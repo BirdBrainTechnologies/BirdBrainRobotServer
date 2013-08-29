@@ -1,0 +1,499 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<title>Snap!</title>
+		<script type="text/javascript" src="morphic.js"></script>
+		<script type="text/javascript" src="widgets.js"></script>
+		<script type="text/javascript" src="blocks.js"></script>
+		<script type="text/javascript" src="threads.js"></script>
+		<script type="text/javascript" src="objects.js"></script>
+		<script type="text/javascript" src="gui.js"></script>
+		<script type="text/javascript" src="lists.js"></script>
+		<script type="text/javascript">			
+			var	world, frame, scripts, palette, proto, block, y, unit, pred, rep; 
+
+			SyntaxElementMorph.prototype.corner = 12;
+			SyntaxElementMorph.prototype.edge = 9;
+			SyntaxElementMorph.prototype.rounding = 32;
+			SyntaxElementMorph.prototype.inset = 20;
+			SyntaxElementMorph.prototype.hatHeight = 40;
+			SyntaxElementMorph.prototype.hatWidth = 250;
+			SyntaxElementMorph.prototype.dent = 30;
+			SyntaxElementMorph.prototype.bottomPadding = 15;
+			SyntaxElementMorph.prototype.cSlotPadding = 15;
+			SyntaxElementMorph.prototype.typeInPadding = 1;
+			SyntaxElementMorph.prototype.labelPadding = 10;
+			SyntaxElementMorph.prototype.reporterDropFeedbackPadding = 40;
+			SyntaxElementMorph.prototype.fontSize = 30;
+			SyntaxElementMorph.prototype.embossing = new Point(-2, -2);
+			SyntaxElementMorph.prototype.labelWidth = 1000;
+			SyntaxElementMorph.prototype.feedbackMinHeight = 5;
+			SyntaxElementMorph.prototype.minSnapDistance = 20;
+			SyntaxElementMorph.prototype.contrast = 60;
+
+			unit = SyntaxElementMorph.prototype.inset;
+			
+			window.onload = function () {
+				world = new WorldMorph(document.getElementById('world'));
+				world.isDevMode = true;
+				
+				palette = new ScrollFrameMorph(null, 38);
+				palette.padding = unit / 2;
+				palette.color = new Color(55, 55, 55);
+				palette.isDraggable = false;
+				palette.acceptsDrops = true;
+				palette.contents.acceptsDrops = false;
+				palette.reactToWorldResize = function (rect) {
+					palette.setPosition(rect.origin/*.add(10)*/);
+					palette.setExtent(new Point(unit * 20, rect.height()));
+					palette.contents.adjustBounds();
+					palette.adjustScrollBars();
+				};
+				palette.reactToDropOf = function (droppedMorph) {
+					droppedMorph.destroy();
+				}
+				
+				world.add(palette);
+				palette.reactToWorldResize(world.bounds);
+
+				scripts = new ScriptsMorph();
+				scripts.isDraggable = false;
+				scripts.color = new Color(112, 112, 112);
+				scripts.texture = 'scriptsPaneTexture.gif';
+				
+				frame = new ScrollFrameMorph(scripts, 38);
+				frame.padding = unit / 2;
+				frame.isDraggable = false;
+				frame.acceptsDrops = false;
+				frame.contents.acceptsDrops = true;
+				frame.reactToWorldResize = function (rect) {
+					frame.setPosition(palette.topRight());
+					frame.setExtent(rect.extent().subtract(new Point(palette.width(), 0)));
+					scripts.adjustBounds();
+					frame.adjustScrollBars();
+				};
+				
+				scripts.scrollFrame = frame;
+				
+				world.add(frame);
+				frame.reactToWorldResize(world.bounds);
+				
+				y = 0;
+				
+				proto = new CommandBlockMorph();
+				proto.isDraggable = false;
+				proto.isTemplate = true;
+
+				pred = new ReporterBlockMorph(true);
+				pred.isDraggable = false;
+				pred.isTemplate = true;
+
+				rep = new ReporterBlockMorph();
+				rep.isDraggable = false;
+				rep.isTemplate = true;
+
+				// motion
+				y += unit / 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(74,108,212));
+				block.setPosition(new Point(0, y));
+				block.setSpec('move %n steps');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(74,108,212));
+				block.setPosition(new Point(0, y));
+				block.setSpec('point in direction %dir');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(74,108,212));
+				block.setPosition(new Point(0, y));
+				block.setSpec('point towards %obj');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(74,108,212));
+				block.setPosition(new Point(0, y));
+				block.setSpec('glide %n secs to x: %n y: %n');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(74,108,212));
+				block.setPosition(new Point(0, y));
+				block.setSpec('x position');
+				palette.addContents(block);
+				y += block.height();
+				
+				y += unit / 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(74,108,212));
+				block.setPosition(new Point(0, y));
+				block.setSpec('heading');
+				palette.addContents(block);
+				y += block.height();
+
+
+				// looks
+				y += unit * 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(143,86,227));
+				block.setPosition(new Point(0, y));
+				block.setSpec('switch to costume %cst');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(143,86,227));
+				block.setPosition(new Point(0, y));
+				block.setSpec('next costume');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(143,86,227));
+				block.setPosition(new Point(0, y));
+				block.setSpec('say %s for %n secs');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(143,86,227));
+				block.setPosition(new Point(0, y));
+				block.setSpec('set %eff effect to %n');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(143,86,227));
+				block.setPosition(new Point(0, y));
+				block.setSpec('costume #');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(143,86,227));
+				block.setPosition(new Point(0, y));
+				block.setSpec('size');
+				palette.addContents(block);
+				y += block.height();
+				
+				
+				// sound
+
+				y += unit * 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(207,74,217));
+				block.setPosition(new Point(0, y));
+				block.setSpec('play %snd until done');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(207,74,217));
+				block.setPosition(new Point(0, y));
+				block.setSpec('rest for %n beats');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(207,74,217));
+				block.setPosition(new Point(0, y));
+				block.setSpec('set instrument to %inst');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(207,74,217));
+				block.setPosition(new Point(0, y));
+				block.setSpec('tempo');
+				palette.addContents(block);
+				y += block.height();
+
+				
+				// pen
+				y += unit * 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(0,161, 120));
+				block.setPosition(new Point(0, y));
+				block.setSpec('pen down');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(0,161, 120));
+				block.setPosition(new Point(0, y));
+				block.setSpec('set pen color to %clr');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(0,161, 120));
+				block.setPosition(new Point(0, y));
+				block.setSpec('change pen color by %n');
+				palette.addContents(block);
+				y += block.height();
+
+
+				// control
+				y += unit * 2;
+				block = new HatBlockMorph();
+				block.isDraggable = false;
+				block.isTemplate = true;
+				block.setColor(new Color(230,168,34));
+				block.setPosition(new Point(0, y));
+				block.setSpec('when %key key pressed');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = new HatBlockMorph();
+				block.isDraggable = false;
+				block.isTemplate = true;
+				block.setColor(new Color(230,168,34));
+				block.setPosition(new Point(0, y));
+				block.setSpec('when I receive %msg');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit;
+				block = proto.fullCopy();
+				block.setColor(new Color(230,168,34));
+				block.setPosition(new Point(0, y));
+				block.setSpec('wait %n secs');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = block.fullCopy();
+				block.setPosition(new Point(0, y));
+				block.setSpec('if %b %c');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = block.fullCopy();
+				block.setPosition(new Point(0, y));
+				block.setSpec('if %b %c else %c');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = block.fullCopy();
+				block.setPosition(new Point(0, y));
+				block.setSpec('repeat %n %c');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = block.fullCopy();
+				block.setPosition(new Point(0, y));
+				block.setSpec('broadcast %msg and wait');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(230,168,34));
+				block.setPosition(new Point(0, y));
+				block.setSpec('call %n %inputs');
+				palette.addContents(block);
+				y += block.height();
+
+
+				// sensing
+				y += unit * 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(4,148,220));
+				block.setPosition(new Point(0, y));
+				block.setSpec('reset timer');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(4,148,220));
+				block.setPosition(new Point(0, y));
+				block.setSpec('timer');
+				palette.addContents(block);
+				y += block.height();
+			
+				y += unit / 2;
+				block = pred.fullCopy();
+				block.setColor(new Color(4,148,220));
+				block.setPosition(new Point(0, y));
+				block.setSpec('key %key pressed?');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = pred.fullCopy();
+				block.setColor(new Color(4,148,220));
+				block.setPosition(new Point(0, y));
+				block.setSpec('touching %obj ?');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(4,148,220));
+				block.setPosition(new Point(0, y));
+				block.setSpec('%att of %obj');
+				palette.addContents(block);
+				y += block.height();
+
+				//operators
+				y += unit * 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(98,194,19));
+				block.setPosition(new Point(0, y));
+				block.setSpec('%n + %n');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(98,194,19));
+				block.setPosition(new Point(0, y));
+				block.setSpec('pick random %n to %n');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(98,194,19));
+				block.setPosition(new Point(0, y));
+				block.setSpec('%fun %n');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = pred.fullCopy();
+				block.setColor(new Color(98,194,19));
+				block.setPosition(new Point(0, y));
+				block.setSpec('%n = %n');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = pred.fullCopy();
+				block.setColor(new Color(98,194,19));
+				block.setPosition(new Point(0, y));
+				block.setSpec('is %s a %typ ?');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = pred.fullCopy();
+				block.setColor(new Color(98,194,19));
+				block.setPosition(new Point(0, y));
+				block.setSpec('%b and %b');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = pred.fullCopy();
+				block.setColor(new Color(98,194,19));
+				block.setPosition(new Point(0, y));
+				block.setSpec('not %b');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(98,194,19));
+				block.setPosition(new Point(0, y));
+				block.setSpec('the script %c');
+				palette.addContents(block);
+				y += block.height();
+
+
+				//variables
+				y += unit * 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(243,118,29));
+				block.setPosition(new Point(0, y));
+				block.setSpec('set %var to %s');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(243,118,29));
+				block.setPosition(new Point(0, y));
+				block.setSpec('variable');
+				palette.addContents(block);
+				y += block.height();
+
+
+				//lists
+				y += unit * 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(217,77,17));
+				block.setPosition(new Point(0, y));
+				block.setSpec('list %mult%s');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = proto.fullCopy();
+				block.setColor(new Color(217,77,17));
+				block.setPosition(new Point(0, y));
+				block.setSpec('replace item %idx of %lst with %s');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = rep.fullCopy();
+				block.setColor(new Color(217,77,17));
+				block.setPosition(new Point(0, y));
+				block.setSpec('item %idx of %lst');
+				palette.addContents(block);
+				y += block.height();
+
+				y += unit / 2;
+				block = pred.fullCopy();
+				block.setColor(new Color(217,77,17));
+				block.setPosition(new Point(0, y));
+				block.setSpec('%lst contains %s');
+				palette.addContents(block);
+				y += block.height();
+
+				
+				palette.scrollX(palette.padding);
+				palette.scrollY(palette.padding);
+				palette.contents.adjustBounds();
+				scripts.adjustBounds();
+
+				setInterval(loop, 50);
+			};
+
+			function loop() {
+				world.doOneCycle();
+			}
+		</script>
+	</head>
+	<body style="background-color: #464646; margin: 0;">
+		<canvas id="world" tabindex="1" width="800" height="600" style="position: absolute;">
+			<p>Your browser doesn't support canvas.</p>
+		</canvas>
+	</body>
+</html>
