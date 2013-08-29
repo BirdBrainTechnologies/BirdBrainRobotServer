@@ -26,6 +26,8 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+
 import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -50,16 +52,21 @@ public class BirdBrainRobotServer {
 	private HummingbirdServletWrapper hummingbird; // Wrapper of the Hummingbird object
 	private boolean finchConnected; // Tracks if we have a connected Finch
 	private boolean hummingbirdConnected; // Tracks if we have a connected Hummingbird
+	private FinchServlet finchServlet;
+	private HummingbirdServlet hummingbirdServlet;
 	private String urlToOpenRemote = "http://snap.berkeley.edu/snapsource/snap.html"; // The URL to open when you click "Open Snap!". Depending on what's connected, this gets altered
 	private String urlToOpenLocal = "http://localhost:22179/SnapOffline/snap.html"; // The local URL for Snap!
 	private String urlToOpen;
 	private String statusMessage; // The message we want to set the helper text to
+	private CheckConnections connector;
 	
 	private JCheckBox chckbxOpenSnapLocally; // Checkbox for open button
 	private JButton btnOpenSnap; // Open Snap! button contained
 	/**
 	 * Launch the application.
 	 */
+
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -88,29 +95,33 @@ public class BirdBrainRobotServer {
 		frmBirdbrainRobotServer = new JFrame();
 		frmBirdbrainRobotServer.setIconImage(Toolkit.getDefaultToolkit().getImage(BirdBrainRobotServer.class.getResource("/LightBulbKnockedOut.png")));
 		frmBirdbrainRobotServer.addWindowListener(new WindowAdapter() {
-			@Override 
+			@Override
 			// If the window is closing, disconnect the Finch and Hummingbird, stop and destroy the server, and then exit
 			public void windowClosing(WindowEvent arg0) {
+				if(connector != null) {
+					connector.stop(); //stop the connector thread
+				}
+				try {
+					Thread.sleep(50); 
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				if(server != null) {
-					
-					// Need to disconnect Hummingbird first if we don't want closing to hang in Linux
-					if(hummingbirdConnected && hummingbird.getSensors() != null) {
-						hummingbird.disConnect();
-					}
-					
-					if(finchConnected && finch.getLightSensors() != null) {
-						finch.disConnect();
-					}
-								
-	               	try {
-	               		server.stop();
-	               	}
-	               	catch(Exception ex)
-	               	{
-	               		System.out.println("Error when stopping jetty server: " + ex.getMessage());
-	               	}
-	           		//server.destroy();
-	                System.exit(0);    
+               	 if(finchConnected) {
+                		finch.disConnect();
+                    }
+                    if(hummingbirdConnected) {
+                    	hummingbird.disConnect();
+                    }
+               	try {
+               		server.stop();
+               	}
+               	catch(Exception ex)
+               	{
+               		System.out.println("Error when stopping jetty server: " + ex.getMessage());
+               	}
+           		//server.destroy();
+                System.exit(0);    
                }				
 			}
 		});
@@ -189,6 +200,9 @@ public class BirdBrainRobotServer {
                             }
                         }
                 }
+				else {
+					lblHelperText.setText("Open Snap! button won't work until you install libgnome2-0");
+				}
 			}
 		});
 		btnOpenSnap.setContentAreaFilled(false);
@@ -217,6 +231,53 @@ public class BirdBrainRobotServer {
 		frmBirdbrainRobotServer.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{btnOpenSnap}));
 	}
 	
+	public class CheckConnections implements Runnable {
+	//Class that dynamically checks if Finch and Hummingbird are connected
+		//Used to make sure the image isn't updated every iteration of the loop
+		private boolean isFinch = false;
+		private boolean isHumm = false;
+		
+		private boolean toRun = true;
+		public void stop() {
+			toRun = false;
+		}
+		
+		public void run() {
+			  
+			while(toRun) {
+				finchConnected = finch.connect();
+				hummingbirdConnected = hummingbird.connect();
+				if(finch.getConnected() && isFinch == false) {
+					finchServlet.setConnectionState(true);
+					lblFinchpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/FinchConnected.png")));
+					isFinch = true;
+				}
+				else if (!finch.getConnected() && isFinch == true) {
+					finchServlet.setConnectionState(false);
+					lblFinchpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/FinchNotConnected.png")));
+					isFinch = false;
+				}
+			    if (hummingbird.getConnected() && isHumm == false) {
+			    	hummingbirdServlet.setConnectionState(true);
+					lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdConnected.png")));
+					isHumm = true;
+				}
+				else if (!hummingbird.getConnected() && isHumm == true) {
+					hummingbirdServlet.setConnectionState(false);
+					lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdNotConnected.png")));
+					isHumm = false;
+				}
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}
+		
+	}
+	
 	private void startServer() {
 		  // Start a new server on port 22179
 		  server = new Server(22179);
@@ -234,36 +295,35 @@ public class BirdBrainRobotServer {
 		  // Use the context as our sole handler for the server
 		  server.setHandler(context);
 		  
-		  // Check if Finch and Hummingbird are connected
 		  finch = new FinchServletWrapper();
 		  hummingbird = new HummingbirdServletWrapper();
 		  
-		  // finch.connect connects to Finch and if it succeeds, returns true, else it returns false, same with Hummingbird
-		  finchConnected = finch.connect();
+		  finchConnected = finch.connect(); 
 		  hummingbirdConnected = hummingbird.connect();
-		  
-		  FinchServlet finchServlet; 
-		  HummingbirdServlet hummingbirdServlet;
+		  finchServlet = new FinchServlet(finch);
 		  
 		  // If our Finch connected, pass the finch wrapper object to the servlet and update the GUI
 		  if(finchConnected) {
-			  finchServlet = new FinchServlet(finch);
+			//  finchServlet = new FinchServlet(finch);
+			  finchServlet.setConnectionState(true);
 			  lblFinchpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/FinchConnected.png")));
 		  }
 		  // Else don't pass the object, so this servlet just prints "Finch not connected"
 		  else {
-			  finchServlet = new FinchServlet();	  
+			  finchServlet.setConnectionState(false);
+			 // finchServlet = new FinchServlet();	  
 		  }
 
+		  hummingbirdServlet = new HummingbirdServlet(hummingbird);
 		  // Ditto for Hummingbird
 		  if(hummingbirdConnected) {
-			  hummingbirdServlet = new HummingbirdServlet(hummingbird);
+			  hummingbirdServlet.setConnectionState(true);
 			  lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdConnected.png")));
 		  }
 		  else {
-			  hummingbirdServlet = new HummingbirdServlet();	  
+			  hummingbirdServlet.setConnectionState(false);
+			  //hummingbirdServlet = new HummingbirdServlet();	  
 		  }
-		  
 		  // Check if Snap! website is available
 		  try {
 			  URL url = new URL(urlToOpenRemote);
@@ -277,6 +337,17 @@ public class BirdBrainRobotServer {
 			  chckbxOpenSnapLocally.setSelected(true);	
 			  chckbxOpenSnapLocally.setEnabled(false);
 		  }
+		  
+		  //Class and thread that handle dynamic checking
+		  connector = new CheckConnections(); 
+		  Thread checker = new Thread(connector);
+		  checker.start();
+		  try {
+			Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		  
 		  // Add Finch, Hummingbird, and Speech servlets
 		  context.addServlet(new ServletHolder(finchServlet), "/finch/*");

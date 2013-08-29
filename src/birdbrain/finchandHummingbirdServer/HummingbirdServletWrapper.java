@@ -11,7 +11,9 @@ public class HummingbirdServletWrapper {
 
 	private int[] sensors;
 	private Thread sensorLoop;
-	
+	public boolean getConnected() {
+		return isConnected;
+	}
 	/* Get sensor data in a loop that runs at ~25 Hz */
 	private class SensorLoop implements Runnable {
 		public void run() {
@@ -27,6 +29,10 @@ public class HummingbirdServletWrapper {
 						catch (NullPointerException ex) { 
 							sensors = null;
 						}
+						if (sensors == null) {
+							isConnected = false;
+						}
+
 					}
 				}
 				catch (InterruptedException ex) {
@@ -60,7 +66,10 @@ public class HummingbirdServletWrapper {
                 return true;
             }
 		}
-        isConnected = false;
+        else if (isConnected) {
+        	return true;
+        }
+        //isConnected = false;
 		return false;
 	}
 	
@@ -76,14 +85,19 @@ public class HummingbirdServletWrapper {
             Thread.sleep(100);
         } catch (InterruptedException ex) {
         }
-		hummingbird.disconnect(); // Close the hummingbird connection
+		try {
+			hummingbird.disconnect(); // Close the hummingbird connection
+		}
+		catch (Exception e) {
+			
+		}
 		//hummingbird = null;
 		return true;
 	}
 		
 	//  The following functions just get the sensors - they don't call Hummingbird directly, they just get the last sensor value found in the sensor loop
 	public int[] getSensors() {
-		if(!isConnected) {
+		if(!isConnected || sensors == null) {
 			return null;
 		}
 		else {
@@ -94,7 +108,7 @@ public class HummingbirdServletWrapper {
 	
 	// Returns the sensor value at port n
 	public Integer getSensorValue(int port) {
-		if(!isConnected) {
+		if(!isConnected || sensors == null) {
 			return null;
 		}
 		else {
@@ -107,7 +121,7 @@ public class HummingbirdServletWrapper {
 	
 	// Returns the sensor value at port n as a temperature in Celcius
 	public Double getTemperatureAtPort(int port) {
-		if(!isConnected) {
+		if(!isConnected || sensors == null) {
 			return null;
 		}
 		else {
@@ -142,7 +156,7 @@ public class HummingbirdServletWrapper {
   	*/
 	
 	public Integer getDistanceAtPort(int port) {
-		if(!isConnected) {
+		if(!isConnected || sensors == null) {
 			return null;
 		}
 		else {

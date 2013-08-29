@@ -1,5 +1,7 @@
 package birdbrain.finchandHummingbirdServer;
 
+import javax.swing.ImageIcon;
+
 import edu.cmu.ri.createlab.terk.robot.finch.DefaultFinchController;
 import edu.cmu.ri.createlab.terk.robot.finch.Finch;
 import edu.cmu.ri.createlab.terk.robot.finch.FinchController;
@@ -17,7 +19,9 @@ public class FinchServletWrapper {
 	
 	// We poll sensors in a separate thread to minimize the timer doGet has to wait
 	private Thread sensorLoop;
-	
+	public boolean getConnected() {
+		return isConnected;
+	}
 	/* Get sensor data in a loop that runs at ~16 Hz */
 	private class SensorLoop implements Runnable {
 		public void run() {
@@ -39,6 +43,10 @@ public class FinchServletWrapper {
 							temperature = null;
 							obstacles = null;
 							lights = null;
+							isConnected = false;
+						}
+						if (accelerations == null || obstacles == null || lights == null) {
+							isConnected = false;
 						}
 					}
 				}
@@ -75,6 +83,9 @@ public class FinchServletWrapper {
                 sensorLoop.start();
                 return true;
             }
+		}
+		else if(isConnected) {
+			return true;
 		}
 		return false;
 	}

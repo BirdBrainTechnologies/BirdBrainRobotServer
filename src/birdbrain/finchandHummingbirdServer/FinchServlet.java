@@ -18,17 +18,21 @@ public class FinchServlet extends HttpServlet
 	// FinchServletWrapper wraps a standard Finch object to make it easier to manage
 	private FinchServletWrapper finch = null;	
 	
-	private boolean isConnected; // Tracks if we've connected to a real Finch
+	private boolean isConnected=false; // Tracks if we've connected to a real Finch
   
   // If we've instantiated this way, we are not connected
-  public FinchServlet() {
-	  isConnected = false;
-  }
+ // public FinchServlet() {
+//	  isConnected = false;
+ // }
   
   // If we've been provided with a Finch object, that means the main server has already verified the connection for us, so it's connected!
   public FinchServlet(FinchServletWrapper wrapFromServer) {
 	  finch = wrapFromServer;
-	  isConnected = true;
+//	  isConnected = true;
+  }
+  
+  public void setConnectionState(boolean state) {
+	  isConnected = state;
   }
   
   /* Chain for finch URLs:

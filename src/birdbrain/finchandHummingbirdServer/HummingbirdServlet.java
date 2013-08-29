@@ -17,16 +17,16 @@ public class HummingbirdServlet extends HttpServlet
 	private static final long serialVersionUID = 585210767963249475L;
 	
 	private HummingbirdServletWrapper hummingbird = null; // Container for Hummingbird object	
-	private boolean isConnected; // Holds Hummingbird connection state
+	private boolean isConnected=false; // Holds Hummingbird connection state
 
-  public HummingbirdServlet() {
-	  isConnected = false;
-  }
-    
   // If we got a wrapper object from the server class, Hummingbird was found and connected to
   public HummingbirdServlet(HummingbirdServletWrapper wrapFromServer) {
 	  hummingbird = wrapFromServer;
-	  isConnected = true;
+  }
+  
+  public void setConnectionState(boolean state)
+  {
+	  isConnected = state;
   }
   
   
