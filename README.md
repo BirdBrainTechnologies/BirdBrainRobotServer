@@ -14,10 +14,12 @@ Much more information at http://www.hummingbirdkit.com/learning/software/snap
 
 #### Preparing for development
 
-	This repo contains all of the files necessary for building the BirdBrain Robot Server. We created the project in Eclipse, so just import the project into Eclipse if you intend to work with it.
+This repo contains all of the files necessary for building the BirdBrain Robot Server. We created the project in Eclipse, so just import the project into Eclipse if you intend to work with it.
 
-#### Installing the RC script
+#### Installing 
 
+Installation methods will vary depending on platform. 
+Included is a source directory for creating a debian package. 
 
 #### Contact
 

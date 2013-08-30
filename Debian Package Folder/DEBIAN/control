@@ -1,0 +1,13 @@
+Package: birdbrain-robot-server
+Version: 1.0.1
+Section: education
+Priority: optional
+Architecture: i386
+Description: Package for using Finch and Hummingbird with Snap!
+ Installs a server utility, the BirdBrain Robot Server, that connects the Finch 
+ and Hummingbird robots with browser-based drag and drop programming 
+ environments like Snap! and Scratch 2.0.
+Maintainer: Tom Lauwers <tlauwers@birdbraintechnologies.com>
+Homepage: http://www.hummingbirdkit.com/learning/software/snap
+Installed-Size: 28000
+Depends: libgnome2-0
