@@ -8,7 +8,7 @@
 
 	Copyright (C) 2012 by Jens Mönig
 
-	This file is part of Snap!. 
+	This file is part of Snap!.
 
 	Snap! is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as
@@ -243,7 +243,7 @@ SnapTranslator.dict.ko = {
         '왼쪽에서 오른쪽으로만',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         '새로운 스프라이트 추가',
 
     // tab help
@@ -265,21 +265,21 @@ SnapTranslator.dict.ko = {
         abbreviation.
 
         For example:
-        
+
             'say %s for %n secs'
 
         can currently not be changed into
-        
+
             'say %n secs long %s'
 
         and still work as intended.
 
         Similarly
-        
+
             'point towards %dst'
 
         cannot be changed into
-        
+
             'point towards %cst'
 
         without breaking its functionality.
@@ -386,7 +386,7 @@ SnapTranslator.dict.ko = {
         '템포를 %n bpm으로 맞추기',
     'tempo':
         '템포',
-        
+
 
     // pen:
     'clear':
@@ -579,7 +579,7 @@ SnapTranslator.dict.ko = {
         '%s 을(를) %idx 위치에 추가하기 %l',
     'replace item %idx of %l with %s':
         '%idx 항목 %l 에 %s 로 교체하기',
-        
+
     // other
     'Make a block':
         '블록 만들기',
@@ -602,7 +602,7 @@ SnapTranslator.dict.ko = {
         '모픽 컨텍스트 메뉴와 인스펙터를 사용할 수 있으나, 사용자 친화적이지 않습니다!',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         '프로젝트 메모...',
     'New':
         '새로 만들기',
@@ -618,13 +618,13 @@ SnapTranslator.dict.ko = {
         '내보낸 프로젝트 파일, 블록 라이브러리\n'
 		+ '스프라이트 모양 또는 소리를 가져옵니다.\n\n'
 		+ '일부 웹브라우저에서는 지원되지 않습니다.',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         '프로젝트를 텍스트 파일로 내보내기...',
     'Export project...':
         '프로젝트 내보내기...',
     'show project data as XML\nin a new browser window':
         '프로젝트 데이터를\n새로운 윈도우에 XML 형태로 보여주기',
-    'Export blocks ...':
+    'Export blocks...':
         '블록 내보내기...',
     'show global custom block definitions as XML\nin a new browser window':
         '새롭게 정의한 전역 블록 데이터를\n새로운 윈도우에 XML 형태로 보여주기',

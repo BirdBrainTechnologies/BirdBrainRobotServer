@@ -6,7 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 /**
- * Finch servlet, exponses Finch functionality over a localhost server
+ * Finch servlet, exposes Finch functionality over a localhost server
  * @author Tom
  *
  */
@@ -17,9 +17,9 @@ public class FinchServlet extends HttpServlet
 
 	// FinchServletWrapper wraps a standard Finch object to make it easier to manage
 	private FinchServletWrapper finch = null;	
-	
+		
 	private boolean isConnected=false; // Tracks if we've connected to a real Finch
-  
+ 
   // If we've instantiated this way, we are not connected
  // public FinchServlet() {
 //	  isConnected = false;
@@ -34,7 +34,7 @@ public class FinchServlet extends HttpServlet
   public void setConnectionState(boolean state) {
 	  isConnected = state;
   }
-  
+   
   /* Chain for finch URLs:
    *
    * out/motor/left/right

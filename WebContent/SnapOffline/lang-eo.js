@@ -8,7 +8,7 @@
 
 	Copyright (C) 2012 by Jens Mönig
 
-	This file is part of Snap!. 
+	This file is part of Snap!.
 
 	Snap! is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as
@@ -248,7 +248,7 @@ SnapTranslator.dict.eo = {
         'nur maldekstren/dekstren',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         'aldoni novan objekton',
 
     // tab help
@@ -269,21 +269,21 @@ SnapTranslator.dict.eo = {
         abbreviation.
 
         For example:
-        
+
             'say %s for %n secs'
 
         can currently not be changed into
-        
+
             'say %n secs long %s'
 
         and still work as intended.
 
         Similarly
-        
+
             'point towards %dst'
 
         cannot be changed into
-        
+
             'point towards %cst'
 
         without breaking its functionality.
@@ -592,7 +592,7 @@ SnapTranslator.dict.eo = {
         'ŝalti Morphic\nkuntekstajn menuojn\nkaj kontrolilojn, \nne la afablajn!',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'Projektonotoj...',
     'New':
         'Nova',
@@ -606,14 +606,14 @@ SnapTranslator.dict.eo = {
         'Importi...',
     'file menu import hint':
         'elŝutu dosieron kun blokoj sonoj aŭ kostumoj',
-    'Export project as plain text ...':
-        'Eksporti projekton en plata teksta formo ...',
+    'Export project as plain text...':
+        'Eksporti projekton en plata teksta formo...',
     'Export project...':
         'Eksporti projekton...',
     'show project data as XML\nin a new browser window':
         'prezenti projekton kiel XML\nen nova fenestro de retumilo',
-    'Export blocks ...':
-        'Eksporti blokojn ...',
+    'Export blocks...':
+        'Eksporti blokojn...',
     'show global custom block definitions as XML\nin a new browser window':
         'prezenti mallokajn difinojn de propraj blokoj kiel XML\nen nova fenestro de retumilo',
     'Delete Project':

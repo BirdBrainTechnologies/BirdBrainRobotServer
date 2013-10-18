@@ -4,11 +4,11 @@
 
     a backend API for SNAP!
 
-    written by Jens Mšnig
+    written by Jens MÃ¶nig
 
-    Copyright (C) 2013 by Jens Mšnig
+    Copyright (C) 2013 by Jens MÃ¶nig
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -29,7 +29,7 @@
 
 /*global modules, IDE_Morph, SnapSerializer, hex_sha512, alert, nop*/
 
-modules.cloud = '2013-February-27';
+modules.cloud = '2013-October-10';
 
 // Global stuff
 
@@ -37,6 +37,9 @@ var Cloud;
 
 var SnapCloud = new Cloud(
     'https://snapcloud.miosoft.com/miocon/app/login?_app=SnapCloud'
+    //'192.168.2.110:8087/miocon/app/login?_app=SnapCloud'
+    //'192.168.186.167:8087/miocon/app/login?_app=SnapCloud'
+    // 'localhost/miocon/app/login?_app=SnapCloud'
 );
 
 // Cloud /////////////////////////////////////////////////////////////
@@ -82,6 +85,11 @@ Cloud.prototype.signup = function (
                 + email,
             true
         );
+        request.setRequestHeader(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+        );
+        request.withCredentials = true;
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.responseText) {
@@ -113,6 +121,116 @@ Cloud.prototype.signup = function (
     }
 };
 
+Cloud.prototype.getPublicProject = function (
+    id,
+    callBack,
+    errorCall
+) {
+    // id is Username=username&projectName=projectname,
+    // where the values are url-component encoded
+    // callBack is a single argument function, errorCall take two args
+    var request = new XMLHttpRequest(),
+        responseList,
+        myself = this;
+    try {
+        request.open(
+            "GET",
+            (this.hasProtocol() ? '' : 'http://')
+                + this.url + 'Public'
+                + '&'
+                + id,
+            true
+        );
+        request.setRequestHeader(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+        );
+        request.withCredentials = true;
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                if (request.responseText) {
+                    if (request.responseText.indexOf('ERROR') === 0) {
+                        errorCall.call(
+                            this,
+                            request.responseText
+                        );
+                    } else {
+                        responseList = myself.parseResponse(
+                            request.responseText
+                        );
+                        callBack.call(
+                            null,
+                            responseList[0].SourceCode
+                        );
+                    }
+                } else {
+                    errorCall.call(
+                        null,
+                        myself.url + 'Public',
+                        'could not connect to:'
+                    );
+                }
+            }
+        };
+        request.send(null);
+    } catch (err) {
+        errorCall.call(this, err.toString(), 'Snap!Cloud');
+    }
+};
+
+Cloud.prototype.resetPassword = function (
+    username,
+    callBack,
+    errorCall
+) {
+    // both callBack and errorCall are two-argument functions
+    var request = new XMLHttpRequest(),
+        myself = this;
+    try {
+        request.open(
+            "GET",
+            (this.hasProtocol() ? '' : 'http://')
+                + this.url + 'ResetPW'
+                + '&Username='
+                + encodeURIComponent(username),
+            true
+        );
+        request.setRequestHeader(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+        );
+        request.withCredentials = true;
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                if (request.responseText) {
+                    if (request.responseText.indexOf('ERROR') === 0) {
+                        errorCall.call(
+                            this,
+                            request.responseText,
+                            'Reset Password'
+                        );
+                    } else {
+                        callBack.call(
+                            null,
+                            request.responseText,
+                            'Reset Password'
+                        );
+                    }
+                } else {
+                    errorCall.call(
+                        null,
+                        myself.url + 'ResetPW',
+                        'could not connect to:'
+                    );
+                }
+            }
+        };
+        request.send(null);
+    } catch (err) {
+        errorCall.call(this, err.toString(), 'Snap!Cloud');
+    }
+};
+
 Cloud.prototype.connect = function (
     callBack,
     errorCall
@@ -126,6 +244,11 @@ Cloud.prototype.connect = function (
             (this.hasProtocol() ? '' : 'http://') + this.url,
             true
         );
+        request.setRequestHeader(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+        );
+        request.withCredentials = true;
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
                 if (request.responseText) {
@@ -233,6 +356,24 @@ Cloud.prototype.saveProject = function (ide, callBack, errorCall) {
     ide.serializer.isCollectingMedia = false;
     ide.serializer.flushMedia();
 
+    // check if serialized data can be parsed back again
+    try {
+        ide.serializer.parse(pdata);
+    } catch (err) {
+        ide.showMessage('Serialization of program data failed:\n' + err);
+        throw new Error('Serialization of program data failed:\n' + err);
+    }
+    if (media !== null) {
+        try {
+            ide.serializer.parse(media);
+        } catch (err) {
+            ide.showMessage('Serialization of media failed:\n' + err);
+            throw new Error('Serialization of media failed:\n' + err);
+        }
+    }
+    ide.serializer.isCollectingMedia = false;
+    ide.serializer.flushMedia();
+
     myself.reconnect(
         function () {
             myself.callService(
@@ -316,7 +457,10 @@ Cloud.prototype.callURL = function (url, callBack, errorCall) {
     try {
         request.open('GET', url, true);
         request.withCredentials = true;
-        request.setRequestHeader('Content-Type', 'text/plain');
+        request.setRequestHeader(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+        );
         request.setRequestHeader('MioCracker', this.session);
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
@@ -353,11 +497,15 @@ Cloud.prototype.callService = function (
         postDict;
 
     if (!this.session) {
-        errorCall.call('You are not connected', 'Cloud');
+        errorCall.call(null, 'You are not connected', 'Cloud');
         return;
     }
     if (!service) {
-        errorCall.call('service ' + serviceName + ' is not available', 'API');
+        errorCall.call(
+            null,
+            'service ' + serviceName + ' is not available',
+            'API'
+        );
         return;
     }
     if (args && args.length > 0) {
@@ -369,7 +517,10 @@ Cloud.prototype.callService = function (
     try {
         request.open(service.method, service.url, true);
         request.withCredentials = true;
-        request.setRequestHeader('Content-Type', 'text/plain');
+        request.setRequestHeader(
+            "Content-Type",
+            "application/x-www-form-urlencoded"
+        );
         request.setRequestHeader('MioCracker', this.session);
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
@@ -446,6 +597,18 @@ Cloud.prototype.parseResponse = function (src) {
     return ans;
 };
 
+Cloud.prototype.parseDict = function (src) {
+    var dict = {};
+    if (!src) {return dict; }
+    src.split("&").forEach(function (entry) {
+        var pair = entry.split("="),
+            key = decodeURIComponent(pair[0]),
+            val = decodeURIComponent(pair[1]);
+        dict[key] = val;
+    });
+    return dict;
+};
+
 Cloud.prototype.encodeDict = function (dict) {
     var str = '',
         pair,
@@ -456,7 +619,7 @@ Cloud.prototype.encodeDict = function (dict) {
             pair = encodeURIComponent(key)
                 + '='
                 + encodeURIComponent(dict[key]);
-            if (pair.length > 0) {
+            if (str.length > 0) {
                 str += '&';
             }
             str += pair;

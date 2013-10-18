@@ -8,7 +8,7 @@
 
 	Copyright (C) 2012 by Jens Mönig
 
-	This file is part of Snap!. 
+	This file is part of Snap!.
 
 	Snap! is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as
@@ -185,7 +185,7 @@ SnapTranslator.dict.fr = {
     'translator_e-mail':
         'i.scool@mac.com', // optional
     'last_changed':
-        '2012-11-27', // this, too, will appear in the Translators tab
+        '2013-09-16', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -227,7 +227,7 @@ SnapTranslator.dict.fr = {
         'Costumes',
     'Sounds':
         'Sons',
-		
+
    // names:
     'Sprite':
         'Lutin',
@@ -243,7 +243,7 @@ SnapTranslator.dict.fr = {
         'le lutin reste en position horizontale \nsoit vers la gauche soit vers la droite ',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         'ajouter un nouveau lutin',
 
     // tab help
@@ -264,21 +264,21 @@ SnapTranslator.dict.fr = {
         abbreviation.
 
         For example:
-        
+
             'say %s for %n secs'
 
         can currently not be changed into
-        
+
             'say %n secs long %s'
 
         and still work as intended.
 
         Similarly
-        
+
             'point towards %dst'
 
         cannot be changed into
-        
+
             'point towards %cst'
 
         without breaking its functionality.
@@ -292,9 +292,9 @@ SnapTranslator.dict.fr = {
     'move %n steps':
         'avancer de %n pas',
     'turn %clockwise %n degrees':
-        'tourner de %n degr\u00E9s  %clockwise' ,
+        'tourner de %n degr\u00E9s %clockwise',
     'turn %counterclockwise %n degrees':
-        'tourner de %n degr\u00E9s  %counterclockwise',
+        'tourner de %n degr\u00E9s %counterclockwise',
     'point in direction %dir':
         'se diriger en faisant un angle de %dir',
     'point towards %dst':
@@ -435,7 +435,7 @@ SnapTranslator.dict.fr = {
     'repeat %n %c':
         'r\u00E9p\u00E9ter %n fois %c',
     'repeat until %b %c':
-        'r\u00E9p\u00E9ter ind\u00E9finiment si %b %c',
+        'r\u00E9p\u00E9ter jusqu\u0027\u00E0 %b %c',
     'if %b %c':
         'si %b  %c',
     'if %b %c else %c':
@@ -587,7 +587,7 @@ SnapTranslator.dict.fr = {
    // menus
     // snap menu
     'About...':
-        'A propos de Snap! ...',
+        'A propos de Snap!...',
     'Snap! website':
         'Snap! le site web',
     'Download source':
@@ -602,7 +602,7 @@ SnapTranslator.dict.fr = {
         'activer la fonction morphic',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'Notes du projet...',
     'New':
         'Nouveau',
@@ -618,13 +618,13 @@ SnapTranslator.dict.fr = {
         'importer un projet export\u00E9,\nune biblioth\u00E8que de '
             + 'blocs\n'
             + 'un costume ou un son',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         'Exporter le projet comme texte...',
     'Export project...':
         'Exporter le projet...',
     'show project data as XML\nin a new browser window':
         'ouvrir le projet au format XML\ndans une nouvelle fen\u00EAtre de votre navigateur',
-    'Export blocks ...':
+    'Export blocks...':
         'Exporter les blocs ',
     'show global custom block definitions as XML\nin a new browser window':
         'montrer les d\u00E9finitions de bloc global personnalis\u00E9 au format XML \ndans une nouvelle fen\u00EAtre de navigateur',

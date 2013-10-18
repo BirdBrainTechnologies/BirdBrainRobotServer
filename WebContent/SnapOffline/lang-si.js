@@ -8,7 +8,7 @@
 
 	Copyright (C) 2012 by Jens Mönig
 
-	This file is part of Snap!. 
+	This file is part of Snap!.
 
 	Snap! is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as
@@ -245,7 +245,7 @@ SnapTranslator.dict.si = {
         'lahko obrnemo le levo/desno',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         'dodaj nov objekt',
 
     // tab help
@@ -267,21 +267,21 @@ SnapTranslator.dict.si = {
         abbreviation.
 
         For example:
-        
+
             'say %s for %n secs'
 
         can currently not be changed into
-        
+
             'say %n secs long %s'
 
         and still work as intended.
 
         Similarly
-        
+
             'point towards %dst'
 
         cannot be changed into
-        
+
             'point towards %cst'
 
         without breaking its functionality.
@@ -594,7 +594,7 @@ SnapTranslator.dict.si = {
         'omogo\u010Di  Morphic menuje in in\u0161pektorje, \ni uporabniku prijazno',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'Opis projekta...',
     'New':
         'Nov',
@@ -610,13 +610,13 @@ SnapTranslator.dict.si = {
         'Nalaganje izvo\u017Eenega projekta,\nknji\u017Enice z '
             + 'bloki\n'
             + 'obleko ali zvokom',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         'Izvozi projekt kot navadno besedilo...',
     'Export project...':
         'Izvozi projekt...',
     'show project data as XML\nin a new browser window':
         'Prikaz projekta kot XML\nv novem oknu brkljalnika',
-    'Export blocks ...':
+    'Export blocks...':
         'Izvozi bloke',
     'show global custom block definitions as XML\nin a new browser window':
         'Prikaz definicij globalnih lastnih blokov kot XML\nv novem oknu brkljalnika',

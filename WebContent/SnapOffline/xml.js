@@ -4,12 +4,12 @@
 
     a simple XML DOM, encoder and parser for morphic.js
 
-    written by Jens Mšnig
+    written by Jens MÃ¶nig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mšnig
+    Copyright (C) 2013 by Jens MÃ¶nig
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -65,7 +65,7 @@
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.xml = '2013-February-18';
+modules.xml = '2013-April-19';
 
 // Declarations
 
@@ -246,7 +246,8 @@ XML_Element.prototype.toString = function (isFormatted, indentationLevel) {
 
     // attributes, if any
     for (key in this.attributes) {
-        if (this.attributes.hasOwnProperty(key) && this.attributes[key]) {
+        if (Object.prototype.hasOwnProperty.call(this.attributes, key)
+                && this.attributes[key]) {
             result += ' ' + key + '="' + this.attributes[key] + '"';
         }
     }

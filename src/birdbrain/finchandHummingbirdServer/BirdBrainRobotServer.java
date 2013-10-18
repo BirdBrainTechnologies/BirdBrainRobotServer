@@ -54,6 +54,8 @@ public class BirdBrainRobotServer {
 	private boolean hummingbirdConnected; // Tracks if we have a connected Hummingbird
 	private FinchServlet finchServlet;
 	private HummingbirdServlet hummingbirdServlet;
+	private ResetServlet resetServlet;
+	private PollServlet pollServlet;
 	private String urlToOpenRemote = "http://snap.berkeley.edu/snapsource/snap.html"; // The URL to open when you click "Open Snap!". Depending on what's connected, this gets altered
 	private String urlToOpenLocal = "http://localhost:22179/SnapOffline/snap.html"; // The local URL for Snap!
 	private String urlToOpen;
@@ -249,21 +251,31 @@ public class BirdBrainRobotServer {
 				hummingbirdConnected = hummingbird.connect();
 				if(finch.getConnected() && isFinch == false) {
 					finchServlet.setConnectionState(true);
+					resetServlet.setFinchConnectionState(true);
+					pollServlet.setFinchConnectionState(true);
 					lblFinchpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/FinchConnected.png")));
 					isFinch = true;
 				}
 				else if (!finch.getConnected() && isFinch == true) {
 					finchServlet.setConnectionState(false);
+					resetServlet.setFinchConnectionState(false);
+					pollServlet.setFinchConnectionState(false);
+					pollServlet.setFinchProblemReport(true);
 					lblFinchpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/FinchNotConnected.png")));
 					isFinch = false;
 				}
 			    if (hummingbird.getConnected() && isHumm == false) {
 			    	hummingbirdServlet.setConnectionState(true);
+					resetServlet.setHummingbirdConnectionState(true);
+					pollServlet.setHummingbirdConnectionState(true);
 					lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdConnected.png")));
 					isHumm = true;
 				}
 				else if (!hummingbird.getConnected() && isHumm == true) {
 					hummingbirdServlet.setConnectionState(false);
+					resetServlet.setHummingbirdConnectionState(false);
+					pollServlet.setHummingbirdConnectionState(false);
+					pollServlet.setHummingbirdProblemReport(true);
 					lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdNotConnected.png")));
 					isHumm = false;
 				}
@@ -338,6 +350,18 @@ public class BirdBrainRobotServer {
 			  chckbxOpenSnapLocally.setEnabled(false);
 		  }
 		  
+		  // Create Reset and Poll servlets as required by Scratch 2.0
+		  resetServlet = new ResetServlet(finch, hummingbird);
+		  resetServlet.setFinchConnectionState(finchConnected);
+		  resetServlet.setHummingbirdConnectionState(hummingbirdConnected);
+		  
+		  pollServlet = new PollServlet(finch, hummingbird);
+		  pollServlet.setFinchConnectionState(finchConnected);
+		  pollServlet.setHummingbirdConnectionState(hummingbirdConnected);
+		  
+		  pollServlet.setFinchProblemReport(finchConnected);
+		  pollServlet.setHummingbirdProblemReport(hummingbirdConnected);
+		  
 		  //Class and thread that handle dynamic checking
 		  connector = new CheckConnections(); 
 		  Thread checker = new Thread(connector);
@@ -353,6 +377,8 @@ public class BirdBrainRobotServer {
 		  context.addServlet(new ServletHolder(finchServlet), "/finch/*");
 		  context.addServlet(new ServletHolder(hummingbirdServlet), "/hummingbird/*");
 		  context.addServlet(new ServletHolder(new TextToSpeechServlet()), "/speak/*");
+		  context.addServlet(new ServletHolder(resetServlet), "/reset_all");
+		  context.addServlet(new ServletHolder(pollServlet), "/poll");
 		  
 		  try {
 		   server.start(); // Finally, start out server

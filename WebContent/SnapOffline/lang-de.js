@@ -4,11 +4,11 @@
 
     German translation for SNAP!
 
-    written by Jens Mšnig
+    written by Jens MÃ¶nig
 
-    Copyright (C) 2013 by Jens Mšnig
+    Copyright (C) 2013 by Jens MÃ¶nig
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -171,10 +171,10 @@ SnapTranslator.dict.de = {
 /*
     Special characters: (see <http://0xcc.net/jsescape/>)
 
-    €, Š   \u00c4, \u00e4
-    …, š   \u00d6, \u00f6
-    †, Ÿ   \u00dc, \u00fc
-    §      \u00df
+    Ã„, Ã¤   \u00c4, \u00e4
+    Ã–, Ã¶   \u00d6, \u00f6
+    Ãœ, Ã¼   \u00dc, \u00fc
+    ÃŸ      \u00df
 */
 
     // translations meta information
@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2013-03-15', // this, too, will appear in the Translators tab
+        '2013-10-04', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -243,7 +243,7 @@ SnapTranslator.dict.de = {
         'kann sich nur nach\nlinks/rechts drehen',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         'ein neues Objekt\nhinzuf\u00fcgen',
 
     // tab help
@@ -265,21 +265,21 @@ SnapTranslator.dict.de = {
         abbreviation.
 
         For example:
-        
+
             'say %s for %n secs'
 
         can currently not be changed into
-        
+
             'say %n secs long %s'
 
         and still work as intended.
 
         Similarly
-        
+
             'point towards %dst'
 
         cannot be changed into
-        
+
             'point towards %cst'
 
         without breaking its functionality.
@@ -427,6 +427,10 @@ SnapTranslator.dict.de = {
         'sende %msg an alle und warte',
     'Message name':
         'Nachricht',
+    'message':
+        'Nachricht',
+    'any message':
+        'eine beliebige Nachricht',
     'wait %n secs':
         'warte %n Sek.',
     'wait until %b':
@@ -449,6 +453,8 @@ SnapTranslator.dict.de = {
         'stoppe dieses Skript',
     'stop all %stop':
         'stoppe alles %stop',
+    'pause all %pause':
+        'pausiere alles %pause',
     'run %cmdRing %inputs':
         'f\u00fchre %cmdRing aus %inputs',
     'launch %cmdRing %inputs':
@@ -534,6 +540,8 @@ SnapTranslator.dict.de = {
         'falsch',
     'join %words':
         'verbinde %words',
+    'split %s by %delim':
+        'trenne %s nach %delim',
     'hello':
         'Hallo',
     'world':
@@ -559,6 +567,8 @@ SnapTranslator.dict.de = {
         'Neue Variable',
     'Variable name':
         'Variablenname',
+    'Script variable name':
+        'Skriptvariablenname',
     'Delete a variable':
         'Variable l\u00f6schen',
 
@@ -621,7 +631,7 @@ SnapTranslator.dict.de = {
         'erm\u00f6glicht Morphic Funktionen',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'Projektanmerkungen...',
     'New':
         'Neu',
@@ -637,20 +647,24 @@ SnapTranslator.dict.de = {
         'l\u00e4dt ein exportiertes Projekt,\neine Bibliothek mit '
             + 'Bl\u00f6cken\n'
             + 'ein Kost\u00fcm oder einen Klang',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         'Projekt als normalen Text exportieren...',
     'Export project...':
         'Projekt exportieren...',
     'show project data as XML\nin a new browser window':
         'zeigt das Projekt als XML\nin einem neuen Browserfenster an',
-    'Export blocks ...':
+    'Export blocks...':
         'Bl\u00f6cke exportieren...',
     'show global custom block definitions as XML\nin a new browser window':
         'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
-    'Import tools...':
-        'Tools laden...',
+    'Import tools':
+        'Tools laden',
     'load the official library of\npowerful blocks':
         'das offizielle Modul mit\nm\u00e4chtigen Bl\u00f6cken laden',
+    'Libraries...':
+        'Module...',
+    'Import library':
+        'Modul laden',
 
     // cloud menu
     'Login...':
@@ -661,6 +675,8 @@ SnapTranslator.dict.de = {
     // settings menu
     'Language...':
         'Sprache...',
+    'Zoom blocks...':
+        'Bl\u00f6cke vergr\u00f6\u00dfern...',
     'Blurred shadows':
         'Weiche Schatten',
     'uncheck to use solid drop\nshadows and highlights':
@@ -689,6 +705,12 @@ SnapTranslator.dict.de = {
             + 'zu erm\u00f6glichen',
     'Long form input dialog':
         'Ausf\u00fchrlicher Input-Dialog',
+    'Plain prototype labels':
+        'Einfache Prototyp-Beschriftung',
+    'uncheck to always show (+) symbols\nin block prototype labels':
+        'ausschalten, um (+) Zeichen\nim Blockeditor zu verbergen',
+    'check to hide (+) symbols\nin block prototype labels':
+        'einschalten, um (+) Zeichen\nim Blockeditor immer anzuzeigen',
     'check to always show slot\ntypes in the input dialog':
         'einschalten, um immer die Datentypen\nim Input-Dialog zu sehen',
     'uncheck to use the input\ndialog in short form':
@@ -752,6 +774,12 @@ SnapTranslator.dict.de = {
     'help':
         'Hilfe',
 
+    // palette:
+    'hide primitives':
+        'Basisbl\u00f6cke ausblenden',
+    'show primitives':
+        'Basisbl\u00f6cke anzeigen',
+
     // blocks:
     'help...':
         'Hilfe...',
@@ -783,12 +811,20 @@ SnapTranslator.dict.de = {
     // sprites:
     'edit':
         'Bearbeiten',
+    'detach from':
+        'Abtrennen von',
+    'detach all parts':
+        'Alle Teile abtrennen',
     'export...':
         'Exportieren...',
 
     // stage:
     'show all':
         'Alles zeigen',
+    'pic...':
+        'Bild exportieren...',
+    'open a new window\nwith a picture of the stage':
+        'ein neues Browserfenster mit einem\nBild der B\u00fchne \u00f6ffnen',
 
     // scripting area
     'clean up':
@@ -797,6 +833,14 @@ SnapTranslator.dict.de = {
         'Skripte der Reihe nach\nanordnen',
     'add comment':
         'Anmerkung hinzuf\u00fcgen',
+    'undrop':
+        'R\u00fcckg\u00e4ngig',
+    'undo the last\nblock drop\nin this pane':
+        'Setzen des letzten Blocks\nwiderrufen',
+    'scripts pic...':
+        'Bild aller Scripte...',
+    'open a new window\nwith a picture of all scripts':
+        'ein neues Browserfenster mit einem\nBild aller Skripte \u00f6ffnen',
     'make a block...':
         'Neuen Block bauen...',
 
@@ -836,6 +880,30 @@ SnapTranslator.dict.de = {
     // help
     'Help':
         'Hilfe',
+
+    // zoom blocks
+    'Zoom blocks':
+        'Bl\u00f6cke vergr\u00f6\u00dfern',
+    'build':
+        'baue',
+    'your own':
+        'eigene',
+    'blocks':
+        'Bl\u00f6cke',
+    'normal (1x)':
+        'normal (1x)',
+    'demo (1.2x)':
+        'Demo (1.2x)',
+    'presentation (1.4x)':
+        'Pr\u00e4sentation (1.4x)',
+    'big (2x)':
+        'gro\u00df (2x)',
+    'huge (4x)':
+        'riesig (4x)',
+    'giant (8x)':
+        'gigantisch (8x)',
+    'monstrous (10x)':
+        'ungeheuerlich (10x)',
 
     // Project Manager
     'Untitled':
@@ -1126,6 +1194,8 @@ SnapTranslator.dict.de = {
     // math functions
     'abs':
         'Betrag',
+    'floor':
+        'Abgerundet',
     'sqrt':
         'Wurzel',
     'sin':
@@ -1144,6 +1214,16 @@ SnapTranslator.dict.de = {
         'ln',
     'e^':
         'e^',
+
+    // delimiters
+    'whitespace':
+        'Leerraum',
+    'line':
+        'Zeilenvorschub',
+    'tab':
+        'Tabulator',
+    'cr':
+        'Wagenr\u00fccklauf',
 
     // data types
     'number':

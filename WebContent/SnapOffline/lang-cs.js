@@ -8,7 +8,7 @@
 
 	Copyright (C) 2012 by Michal Moc
 
-	This file is part of Snap!. 
+	This file is part of Snap!.
 
 	Snap! is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Affero General Public License as
@@ -243,8 +243,8 @@ SnapTranslator.dict.cs = {
         'jen vlevo/vpravo',
 
     // new sprite button:
-    'add a new Sprite':
-        'přidat nový Sprite',
+    'add a new sprite':
+        'přidat nový sprite',
 
     // tab help
     'costumes tab help':
@@ -265,21 +265,21 @@ SnapTranslator.dict.cs = {
         abbreviation.
 
         For example:
-        
+
             'say %s for %n secs'
 
         can currently not be changed into
-        
+
             'say %n secs long %s'
 
         and still work as intended.
 
         Similarly
-        
+
             'point towards %dst'
 
         cannot be changed into
-        
+
             'point towards %cst'
 
         without breaking its functionality.
@@ -618,7 +618,7 @@ SnapTranslator.dict.cs = {
         'Referenční příručka',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'Poznámky k projektu...',
     'New':
         'Nový',
@@ -633,18 +633,18 @@ SnapTranslator.dict.cs = {
     'file menu import hint':
         'Načíst exportovaný projekt, '
             + 'knihovnu bloků, kostýmy nebo zvuky',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         'Exportovat projekt jako prostý text...',
     'Export project...':
         'Exportovat projekt...',
     'show project data as XML\nin a new browser window':
         'zobrazit data projektu jako xml  XML\n v novém okně prohlížeče',
-    'Export blocks ...':
+    'Export blocks...':
         'Exportovat bloky...',
     'show global custom block definitions as XML\nin a new browser window':
         'Zobrazit definici vlastních bloků jako\nXML v novém okně prohlížeče',
-    'Import tools...':
-        'Importovat nástroje...',
+    'Import tools':
+        'Importovat nástroje',
     'load the official library of\npowerful blocks':
         'nahraje oficialní knihovnu\npokročilých bloků',
 

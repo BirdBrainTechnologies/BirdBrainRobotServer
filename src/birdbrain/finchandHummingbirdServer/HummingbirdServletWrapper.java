@@ -309,7 +309,7 @@ public class HummingbirdServletWrapper {
 					if(blueLED < 0)
 						blueLED = 0;
 					
-					hummingbird.setFullColorLED(port-1, redLED, greenLED, blueLED);
+					hummingbird.setFullColorLED(port-1, (int)(redLED*2.55), (int)(greenLED*2.55), (int)(blueLED*2.55));
 					return true;
 				}
 			}

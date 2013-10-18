@@ -5,12 +5,12 @@
     a lively Web-GUI
     inspired by Squeak
 
-    written by Jens Mšnig
+    written by Jens MÃ¶nig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mšnig
+    Copyright (C) 2013 by Jens MÃ¶nig
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -147,6 +147,7 @@
     III. yet to implement
     ---------------------
     - keyboard support for scroll frames and lists
+    - virtual keyboard support for Android and IE
 
 
     IV. open issues
@@ -416,7 +417,7 @@
     * add(submorph)            - attaches submorph ontop
     * addBack(submorph)        - attaches submorph underneath
 
-    * fullCopy()            - duplication
+    * fullCopy()               - duplication
     * destroy()                - deletion
 
 
@@ -450,6 +451,7 @@
         mouseDownRight
         mouseClickLeft
         mouseClickRight
+        mouseDoubleClick
         mouseEnter
         mouseLeave
         mouseEnterDragging
@@ -591,9 +593,9 @@
     rasterization can be deferred until the destination scale is known, taking
     advantage of SVG's ability for smooth scaling. If instead SVGs are to be
     rasterized right away, you can set the
-    
+
         MorphicPreferences.rasterizeSVGs
-    
+
     preference to <true>. In this case dropped SVGs also trigger the
     droppedImage() event with a canvas containing a rasterized version of the
     SVG.
@@ -602,12 +604,12 @@
     canvas.
 
     Those are dispatched as
-    
+
         droppedAudio(anAudio, name)
         droppedText(aString, name)
 
     events to interested Morphs at the mouse pointer.
-    
+
     if none of the above content types can be determined, the file contents
     is dispatched as an ArrayBuffer to interested Morphs:
 
@@ -637,7 +639,7 @@
         keyboardReceiver
 
     property.
-    
+
     Note that processKeyUp() is optional and doesn't have to be present
     if your morph doesn't require it.
 
@@ -708,34 +710,34 @@
     a stream of events, mostly by "bubbling" them up the text element's
     owner chain. Text elements' parents are notified about the following
     events:
-    
+
     Whenever the user presses a key on the keyboard while a text element
     is being edited, a
-    
+
         reactToKeystroke(event)
 
     is escalated up its parent chain, the "event" parameter being the
     original one received by the World.
-    
+
     Once the user has completed the edit, the following events are
     dispatched:
-    
+
         accept() - <enter> was pressed on a single line of text
         cancel() - <esc> was pressed on any text element
 
     Note that "accept" only gets triggered by single-line texte elements,
     as the <enter> key is used to insert line breaks in multi-line
     elements. Therefore, whenever a text edit is terminated by the user
-    (accepted, cancelled or otherwise), 
+    (accepted, cancelled or otherwise),
 
         reactToEdit(StringOrTextMorph)
 
     is triggered.
 
     If the MorphicPreference's
-    
+
         useSliderForInput
-    
+
     setting is turned on, a slider is popped up underneath the currently
     edited text element letting the user insert numbers out of the given
     slider range. Whenever this happens, i.e. whenever the slider is moved
@@ -751,7 +753,7 @@
     method is invoked. That way complex Morphs containing text elements
     get a chance to react if something about the embedded text has been
     modified programmatically. These events are:
-    
+
         layoutChanged() - sent from instances of TextMorph
         fixLayout() - sent from instances of StringMorph
 
@@ -842,12 +844,12 @@
     menu features Gui-Builder-wise functionality to directly inspect,
     take apart, reassamble and otherwise manipulate morphs and their
     contents.
-    
+
     Instead of using the "customContextMenu" property you can also
     assign a more dynamic contextMenu by overriding the general
-    
+
         userMenu()
-    
+
     method with a customized menu constructor. The difference between
     the customContextMenu property and the userMenu() method is that
     the former is also present in development mode and overrides the
@@ -936,11 +938,11 @@
     seemingly dramatic slow-down of the Morphic system. Typically this
     occurs when updating the layout of complex Morphs with very many
     submorphs, e.g. when resizing an inspector window.
-    
+
     An effective strategy to cope with this is to use the inherited
-    
+
         trackChanges
-        
+
     property of the Morph prototype for damage list housekeeping.
 
     The trackChanges property of the Morph prototype is a Boolean switch
@@ -953,20 +955,20 @@
     achieved by setting the trackChanges flag to false before propagating
     the layout changes, setting it to true again and then storing the full
     bounds of the surrounding morph. An an example refer to the
-    
+
         moveBy()
-    
+
     method of HandMorph, and to the
 
         fixLayout()
-        
+
     method of InspectorMorph, or the
-    
+
         startLayout()
         endLayout()
 
-    methods of SyntaxElementMorph in the Snap application.    
-    
+    methods of SyntaxElementMorph in the Snap application.
+
 
     (9) minifying morphic.js
     ------------------------
@@ -1025,7 +1027,7 @@
     Ian Reynolds contributed backspace key handling for Chrome.
     Davide Della Casa contributed performance optimizations for Firefox.
 
-    - Jens Mšnig
+    - Jens MÃ¶nig
 */
 
 // Global settings /////////////////////////////////////////////////////
@@ -1033,7 +1035,7 @@
 /*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
 FileList, getBlurredShadowSupport*/
 
-var morphicVersion = '2013-March-11';
+var morphicVersion = '2013-October-15';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1051,7 +1053,9 @@ var standardSettings = {
     mouseScrollAmount: 40,
     useSliderForInput: false,
     useVirtualKeyboard: true,
-    rasterizeSVGs: false
+    isTouchDevice: false, // turned on by touch events, don't set
+    rasterizeSVGs: false,
+    isFlat: false
 };
 
 var touchScreenSettings = {
@@ -1068,7 +1072,9 @@ var touchScreenSettings = {
     mouseScrollAmount: 40,
     useSliderForInput: true,
     useVirtualKeyboard: true,
-    rasterizeSVGs: false
+    isTouchDevice: false,
+    rasterizeSVGs: false,
+    isFlat: false
 };
 
 var MorphicPreferences = standardSettings;
@@ -1112,7 +1118,7 @@ function sizeOf(object) {
     // answer the number of own properties
     var size = 0, key;
     for (key in object) {
-        if (object.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(object, key)) {
             size += 1;
         }
     }
@@ -1227,7 +1233,7 @@ function getDocumentPositionOf(aDOMelement) {
 function clone(target) {
     // answer a new instance of target's type
     if (typeof target === 'object') {
-        var Clone = function () {};
+        var Clone = function () {nop(); };
         Clone.prototype = target;
         return new Clone();
     }
@@ -1249,7 +1255,7 @@ function copy(target) {
             target.constructor !== Object) {
         c = clone(target.constructor.prototype);
         for (property in target) {
-            if (target.hasOwnProperty(property)) {
+            if (Object.prototype.hasOwnProperty.call(target, property)) {
                 c[property] = target[property];
             }
         }
@@ -1907,6 +1913,12 @@ Rectangle.prototype.merge = function (aRect) {
     return result;
 };
 
+Rectangle.prototype.mergeWith = function (aRect) {
+    // mutates myself
+    this.origin = this.origin.min(aRect.origin);
+    this.corner = this.corner.max(aRect.corner);
+};
+
 Rectangle.prototype.round = function () {
     return this.origin.round().corner(this.corner.round());
 };
@@ -1922,7 +1934,7 @@ Rectangle.prototype.amountToTranslateWithin = function (aRect) {
     aRectangle. when all of me cannot be made to fit, prefer to keep
     my topLeft inside. Taken from Squeak.
 */
-    var dx, dy;
+    var dx = 0, dy = 0;
 
     if (this.right() > aRect.right()) {
         dx = aRect.right() - this.right();
@@ -1931,7 +1943,7 @@ Rectangle.prototype.amountToTranslateWithin = function (aRect) {
         dy = aRect.bottom() - this.bottom();
     }
     if ((this.left() + dx) < aRect.left()) {
-        dx = aRect.left() - this.right();
+        dx = aRect.left() - this.left();
     }
     if ((this.top() + dy) < aRect.top()) {
         dy = aRect.top() - this.top();
@@ -1956,6 +1968,14 @@ Rectangle.prototype.intersects = function (aRect) {
         (rc.y >= this.origin.y) &&
         (ro.x <= this.corner.x) &&
         (ro.y <= this.corner.y);
+};
+
+Rectangle.prototype.isNearTo = function (aRect, threshold) {
+    var ro = aRect.origin, rc = aRect.corner, border = threshold || 0;
+    return (rc.x + border >= this.origin.x) &&
+        (rc.y  + border >= this.origin.y) &&
+        (ro.x - border <= this.corner.x) &&
+        (ro.y - border <= this.corner.y);
 };
 
 // Rectangle transforming:
@@ -2157,9 +2177,9 @@ Morph.uber = Node.prototype;
     bounds of the surrounding morph. An an example refer to the
 
         fixLayout()
-        
+
     method of InspectorMorph, or the
-    
+
         startLayout()
         endLayout()
 
@@ -2788,7 +2808,7 @@ Morph.prototype.shadow = function (off, a, color) {
         alpha = a || ((a === 0) ? 0 : 0.2),
         fb = this.fullBounds();
     shadow.setExtent(fb.extent().add(this.shadowBlur * 2));
-    if (useBlurredShadows) {
+    if (useBlurredShadows && !MorphicPreferences.isFlat) {
         shadow.image = this.shadowImageBlurred(offset, color);
         shadow.alpha = alpha;
         shadow.setPosition(fb.origin.add(offset).subtract(this.shadowBlur));
@@ -3975,7 +3995,7 @@ PenMorph.prototype.drawNew = function (facing) {
 /*
     my orientation can be overridden with the "facing" parameter to
     implement Scratch-style rotation styles
-    
+
 */
     var context, start, dest, left, right, len,
         direction = facing || this.heading;
@@ -5460,7 +5480,7 @@ SliderButtonMorph.prototype.init = function (orientation) {
     this.color = new Color(80, 80, 80);
     this.highlightColor = new Color(90, 90, 140);
     this.pressColor = new Color(80, 80, 160);
-    this.is3D = true;
+    this.is3D = false;
     this.hasMiddleDip = true;
     SliderButtonMorph.uber.init.call(this, orientation);
 };
@@ -5473,21 +5493,21 @@ SliderButtonMorph.prototype.drawNew = function () {
     var colorBak = this.color.copy();
 
     SliderButtonMorph.uber.drawNew.call(this);
-    if (this.is3D) {
+    if (this.is3D || !MorphicPreferences.isFlat) {
         this.drawEdges();
     }
     this.normalImage = this.image;
 
     this.color = this.highlightColor.copy();
     SliderButtonMorph.uber.drawNew.call(this);
-    if (this.is3D) {
+    if (this.is3D || !MorphicPreferences.isFlat) {
         this.drawEdges();
     }
     this.highlightImage = this.image;
 
     this.color = this.pressColor.copy();
     SliderButtonMorph.uber.drawNew.call(this);
-    if (this.is3D) {
+    if (this.is3D || !MorphicPreferences.isFlat) {
         this.drawEdges();
     }
     this.pressImage = this.image;
@@ -6131,7 +6151,7 @@ InspectorMorph.prototype.init = function (target) {
     );
     this.isDraggable = true;
     this.border = 1;
-    this.edge = 5;
+    this.edge = MorphicPreferences.isFlat ? 1 : 5;
     this.color = new Color(60, 60, 60);
     this.borderColor = new Color(95, 95, 95);
     this.drawNew();
@@ -6159,7 +6179,7 @@ InspectorMorph.prototype.setTarget = function (target) {
 };
 
 InspectorMorph.prototype.buildPanes = function () {
-    var attribs = [], property, myself = this, ctrl, ev;
+    var attribs = [], property, myself = this, ctrl, ev, doubleClickAction;
 
     // remove existing panes
     this.children.forEach(function (m) {
@@ -6192,6 +6212,20 @@ InspectorMorph.prototype.buildPanes = function () {
             return typeof myself.target[prop] === 'function';
         });
     } // otherwise show all properties
+
+    doubleClickAction = function () {
+        var world, inspector;
+        if (!isObject(myself.currentProperty)) {return; }
+        world = myself.world();
+        inspector = new InspectorMorph(
+            myself.currentProperty
+        );
+        inspector.setPosition(world.hand.position());
+        inspector.keepWithin(world);
+        world.add(inspector);
+        inspector.changed();
+    };
+
     this.list = new ListMorph(
         this.target instanceof Array ? attribs : attribs.sort(),
         null, // label getter
@@ -6200,14 +6234,20 @@ InspectorMorph.prototype.buildPanes = function () {
                     [ // format element: [color, predicate(element]
                         new Color(0, 0, 180),
                         function (element) {
-                            return myself.target.hasOwnProperty(element);
+                            return Object.prototype.hasOwnProperty.call(
+                                myself.target,
+                                element
+                            );
                         }
                     ]
                 ]
-                : null
+                : null,
+        doubleClickAction
     );
+
     this.list.action = function (selected) {
         var val, txt, cnts;
+        if (selected === undefined) {return; }
         val = myself.target[selected];
         myself.currentProperty = val;
         if (val === null) {
@@ -6223,6 +6263,7 @@ InspectorMorph.prototype.buildPanes = function () {
         cnts.setReceiver(myself.target);
         myself.detail.setContents(cnts);
     };
+
     this.list.hBar.alpha = 0.6;
     this.list.vBar.alpha = 0.6;
     this.list.contents.step = null;
@@ -6598,11 +6639,19 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     this.edge = null;
 };
 
-MenuMorph.prototype.addItem = function (labelString, action, hint, color) {
+MenuMorph.prototype.addItem = function (
+    labelString,
+    action,
+    hint,
+    color,
+    bold, // bool
+    italic, // bool
+    doubleClickAction // optional, when used as list contents
+) {
     /*
     labelString is normally a single-line string. But it can also be one
     of the following:
-    
+
         * a multi-line string (containing line breaks)
         * an icon (either a Morph or a Canvas)
         * a tuple of format: [icon, string]
@@ -6611,7 +6660,10 @@ MenuMorph.prototype.addItem = function (labelString, action, hint, color) {
         localize(labelString || 'close'),
         action || nop,
         hint,
-        color]);
+        color,
+        bold || false,
+        italic || false,
+        doubleClickAction]);
 };
 
 MenuMorph.prototype.addLine = function (width) {
@@ -6636,6 +6688,9 @@ MenuMorph.prototype.createLabel = function () {
     text.backgroundColor = this.borderColor;
     text.drawNew();
     this.label = new BoxMorph(3, 0);
+    if (MorphicPreferences.isFlat) {
+        this.label.edge = 0;
+    }
     this.label.color = this.borderColor;
     this.label.borderColor = this.borderColor;
     this.label.setExtent(text.extent().add(4));
@@ -6657,8 +6712,8 @@ MenuMorph.prototype.drawNew = function () {
     });
     this.children = [];
     if (!this.isListContents) {
-        this.edge = 5;
-        this.border = 2;
+        this.edge = MorphicPreferences.isFlat ? 0 : 5;
+        this.border = MorphicPreferences.isFlat ? 1 : 2;
     }
     this.color = new Color(255, 255, 255);
     this.borderColor = new Color(60, 60, 60);
@@ -6697,7 +6752,10 @@ MenuMorph.prototype.drawNew = function () {
                 MorphicPreferences.menuFontName,
                 myself.environment,
                 tuple[2], // bubble help hint
-                tuple[3] // color
+                tuple[3], // color
+                tuple[4], // bold
+                tuple[5], // italic
+                tuple[6] // doubleclick action
             );
         }
         if (isLine) {
@@ -6931,6 +6989,7 @@ StringMorph.prototype.font = function () {
 
 StringMorph.prototype.drawNew = function () {
     var context, width, start, stop, i, p, c, x, y,
+        shadowOffset = this.shadowOffset || new Point(),
         txt = this.isPassword ?
                 this.password('*', this.text.length) : this.text;
 
@@ -6941,14 +7000,13 @@ StringMorph.prototype.drawNew = function () {
 
     // set my extent
     width = Math.max(
-        context.measureText(txt).width +
-            Math.abs(this.shadowOffset.x),
+        context.measureText(txt).width + Math.abs(shadowOffset.x),
         1
     );
     this.bounds.corner = this.bounds.origin.add(
         new Point(
             width,
-            fontHeight(this.fontSize) + Math.abs(this.shadowOffset.y)
+            fontHeight(this.fontSize) + Math.abs(shadowOffset.y)
         )
     );
     this.image.width = width;
@@ -6961,15 +7019,15 @@ StringMorph.prototype.drawNew = function () {
 
     // first draw the shadow, if any
     if (this.shadowColor) {
-        x = Math.max(this.shadowOffset.x, 0);
-        y = Math.max(this.shadowOffset.y, 0);
+        x = Math.max(shadowOffset.x, 0);
+        y = Math.max(shadowOffset.y, 0);
         context.fillStyle = this.shadowColor.toString();
         context.fillText(txt, x, fontHeight(this.fontSize) + y);
     }
 
     // now draw the actual text
-    x = Math.abs(Math.min(this.shadowOffset.x, 0));
-    y = Math.abs(Math.min(this.shadowOffset.y, 0));
+    x = Math.abs(Math.min(shadowOffset.x, 0));
+    y = Math.abs(Math.min(shadowOffset.y, 0));
     context.fillStyle = this.color.toString();
 
     if (this.isShowingBlanks) {
@@ -7892,7 +7950,10 @@ function TriggerMorph(
     fontStyle,
     environment,
     hint,
-    labelColor
+    labelColor,
+    labelBold,
+    labelItalic,
+    doubleClickAction
 ) {
     this.init(
         target,
@@ -7902,7 +7963,10 @@ function TriggerMorph(
         fontStyle,
         environment,
         hint,
-        labelColor
+        labelColor,
+        labelBold,
+        labelItalic,
+        doubleClickAction
     );
 }
 
@@ -7914,11 +7978,15 @@ TriggerMorph.prototype.init = function (
     fontStyle,
     environment,
     hint,
-    labelColor
+    labelColor,
+    labelBold,
+    labelItalic,
+    doubleClickAction
 ) {
     // additional properties:
     this.target = target || null;
     this.action = action || null;
+    this.doubleClickAction = doubleClickAction || null;
     this.environment = environment || null;
     this.labelString = labelString || null;
     this.label = null;
@@ -7928,6 +7996,8 @@ TriggerMorph.prototype.init = function (
     this.highlightColor = new Color(192, 192, 192);
     this.pressColor = new Color(128, 128, 128);
     this.labelColor = labelColor || new Color(0, 0, 0);
+    this.labelBold = labelBold || false;
+    this.labelItalic = labelItalic || false;
 
     // initialize inherited properties:
     TriggerMorph.uber.init.call(this);
@@ -7976,8 +8046,8 @@ TriggerMorph.prototype.createLabel = function () {
         this.labelString,
         this.fontSize,
         this.fontStyle,
-        false, // bold
-        false, // italic
+        this.labelBold,
+        this.labelItalic,
         false, // numeric
         null, // shadow offset
         null, // shadow color
@@ -8014,7 +8084,9 @@ TriggerMorph.prototype.trigger = function () {
     in the environment as optionally specified.
     Note: if action is also a function, instead of becoming
     the argument itself it will be called to answer the argument.
-    for selections, Yes/No Choices etc:
+    for selections, Yes/No Choices etc. As second argument pass
+    myself, so I can be modified to reflect status changes, e.g.
+    inside a list box:
 
     else (if target is not a function):
 
@@ -8028,15 +8100,38 @@ TriggerMorph.prototype.trigger = function () {
     */
     if (typeof this.target === 'function') {
         if (typeof this.action === 'function') {
-            this.target.call(this.environment, this.action.call());
+            this.target.call(this.environment, this.action.call(), this);
         } else {
-            this.target.call(this.environment, this.action);
+            this.target.call(this.environment, this.action, this);
         }
     } else {
         if (typeof this.action === 'function') {
             this.action.call(this.target);
         } else { // assume it's a String
             this.target[this.action]();
+        }
+    }
+};
+
+TriggerMorph.prototype.triggerDoubleClick = function () {
+    // same as trigger() but use doubleClickAction instead of action property
+    // note that specifying a doubleClickAction is optional
+    if (!this.doubleClickAction) {return; }
+    if (typeof this.target === 'function') {
+        if (typeof this.doubleClickAction === 'function') {
+            this.target.call(
+                this.environment,
+                this.doubleClickAction.call(),
+                this
+            );
+        } else {
+            this.target.call(this.environment, this.doubleClickAction, this);
+        }
+    } else {
+        if (typeof this.doubleClickAction === 'function') {
+            this.doubleClickAction.call(this.target);
+        } else { // assume it's a String
+            this.target[this.doubleClickAction]();
         }
     }
 };
@@ -8068,6 +8163,14 @@ TriggerMorph.prototype.mouseClickLeft = function () {
     this.image = this.highlightImage;
     this.changed();
     this.trigger();
+};
+
+TriggerMorph.prototype.mouseDoubleClick = function () {
+    this.triggerDoubleClick();
+};
+
+TriggerMorph.prototype.rootForGrab = function () {
+    return this.isDraggable ? TriggerMorph.uber.rootForGrab.call(this) : null;
 };
 
 // TriggerMorph bubble help:
@@ -8115,7 +8218,10 @@ function MenuItemMorph(
     fontStyle,
     environment,
     hint,
-    color
+    color,
+    bold,
+    italic,
+    doubleClickAction // optional when used as list morph item
 ) {
     this.init(
         target,
@@ -8125,7 +8231,10 @@ function MenuItemMorph(
         fontStyle,
         environment,
         hint,
-        color
+        color,
+        bold,
+        italic,
+        doubleClickAction
     );
 }
 
@@ -8137,11 +8246,13 @@ MenuItemMorph.prototype.createLabel = function () {
     if (isString(this.labelString)) {
         this.label = this.createLabelString(this.labelString);
     } else if (this.labelString instanceof Array) {
-        // assume its pattern is: [icon, string] 
+        // assume its pattern is: [icon, string]
         this.label = new Morph();
         this.label.alpha = 0; // transparent
-        this.label.add(icon = this.createIcon(this.labelString[0]));
-        this.label.add(lbl = this.createLabelString(this.labelString[1]));
+        icon = this.createIcon(this.labelString[0]);
+        this.label.add(icon);
+        lbl = this.createLabelString(this.labelString[1]);
+        this.label.add(lbl);
         lbl.setCenter(icon.center());
         lbl.setLeft(icon.right() + 4);
         this.label.bounds = (icon.bounds.merge(lbl.bounds));
@@ -8179,7 +8290,9 @@ MenuItemMorph.prototype.createLabelString = function (string) {
     var lbl = new TextMorph(
         string,
         this.fontSize,
-        this.fontStyle
+        this.fontStyle,
+        this.labelBold,
+        this.labelItalic
     );
     lbl.setColor(this.labelColor);
     return lbl;
@@ -8589,11 +8702,11 @@ ScrollFrameMorph.prototype.scrollX = function (steps) {
         newX;
 
     newX = cl + steps;
-    if (newX > l) {
-        newX = l;
-    }
     if (newX + cw < r) {
         newX = r - cw;
+    }
+    if (newX > l) {
+        newX = l;
     }
     if (newX !== cl) {
         this.contents.setLeft(newX);
@@ -8608,11 +8721,11 @@ ScrollFrameMorph.prototype.scrollY = function (steps) {
         newY;
 
     newY = ct + steps;
-    if (newY > t) {
-        newY = t;
-    }
     if (newY + ch < b) {
         newY = b - ch;
+    }
+    if (newY > t) {
+        newY = t;
     }
     if (newY !== ct) {
         this.contents.setTop(newY);
@@ -8823,21 +8936,24 @@ ListMorph.prototype = new ScrollFrameMorph();
 ListMorph.prototype.constructor = ListMorph;
 ListMorph.uber = ScrollFrameMorph.prototype;
 
-function ListMorph(elements, labelGetter, format) {
+function ListMorph(elements, labelGetter, format, doubleClickAction) {
 /*
     passing a format is optional. If the format parameter is specified
     it has to be of the following pattern:
 
         [
             [<color>, <single-argument predicate>],
+            ['bold', <single-argument predicate>],
+            ['italic', <single-argument predicate>],
             ...
         ]
 
-    multiple color conditions can be passed in such a format list, the
+    multiple conditions can be passed in such a format list, the
     last predicate to evaluate true when given the list element sets
-    the given color. If no condition is met, the default color (black)
-    will be assigned.
-    
+    the given format category (color, bold, italic).
+    If no condition is met, the default format (color black, non-bold,
+    non-italic) will be assigned.
+
     An example of how to use fomats can be found in the InspectorMorph's
     "markOwnProperties" mechanism.
 */
@@ -8852,11 +8968,17 @@ function ListMorph(elements, labelGetter, format) {
             }
             return element.toString();
         },
-        format || []
+        format || [],
+        doubleClickAction // optional callback
     );
 }
 
-ListMorph.prototype.init = function (elements, labelGetter, format) {
+ListMorph.prototype.init = function (
+    elements,
+    labelGetter,
+    format,
+    doubleClickAction
+) {
     ListMorph.uber.init.call(this);
 
     this.contents.acceptsDrops = false;
@@ -8867,8 +8989,10 @@ ListMorph.prototype.init = function (elements, labelGetter, format) {
     this.labelGetter = labelGetter;
     this.format = format;
     this.listContents = null;
-    this.selected = null;
+    this.selected = null; // actual element currently selected
+    this.active = null; // menu item representing the selected element
     this.action = null;
+    this.doubleClickAction = doubleClickAction || null;
     this.acceptsDrops = false;
     this.buildListContents();
 };
@@ -8887,18 +9011,29 @@ ListMorph.prototype.buildListContents = function () {
         this.elements = ['(empty)'];
     }
     this.elements.forEach(function (element) {
-        var color = null;
+        var color = null,
+            bold = false,
+            italic = false;
 
         myself.format.forEach(function (pair) {
             if (pair[1].call(null, element)) {
-                color = pair[0];
+                if (pair[0] === 'bold') {
+                    bold = true;
+                } else if (pair[0] === 'italic') {
+                    italic = true;
+                } else { // assume it's a color
+                    color = pair[0];
+                }
             }
         });
         myself.listContents.addItem(
             myself.labelGetter(element), // label string
             element, // action
             null, // hint
-            color
+            color,
+            bold,
+            italic,
+            myself.doubleClickAction
         );
     });
     this.listContents.setPosition(this.contents.position());
@@ -8907,8 +9042,9 @@ ListMorph.prototype.buildListContents = function () {
     this.addContents(this.listContents);
 };
 
-ListMorph.prototype.select = function (item) {
+ListMorph.prototype.select = function (item, trigger) {
     this.selected = item;
+    this.active = trigger;
     if (this.action) {
         this.action.call(null, item);
     }
@@ -9289,6 +9425,7 @@ HandMorph.prototype.drop = function () {
         mouseDownRight
         mouseClickLeft
         mouseClickRight
+        mouseDoubleClick
         mouseEnter
         mouseLeave
         mouseEnterDragging
@@ -9352,6 +9489,7 @@ HandMorph.prototype.processMouseDown = function (event) {
 
 HandMorph.prototype.processTouchStart = function (event) {
     var myself = this;
+    MorphicPreferences.isTouchDevice = true;
     clearInterval(this.touchHoldTimeout);
     if (event.touches.length === 1) {
         this.touchHoldTimeout = setInterval( // simulate mouseRightClick
@@ -9370,6 +9508,7 @@ HandMorph.prototype.processTouchStart = function (event) {
 };
 
 HandMorph.prototype.processTouchMove = function (event) {
+    MorphicPreferences.isTouchDevice = true;
     if (event.touches.length === 1) {
         var touch = event.touches[0];
         this.processMouseMove(touch);
@@ -9378,6 +9517,7 @@ HandMorph.prototype.processTouchMove = function (event) {
 };
 
 HandMorph.prototype.processTouchEnd = function (event) {
+    MorphicPreferences.isTouchDevice = true;
     clearInterval(this.touchHoldTimeout);
     nop(event);
     this.processMouseUp({button: 0});
@@ -9414,6 +9554,23 @@ HandMorph.prototype.processMouseUp = function () {
             morph = morph.parent;
         }
         morph[expectedClick](this.bounds.origin);
+    }
+    this.mouseButton = null;
+};
+
+HandMorph.prototype.processDoubleClick = function () {
+    var morph = this.morphAtPointer();
+
+    this.destroyTemporaries();
+    if (this.children.length !== 0) {
+        this.drop();
+    } else {
+        while (morph && !morph.mouseDoubleClick) {
+            morph = morph.parent;
+        }
+        if (morph) {
+            morph.mouseDoubleClick(this.bounds.origin);
+        }
     }
     this.mouseButton = null;
 };
@@ -9458,19 +9615,20 @@ HandMorph.prototype.processMouseMove = function (event) {
                 this.grab(morph);
                 this.grabOrigin = this.morphToGrab.situation();
             }
-            // if the mouse has left its fullBounds, center it
-            fb = morph.fullBounds();
-            if (!fb.containsPoint(pos)) {
-                this.bounds.origin = fb.center();
-                this.grab(morph);
-                this.setPosition(pos);
+            if (morph) {
+                // if the mouse has left its fullBounds, center it
+                fb = morph.fullBounds();
+                if (!fb.containsPoint(pos)) {
+                    this.bounds.origin = fb.center();
+                    this.grab(morph);
+                    this.setPosition(pos);
+                }
             }
-
         }
 
 /*
     original, more cautious code for grabbing Morphs,
-    retained in case of needing    to fall back:
+    retained in case of needing to fall back:
 
         if (morph === this.morphToGrab) {
             if (morph.isDraggable) {
@@ -9491,7 +9649,7 @@ HandMorph.prototype.processMouseMove = function (event) {
             if (old.mouseLeave) {
                 old.mouseLeave();
             }
-            if (old.mouseLeaveDragging && this.mouseButton) {
+            if (old.mouseLeaveDragging && myself.mouseButton) {
                 old.mouseLeaveDragging();
             }
         }
@@ -9501,7 +9659,7 @@ HandMorph.prototype.processMouseMove = function (event) {
             if (newMorph.mouseEnter) {
                 newMorph.mouseEnter();
             }
-            if (newMorph.mouseEnterDragging && this.mouseButton) {
+            if (newMorph.mouseEnterDragging && myself.mouseButton) {
                 newMorph.mouseEnterDragging();
             }
         }
@@ -9528,7 +9686,10 @@ HandMorph.prototype.processMouseScroll = function (event) {
     if (morph) {
         morph.mouseScroll(
             (event.detail / -3) || (
-                event.hasOwnProperty('wheelDeltaY') ?
+                Object.prototype.hasOwnProperty.call(
+                    event,
+                    'wheelDeltaY'
+                ) ?
                         event.wheelDeltaY / 120 :
                         event.wheelDelta / 120
             ),
@@ -9551,16 +9712,18 @@ HandMorph.prototype.processDrop = function (event) {
     find out whether an external image or audio file was dropped
     onto the world canvas, turn it into an offscreen canvas or audio
     element and dispatch the
-    
+
         droppedImage(canvas, name)
         droppedSVG(image, name)
         droppedAudio(audio, name)
-    
+
     events to interested Morphs at the mouse pointer
 */
     var files = event instanceof FileList ? event
                 : event.target.files || event.dataTransfer.files,
         file,
+        url = event.dataTransfer ?
+                event.dataTransfer.getData('URL') : null,
         txt = event.dataTransfer ?
                 event.dataTransfer.getData('Text/HTML') : null,
         src,
@@ -9639,18 +9802,18 @@ HandMorph.prototype.processDrop = function (event) {
     }
 
     function parseImgURL(html) {
-        var url = '',
-            i,
+        var iurl = '',
+            idx,
             c,
             start = html.indexOf('<img src="');
         if (start === -1) {return null; }
         start += 10;
-        for (i = start; i < html.length; i += 1) {
-            c = html[i];
+        for (idx = start; idx < html.length; idx += 1) {
+            c = html[idx];
             if (c === '"') {
-                return url;
+                return iurl;
             }
-            url = url.concat(c);
+            iurl = iurl.concat(c);
         }
         return null;
     }
@@ -9670,6 +9833,24 @@ HandMorph.prototype.processDrop = function (event) {
             } else { // assume it's meant to be binary
                 readBinary(file);
             }
+        }
+    } else if (url) {
+        if (
+            contains(
+                ['gif', 'png', 'jpg', 'jpeg', 'bmp'],
+                url.slice(url.lastIndexOf('.') + 1).toLowerCase()
+            )
+        ) {
+            while (!target.droppedImage) {
+                target = target.parent;
+            }
+            img = new Image();
+            img.onload = function () {
+                canvas = newCanvas(new Point(img.width, img.height));
+                canvas.getContext('2d').drawImage(img, 0, 0);
+                target.droppedImage(canvas);
+            };
+            img.src = url;
         }
     } else if (txt) {
         while (!target.droppedImage) {
@@ -9745,6 +9926,10 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     this.worldCanvas = aCanvas;
 
     // additional properties:
+    this.stamp = Date.now(); // reference in multi-world setups
+    while (this.stamp === Date.now()) {nop(); }
+    this.stamp = Date.now();
+
     this.useFillPage = fillPage;
     if (this.useFillPage === undefined) {
         this.useFillPage = true;
@@ -9779,12 +9964,41 @@ WorldMorph.prototype.fullDrawOn = function (aCanvas, aRect) {
 
 WorldMorph.prototype.updateBroken = function () {
     var myself = this;
+    this.condenseDamages();
     this.broken.forEach(function (rect) {
         if (rect.extent().gt(new Point(0, 0))) {
             myself.fullDrawOn(myself.worldCanvas, rect);
         }
     });
     this.broken = [];
+};
+
+WorldMorph.prototype.condenseDamages = function () {
+    // collapse clustered damaged rectangles into their unions,
+    // thereby reducing the array of brokens to a manageable size
+
+    function condense(src) {
+        var trgt = [], hit;
+        src.forEach(function (rect) {
+            hit = detect(
+                trgt,
+                function (each) {return each.isNearTo(rect, 20); }
+            );
+            if (hit) {
+                hit.mergeWith(rect);
+            } else {
+                trgt.push(rect);
+            }
+        });
+        return trgt;
+    }
+
+    var again = true, size = this.broken.length;
+    while (again) {
+        this.broken = condense(this.broken);
+        again = (this.broken.length < size);
+        size = this.broken.length;
+    }
 };
 
 WorldMorph.prototype.doOneCycle = function () {
@@ -9875,7 +10089,8 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
         document.body.removeChild(this.virtualKeyboard);
         this.virtualKeyboard = null;
     }
-    if (!MorphicPreferences.useVirtualKeyboard) {
+    if (!MorphicPreferences.isTouchDevice
+            || !MorphicPreferences.useVirtualKeyboard) {
         return;
     }
     this.virtualKeyboard = document.createElement("input");
@@ -9889,6 +10104,7 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
     this.virtualKeyboard.style.left = "0px";
     this.virtualKeyboard.style.width = "0px";
     this.virtualKeyboard.style.height = "0px";
+    this.virtualKeyboard.autocapitalize = "none"; // iOS specific
     document.body.appendChild(this.virtualKeyboard);
 
     this.virtualKeyboard.addEventListener(
@@ -9957,6 +10173,8 @@ WorldMorph.prototype.initEventListeners = function () {
     canvas.addEventListener(
         "mousedown",
         function (event) {
+            event.preventDefault();
+            canvas.focus();
             myself.hand.processMouseDown(event);
         },
         false
@@ -9975,6 +10193,15 @@ WorldMorph.prototype.initEventListeners = function () {
         function (event) {
             event.preventDefault();
             myself.hand.processMouseUp(event);
+        },
+        false
+    );
+
+    canvas.addEventListener(
+        "dblclick",
+        function (event) {
+            event.preventDefault();
+            myself.hand.processDoubleClick(event);
         },
         false
     );
@@ -10446,7 +10673,7 @@ WorldMorph.prototype.about = function () {
     var versions = '', module;
 
     for (module in modules) {
-        if (modules.hasOwnProperty(module)) {
+        if (Object.prototype.hasOwnProperty.call(modules, module)) {
             versions += ('\n' + module + ' (' + modules[module] + ')');
         }
     }
@@ -10482,7 +10709,8 @@ WorldMorph.prototype.edit = function (aStringOrTextMorph) {
     this.keyboardReceiver = this.cursor;
 
     this.initVirtualKeyboard();
-    if (MorphicPreferences.useVirtualKeyboard) {
+    if (MorphicPreferences.isTouchDevice
+            && MorphicPreferences.useVirtualKeyboard) {
         this.virtualKeyboard.style.top = this.cursor.top() + pos.y + "px";
         this.virtualKeyboard.style.left = this.cursor.left() + pos.x + "px";
         this.virtualKeyboard.focus();

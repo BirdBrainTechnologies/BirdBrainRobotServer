@@ -144,6 +144,8 @@ public class FinchServletWrapper {
 		
 	}	
 	
+	
+	
 	// Parses the Finch output string and sets it
 	public boolean setOutput(String setter)
 	{
@@ -225,18 +227,18 @@ public class FinchServletWrapper {
 					return false;
 				}
 				
-				if(redLED > 100)
-					redLED = 100;
+				if(redLED > 255)
+					redLED = 255;
 				if(redLED < 0)
 					redLED = 0;
 				
-				if(greenLED > 100)
-					greenLED = 100;
+				if(greenLED > 255)
+					greenLED = 255;
 				if(greenLED < 0)
 					greenLED = 0;
 				
-				if(blueLED > 100)
-					blueLED = 100;
+				if(blueLED > 255)
+					blueLED = 255;
 				if(blueLED < 0)
 					blueLED = 0;
 			

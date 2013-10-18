@@ -4,7 +4,7 @@
 
     Russian translation for SNAP!
 
-    This file is part of Snap!. 
+    This file is part of Snap!.
 
     Snap! is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -168,7 +168,7 @@ SnapTranslator.dict.ru = {
     Special characters: (see <http://0xcc.net/jsescape/>)
 
     ,    \u00c4, \u00e4
-    ,    \u00d6, \u00f6
+,    \u00d6, \u00f6
     ,    \u00dc, \u00fc
     §      \u00df
 */
@@ -239,7 +239,7 @@ SnapTranslator.dict.ru = {
         'вращаемый только слева направо',
 
     // new sprite button:
-    'add a new Sprite':
+    'add a new sprite':
         'Добавить новый Образ',
 
     // tab help
@@ -260,21 +260,21 @@ SnapTranslator.dict.ru = {
         abbreviation.
 
         For example:
-        
+
             'say %s for %n secs'
 
         can currently not be changed into
-        
+
             'say %n secs long %s'
 
         and still work as intended.
 
         Similarly
-        
+
             'point towards %dst'
 
         cannot be changed into
-        
+
             'point towards %cst'
 
         without breaking its functionality.
@@ -599,7 +599,7 @@ SnapTranslator.dict.ru = {
         'включить Morphic\nконтекст меню',
 
     // project menu
-    'Project Notes...':
+    'Project notes...':
         'Проектные Записки...',
     'New':
         'Новый проект',
@@ -613,18 +613,18 @@ SnapTranslator.dict.ru = {
         'Импорт...',
     'file menu import hint':
         'загрузить экспортированный проект\nили библиотеку блоков, маску или звук',
-    'Export project as plain text ...':
+    'Export project as plain text...':
         'Экспорт проект как текстовый файл...',
     'Export project...':
         'Экспорт проект...',
     'show project data as XML\nin a new browser window':
         'представить проектные данные как XML\nв новом окне браузера',
-    'Export blocks ...':
+    'Export blocks...':
         'Экспорт блоки...',
     'show global custom block definitions as XML\nin a new browser window':
         'представить определения глобальных пользовательских блоков как XML\nв новом окне браузера',
-    'Import tools...':
-        'Импорт сервисные ср-ва...',
+    'Import tools':
+        'Импорт сервисные ср-ва',
     'load the official library of\npowerful blocks':
         'загрузить служебную библиотеку блоков',
 
