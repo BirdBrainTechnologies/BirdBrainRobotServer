@@ -28,6 +28,7 @@ public class HummingbirdServletWrapper {
 						}
 						catch (NullPointerException ex) { 
 							sensors = null;
+							isConnected = false;
 						}
 						if (sensors == null) {
 							isConnected = false;
@@ -82,7 +83,7 @@ public class HummingbirdServletWrapper {
 		isConnected = false;
 		// Wait for the sensor loop to die, 100ms should do it
         try {
-            Thread.sleep(100);
+            Thread.sleep(500);
         } catch (InterruptedException ex) {
         }
 		try {

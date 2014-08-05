@@ -185,7 +185,7 @@ SnapTranslator.dict.pt = {
     'translator_e-mail':
         'mmsequeira@gmail.com',
     'last_changed':
-        '2013-10-14',
+        '2014-05-26',
 
     // GUI
     // control bar:
@@ -420,7 +420,7 @@ SnapTranslator.dict.pt = {
     'when I am clicked':
         'Quando alguém clicar em ti',
     'when I receive %msgHat':
-        'Quando receberes %msgHat',
+        'Quando receberes a mensagem %msgHat',
     'broadcast %msg':
         'difunde a mensagem %msg',
     'broadcast %msg and wait':
@@ -447,12 +447,20 @@ SnapTranslator.dict.pt = {
         'se %b , então %c senão, %c',
     'report %s':
         'reporta %s',
-    'stop block':
-        'pára este guião de bloco',
-    'stop script':
-        'pára este guião de actor',
-    'stop all %stop':
-        'pára tudo %stop',
+    'stop %stopChoices':
+        'pára %stopChoices',
+    'all':
+        'tudo',
+    'this script':
+        'este guião de objecto',
+    'this block':
+        'este guião de bloco',
+    'stop %stopOthersChoices':
+        'pára %stopOthersChoices',
+    'all but this script':
+        'todos os guiões de objecto excepto este',
+    'other scripts in sprite':
+        'os outros guiões deste objecto',
     'pause all %pause':
         'faz pausa em tudo %pause',
     'run %cmdRing %inputs':
@@ -470,9 +478,9 @@ SnapTranslator.dict.pt = {
     'when I start as a clone':
         'Quando fores criado como clone',
     'create a clone of %cln':
-        'clona o actor %cln',
+        'clona %cln',
     'myself':
-        'tu próprio',
+        '-te',
     'delete this clone':
         'remove-te',
 
@@ -677,6 +685,16 @@ SnapTranslator.dict.pt = {
         'Língua…',
     'Zoom blocks...':
         'Ampliação dos blocos…',
+    'Stage size...':
+        'Tamanho do palco…',
+    'Stage size':
+        'Tamanho do palco',
+    'Stage width':
+        'Largura do palco',
+    'Stage height':
+        'Altura do palco',
+    'Default':
+        'Normal',
     'Blurred shadows':
         'Sombras desfocadas',
     'uncheck to use solid drop\nshadows and highlights':
@@ -759,6 +777,12 @@ SnapTranslator.dict.pt = {
         'Desassinalar para aumentar a velocidade\npermitindo ritmos variáveis das tramas.',
     'check for smooth, predictable\nanimations across computers':
         'Assinalar para obter animações mais suaves\ne previsíveis de computador para computador.',
+    'Flat line ends':
+        'Extremos das linhas planos',
+    'check for flat ends of lines':
+        'Assinalar para que os extremos das linhas\ndesenhadas pela caneta sejam planos.',
+    'uncheck for round ends of lines':
+        'Desassinalar para que os extremos das linhas\ndesenhadas pela caneta sejam redondos.',
 
     // entradas
     'with inputs':
@@ -950,8 +974,6 @@ SnapTranslator.dict.pt = {
         'Este projecto ainda não tem\nnenhum bloco personalizado global.',
     'select':
         'seleccionar',
-    'all':
-        'todos',
     'none':
         'nenhum',
 
@@ -1087,21 +1109,29 @@ SnapTranslator.dict.pt = {
 
     // detecção de colisões
     'mouse-pointer':
-        'ponteiro do rato',
+        'o ponteiro do rato',
     'edge':
-        'borda',
+        'a borda',
     'pen trails':
         'traços da caneta',
 
     // trajes
     'Turtle':
-        'Seta',
+        'tartaruga',
     'Empty':
-        'Vazio',
+        'vazio',
 
     // efeitos gráficos
+    'brightness':
+        'brilho',
     'ghost':
         'fantasma',
+    'negative':
+        'negativo',
+    'comic':
+        'ondeado',
+    'confetti':
+        'cor',
 
     // teclas
     'space':
@@ -1215,11 +1245,11 @@ SnapTranslator.dict.pt = {
     'e^':
         'a exponencial',
 
-    // delimiters
+    // delimitadores
     'whitespace':
         'espaços em branco',
     'line':
-        'avanços de linha',
+        'linha',
     'tab':
         'tabuladores',
     'cr':
@@ -1248,28 +1278,308 @@ SnapTranslator.dict.pt = {
         'um item ao acaso',
 
     // em falta no ficheiro lang-de.js
+    'grow':
+        'aumentar',
+    'shrink':
+        'reduzir',
+    'flip ↔':
+        'inverter ↔',
+    'flip ↕':
+        'inverter ↕',
+    'Export all scripts as pic...':
+        'Exportar todos os guiões como fotografia…',
+    'show a picture of all scripts\nand block definitions':
+        'Mostra uma imagem com todos\nos guiões e definições de blocos',
+    'current %dates':
+        '%dates corrente',
+    'year':
+        'ano',
+    'month':
+        'mês',
+    'date':
+        'dia',
+    'day of week':
+        'dia da semana',
+    'hour':
+        'hora',
+    'minute':
+        'minuto',
+    'second':
+        'segundo',
+    'time in milliseconds':
+        'tempo (em milisegundos)',
+    'find blocks...':
+        'procurar blocos…',
     'costume name':
         'o nome do traje',
     'Open':
         'Abrir',
     'Share':
         'Partilhar',
+    'Snap!Cloud':
+        'Snap!Nuvem',
     'Cloud':
         'Nuvem',
+    'could not connect to:':
+        'Não foi possível ligar a:',
+    'Service:':
+        'Serviço:',
+    'login':
+        'autenticação',
+    'ERROR: INVALID PASSWORD':
+        'ERRO: PALAVRA-PASSE INVÁLIDA',
     'Browser':
         'Navegador',
+    'Sign up':
+        'Registar nova conta',
+    'Signup':
+        'Registo de nova conta',
+    'Sign in':
+        'Entrar',
+    'Logout':
+        'Sair',
+    'Change Password...':
+        'Alterar palavra-passe…',
+    'Change Password':
+        'Alterar palavra-passe',
+    'Account created.':
+        'Conta criada.',
+    'An e-mail with your password\nhas been sent to the address provided':
+        'Foi enviada uma mensagem para\no endereço disponibilizado\ncontendo a sua palavra-passe.',
+    'now connected.':
+        'entrou.',
+    'disconnected.':
+        'saiu.',
+    'Reset password':
+        'Recuperar palavra-passe',
+    'Reset Password...':
+        'Recuperar palavra-passe…',
+    'User name:':
+        'Nome de utilizador:',
+    'Password:':
+        'Palavra-passe:',
+    'Old password:':
+        'Palavra-passe actual:',
+    'New password:':
+        'Nova palavra-passe:',
+    'Repeat new password:':
+        'Repita a nova palavra-passe:',
+    'Birth date:':
+        'Data de nascimento:',
+    'January':
+        'Janeiro',
+    'February':
+        'Fevereiro',
+    'March':
+        'Março',
+    'April':
+        'Abril',
+    'May':
+        'Maio',
+    'June':
+        'Junho',
+    'July':
+        'Julho',
+    'August':
+        'Agosto',
+    'September':
+        'Setembro',
+    'October':
+        'Outubro',
+    'November':
+        'Novembro',
+    'December':
+        'Dezembro',
+    'year:':
+        'ano:',
+    ' or before':
+        ' ou antes',
+    'E-mail address:':
+        'Endereço de correio electrónico:',
+    'E-mail address of parent or guardian:':
+        'Endereço de encarregado de educação:',
+    'Terms of Service...':
+        'Termos do Serviço…',
+    'Privacy...':
+        'Privacidade…',
+    'I have read and agree\nto the Terms of Service':
+        'Li e declaro concordar\ncom os Termos do Serviço',
+    'stay signed in on this computer\nuntil logging out':
+        'manter-me autenticado neste\ncomputador até que saia',
+    'please fill out\nthis field':
+        'Por favor preencha\neste campo.',
+    'User name must be four\ncharacters or longer':
+        'O nome de utilizador tem de ter\npelo menos quatro caracteres.',
+    'please provide a valid\nemail address':
+        'Por favor indique um endereço\nde correio electrónico válido.',
+    'password must be six\ncharacters or longer':
+        'A palavra-passe tem de ter\npelo menos seis caracteres.',
+    'passwords do\nnot match':
+        'As palavras-passe\nnão correspondem.',
+    'please agree to\nthe TOS':
+        'Por favor concorde com\nos Termos do Serviço.',
     'Examples':
         'Exemplos',
     'You are not logged in':
         'Ainda não se autenticou',
-    'Updating project list...':
-        'Actualizando a lista de projectos…',
+    'Updating\nproject list...':
+        'Actualizando a\nlista de projectos…',
     'Opening project...':
         'Abrindo o projecto…',
     'Fetching project from the cloud...':
         'Obtendo o projecto da nuvem…',
     'Saving project to the cloud...':
         'Guardando o projecto na nuvem…',
+    'Sprite Nesting':
+        'Actores compostos',
+    'uncheck to disable\nsprite composition':
+        'Desassinalar para desactivar\na composição de actores.',
+    'Codification support':
+        'Suportar produção de código',
+    'check for block\nto text mapping features':
+        'Assinalar para funcionalidades\nde mapeamento entre blocos e texto.',
+    'Save to disk':
+        'Guardar no disco',
+    'experimental - store this project\nin your downloads folder':
+        'Experimental - Guardar este projecto\nna sua pasta de descargas.',
     'saved.':
-        'guardado.'
+        'guardado.',
+    'options...':
+        'opções…',
+    'read-only':
+        'apenas leitura',
+    'Input Slot Options':
+        'Opções de Ranhura de Entrada',
+    'Enter one option per line.Optionally use "=" as key/value delimiter\ne.g.\n   the answer=42':
+        'Introduza uma opção por linha. Opcionalmente, use "=" como separador\nentre chave e valor, e.g.\n   a resposta=42',
+    'paint a new sprite':
+        'Pintar um novo actor.',
+    'Paint a new costume':
+        'Pintar um novo traje.',
+    'add a new Turtle sprite':
+        'Adicionar um novo actor.',
+    'Flat design':
+        'Design plano',
+    'check for alternative\nGUI design':
+        'Assinalar para um design alternativo\nda interface gráfica com o utilizador.',
+    'Rasterize SVGs':
+        'Transformar SVG em mapas de bits',
+    'check to rasterize\nSVGs on import':
+        'Assinalar para transformar os arquivos SVG\nem mapas de bits durante a importação.',
+    'comment pic...':
+        'fotografia do comentário…',
+    'open a new window\nwith a picture of this comment':
+        'Abrir uma nova janela com\numa fotografia deste comentário.',
+    'undo':
+        'desfazer',
+    'Brush size':
+        'Espessura do pincel',
+    'Constrain proportions of shapes?\n(you can also hold shift)':
+        'Preservar proporções das formas?\n(também pode pressionar shift)',
+    'Eraser tool':
+        'Borracha',
+    'Paintbrush tool\n(free draw)':
+        'Pincel\n(desenho livre)',
+    'Line tool\n(shift: vertical/horizontal)':
+        'Segmento de recta\n(shift: vertical/horizontal)',
+    'Stroked Rectangle\n(shift: square)':
+        'Rectângulo\n(shift: quadrado)',
+    'Filled Rectangle\n(shift: square)':
+        'Rectângulo preenchido\n(shift: quadrado)',
+    'Stroked Ellipse\n(shift: circle)':
+        'Elipse\n(shift: circunferência)',
+    'Filled Ellipse\n(shift: circle)':
+        'Elipse preenchida\n(shift: círculo)',
+    'Fill a region':
+        'Balde de tinta',
+    'Set the rotation center':
+        'Estabelecer centro de rotação',
+    'Pipette tool\n(pick a color anywhere)':
+        'Pipeta\n(recolher uma cor em qualquer lado)',
+    'Paint Editor':
+        'Editor de Pintura',
+    'square':
+        'quadrado',
+    'pointRight':
+        'triângulo para a direita',
+    'gears':
+        'roda dentada',
+    'file':
+        'arquivo',
+    'fullScreen':
+        'ecrã inteiro',
+    'normalScreen':
+        'ecrã normal',
+    'smallStage':
+        'palco pequeno',
+    'normalStage':
+        'palco normal',
+    'turtle':
+        'tartaruga',
+    'stage':
+        'palco',
+    'turtleOutline':
+        'contorno de tartaruga',
+    'pause':
+        'pausa',
+    'flag':
+        'bandeira',
+    'octagon':
+        'octógono',
+    'cloud':
+        'nuvem',
+    'cloudOutline':
+        'contorno de nuvem',
+    'cloudGradient':
+        'nuvem com gradiente',
+    'turnRight':
+        'girar à direita',
+    'turnLeft':
+        'girar à esquerda',
+    'storage':
+        'armazenagem',
+    'poster':
+        'póster',
+    'flash':
+        'relâmpago',
+    'brush':
+        'pincel',
+    'rectangle':
+        'rectângulo',
+    'rectangleSolid':
+        'rectângulo preenchido',
+    'circle':
+        'circunferência',
+    'circleSolid':
+        'círculo',
+    'crosshairs':
+        'mira',
+    'paintbucket':
+        'balde de tinta',
+    'eraser':
+        'borracha',
+    'pipette':
+        'pipeta',
+    'speechBubble':
+        'balão de fala',
+    'speechBubbleOutline':
+        'contorno de balão de fala',
+    'arrowUp':
+        'seta para cima',
+    'arrowUpOutline':
+        'contorno de seta para cima',
+    'arrowLeft':
+        'seta para a esquerda',
+    'arrowLeftOutline':
+        'contorno de seta para a esquerda',
+    'arrowDown':
+        'seta para baixo',
+    'arrowDownOutline':
+        'contorno de seta para baixo',
+    'arrowRight':
+        'seta para a direita',
+    'arrowRightOutline':
+        'contorno de seta para a direita',
+    'robot':
+        'robot'
 };

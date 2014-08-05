@@ -5,10 +5,10 @@
               directory with the processing instruction <?eclipse.ant.import?>
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="BirdBrainRobotServer">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="../../../../../eclipse"/>
+    <property name="ECLIPSE_HOME" value="../../Software/eclipse/"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.6"/>
-    <property name="source" value="1.6"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
     <path id="BirdBrainRobotServer.classpath">
         <pathelement location="bin"/>
         <pathelement location="libs/jetty-ajp-8.1.9.v20130131.jar"/>
@@ -59,7 +59,6 @@
         <pathelement location="libs/create-lab-commons-device.jar"/>
         <pathelement location="libs/create-lab-commons-serial.jar"/>
         <pathelement location="libs/create-lab-commons-speech.jar"/>
-        <pathelement location="libs/create-lab-commons-usb-hid.jar"/>
         <pathelement location="libs/create-lab-commons-user-interface.jar"/>
         <pathelement location="libs/create-lab-commons-util.jar"/>
         <pathelement location="libs/create-lab-commons-xml.jar"/>
@@ -74,11 +73,18 @@
         <pathelement location="libs/terk-services.jar"/>
         <pathelement location="libs/ServerPics.jar"/>
         <pathelement location="libs/jnaerator-0.9.5.jar"/>
+        <pathelement location="libs/create-lab-commons-usb-hid.jar"/>
+        <pathelement location="libs/hidapi-1.1.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="libs/resources">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -93,6 +99,7 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
+            <src path="libs/resources"/>
             <classpath refid="BirdBrainRobotServer.classpath"/>
         </javac>
     </target>
@@ -110,94 +117,9 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="BirdBrainRobotServer">
+    <target name="BirdBrain">
         <java classname="birdbrain.finchandHummingbirdServer.BirdBrainRobotServer" failonerror="true" fork="yes">
             <classpath refid="BirdBrainRobotServer.classpath"/>
         </java>
     </target>
-              	<target name="create_run_jar">
-              	        <jar destfile="dist/BirdBrainRobotServer.jar" filesetmanifest="mergewithoutmain">
-              	            <manifest>
-              	                <attribute name="Main-Class" value="birdbrain.finchandHummingbirdServer.BirdBrainRobotServer"/>
-              	                <attribute name="Class-Path" value="."/>
-              	            </manifest>
-              	            <fileset dir="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/bin"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-ajp-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-annotations-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-client-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-continuation-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-deploy-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-http-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-io-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-jmx-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-jndi-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-overlay-deployer-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-plus-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-policy-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-rewrite-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-security-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-server-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-servlet-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-servlets-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-util-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-webapp-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-websocket-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jetty-xml-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/servlet-api-3.0.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/annotations/javax.annotation-1.1.0.v201108011116.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/annotations/org.objectweb.asm-3.1.0.v200803061910.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jndi/javax.activation-1.1.0.v201105071233.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jndi/javax.mail.glassfish-1.4.1.v201005082020.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jsp/com.sun.el-2.2.0.v201108011116.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jsp/javax.el-2.2.0.v201108011116.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jsp/javax.servlet.jsp-2.2.0.v201112011158.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jsp/javax.servlet.jsp.jstl-1.2.0.v201105211821.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jsp/org.apache.jasper.glassfish-2.2.2.v201112011158.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jsp/org.apache.taglibs.standard.glassfish-1.2.0.v201112081803.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jsp/org.eclipse.jdt.core-3.7.1.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jta/javax.transaction-1.1.1.v201105210645.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/monitor/jetty-monitor-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/spdy/spdy-core-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/spdy/spdy-jetty-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/spdy/spdy-jetty-http-8.1.9.v20130131.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/apache-log4j-extras-1.0.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/cmu_us_kal.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/cmulex.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/commons-collections-3.2.1.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/commons-lang-2.5.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/create-lab-commons-audio.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/create-lab-commons-collections.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/create-lab-commons-device.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/create-lab-commons-serial.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/create-lab-commons-speech.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/create-lab-commons-usb-hid.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/create-lab-commons-user-interface.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/create-lab-commons-util.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/create-lab-commons-xml.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/en_us.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/finch-core.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/freetts.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/hummingbird-core.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jna.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/log4j-1.2.16.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/RXTXcomm.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/terk-core.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/terk-services.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/ServerPics.jar"/>
-              	            <zipfileset excludes="META-INF/*.SF" src="C:/Users/Tom/Dropbox/SnapServerForFinchandHummingbird/BirdBrainRobotServer/libs/jnaerator-0.9.5.jar"/>
-              	        </jar>
-              	    </target>
-              	<taskdef name="bundleapp"
-              	             classname="com.oracle.appbundler.AppBundlerTask"   
-              	             classpath="libs/appbundler-1.0.jar" />
-
-              	    <target name="makeMacApp">
-              	        <bundleapp outputdirectory="dist"
-              	            name="BirdBrainRobotServer"
-              	            displayname="BirdBrain Robot Server"
-              	            identifier="birdbrain.finchandHummingbirdServer.BirdBrainRobotServer"
-              	            mainclassname="birdbrain.finchandHummingbirdServer.BirdBrainRobotServer">
-              	            <classpath file="dist/BirdBrainRobotServer.jar" />
-              	        </bundleapp>
-              	    </target>
 </project>

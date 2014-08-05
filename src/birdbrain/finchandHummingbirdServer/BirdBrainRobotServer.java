@@ -1,7 +1,7 @@
 package birdbrain.finchandHummingbirdServer;
 
-import java.awt.Desktop;
 import java.awt.EventQueue;
+import java.awt.Desktop;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,28 +11,38 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
-
 import java.awt.Color;
+
 import javax.swing.JButton;
+
 import java.awt.Font;
+
 import javax.swing.SwingConstants;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+import org.apache.commons.lang.SystemUtils;
+
+
+
 
 
 import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import javax.swing.JCheckBox;
+
 import java.awt.Toolkit;
+
 
 /**
  * BirdBrain Robot Server - main class for exposing Finch and Hummingbird functionality over a localhost server.
@@ -64,6 +74,7 @@ public class BirdBrainRobotServer {
 	
 	private JCheckBox chckbxOpenSnapLocally; // Checkbox for open button
 	private JButton btnOpenSnap; // Open Snap! button contained
+	private JButton btnOpenScratch;
 	/**
 	 * Launch the application.
 	 */
@@ -100,30 +111,31 @@ public class BirdBrainRobotServer {
 			@Override
 			// If the window is closing, disconnect the Finch and Hummingbird, stop and destroy the server, and then exit
 			public void windowClosing(WindowEvent arg0) {
+				frmBirdbrainRobotServer.setVisible(false);
 				if(connector != null) {
 					connector.stop(); //stop the connector thread
 				}
 				try {
-					Thread.sleep(50); 
+					Thread.sleep(500); 
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				if(server != null) {
-               	 if(finchConnected) {
-                		finch.disConnect();
-                    }
-                    if(hummingbirdConnected) {
+					if(hummingbirdConnected) {
                     	hummingbird.disConnect();
                     }
-               	try {
-               		server.stop();
-               	}
-               	catch(Exception ex)
-               	{
-               		System.out.println("Error when stopping jetty server: " + ex.getMessage());
-               	}
-           		//server.destroy();
-                System.exit(0);    
+					if(finchConnected) {
+                		finch.disConnect();
+                    }
+                    try {
+	               		server.stop();
+	               	}
+	               	catch(Exception ex)
+	               	{
+	               		System.out.println("Error when stopping jetty server: " + ex.getMessage());
+	               	}
+	           		//server.destroy();
+	                System.exit(0);    
                }				
 			}
 		});
@@ -149,68 +161,116 @@ public class BirdBrainRobotServer {
 		btnOpenSnap.setRolloverIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/OpenButton2Clicked.png")));
 		btnOpenSnap.setDefaultCapable(false);
 		btnOpenSnap.setBorder(null);
-		// Open Snap should open the default browser
+		// Open Snap should open Google Chrome
 		btnOpenSnap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if ( Desktop.isDesktopSupported() )
+              // Check if they want to open stuff locally or remotely
+              if(chckbxOpenSnapLocally.isSelected()) {
+            	urlToOpen = urlToOpenLocal;
+              }
+              else {
+            	urlToOpen = urlToOpenRemote;
+              }
+              
+              // Based on what's connected, load the appropriate blocks library by setting the URL
+      		  // Notify the user through the status message
+      		  if(finchConnected && hummingbirdConnected) {
+      			  urlToOpen += "#open:http://localhost:22179/FinchHummingbirdSnapBlocks.xml";
+      			  statusMessage = "Opening Snap! with Finch and Hummingbird blocks loaded...";
+      		  }
+      		  else if(finchConnected) {
+      			  urlToOpen += "#open:http://localhost:22179/FinchSnapBlocks.xml";
+      			  statusMessage = "Opening Snap! with Finch blocks loaded...";
+      		  }
+      		  else if(hummingbirdConnected) {
+      			  urlToOpen += "#open:http://localhost:22179/HummingbirdSnapBlocks.xml";
+      			  statusMessage = "Opening Snap! with Hummingbird blocks loaded...";
+      		  }
+      		  else
+      		  {
+      			  lblHelperText.setText("<html>No Finch or Hummingbird detected.<br> Plug in a robot and restart this program to check again");
+      			  statusMessage = "Opening Snap! with no robot blocks loaded...";
+      			  urlToOpen += "#open:http://localhost:22179/SayThisBlock.xml";
+      		  }
+	                  		  
+      		  try{
+            	// The URL - set in startServer
+          		// Runs different command to open Snap in Chrome depending on OS (Windows, Mac, Linux supported)
+                  if(SystemUtils.IS_OS_WINDOWS){
+                	  final String arch = System.getProperty("sun.arch.data.model","");
+                	  File chrome= new File(System.getenv("PROGRAMFILES")+"/Google/Chrome/Application/chrome.exe"); 
+                	  if("64".equals(arch) && !chrome.exists())
+                		  chrome = new File(System.getenv("PROGRAMFILES(X86)")+"/Google/Chrome/Application/chrome.exe");
+                	  File chromeFallback = new File(System.getenv("USERPROFILE")+"/AppData/Local/Google/Chrome/Application/chrome.exe");
+                	  if(chrome.exists() || chromeFallback.exists()){
+                		  String[] chromePath = {"cmd","/k","start","chrome",urlToOpen};
+                		  Runtime.getRuntime().exec(chromePath);
+                	  }
+                	  else {
+                		  throw new IOException("Cannot find Google Chrome on Windows");
+                	  }
+                  }
+                  else if(SystemUtils.IS_OS_MAC_OSX) {
+                      File chrome = new File("/Applications/Google Chrome.app");
+                      if(chrome.exists()) {
+                          String[] chromePath = {"/usr/bin/open","-a","/Applications/Google Chrome.app",urlToOpen};
+                          Runtime.getRuntime().exec(chromePath);
+                      }
+                      else {
+                          //Error message if Chrome not found
+                          throw new IOException("Cannot find Google Chrome on Mac");
+                      }
+                  }
+                  else if(SystemUtils.IS_OS_LINUX) {
+                	  File chrome = new File("/usr/bin/google-chrome");
+                	  File chromium = new File("/usr/bin/chromium-browser");
+                	  if(chrome.exists()){
+                          String[] chromePath = {"google-chrome",urlToOpen};
+                          Runtime.getRuntime().exec(chromePath);
+                	  }
+                	  else if(chromium.exists()){
+                		  String[] chromePath = {"chromium-browser",urlToOpen};
+                          Runtime.getRuntime().exec(chromePath);
+                	  }
+                	  else {
+                		//Error message if Chrome not found
+                          throw new IOException("Cannot find Google Chrome or Chromium on Linux");
+                	  }
+                  }
+                  else {
+                      throw new IOException("Incompatible Operating System");
+                  }
+                // Set the status message to something like "Opening Snap! with x blocks loaded"
+                lblHelperText.setText(statusMessage);
+                }
+            catch ( IOException e )
                 {
-                    final Desktop dt = Desktop.getDesktop();
-                    if ( dt.isSupported( Desktop.Action.BROWSE ) )
-                        {
-                        try
-                            {
-	                          // Check if they want to open stuff locally or remotely
-	                          if(chckbxOpenSnapLocally.isSelected()) {
-	                        	urlToOpen = urlToOpenLocal;
-	                          }
-	                          else {
-	                        	urlToOpen = urlToOpenRemote;
-	                          }
-	                          
-	                          // Based on what's connected, load the appropriate blocks library by setting the URL
-	                  		  // Notify the user through the status message
-	                  		  if(finchConnected && hummingbirdConnected) {
-	                  			  urlToOpen += "#open:http://localhost:22179/FinchHummingbirdSnapBlocks.xml";
-	                  			  statusMessage = "Opening Snap! with Finch and Hummingbird blocks loaded...";
-	                  		  }
-	                  		  else if(finchConnected) {
-	                  			  urlToOpen += "#open:http://localhost:22179/FinchSnapBlocks.xml";
-	                  			  statusMessage = "Opening Snap! with Finch blocks loaded...";
-	                  		  }
-	                  		  else if(hummingbirdConnected) {
-	                  			  urlToOpen += "#open:http://localhost:22179/HummingbirdSnapBlocks.xml";
-	                  			  statusMessage = "Opening Snap! with Hummingbird blocks loaded...";
-	                  		  }
-	                  		  else
-	                  		  {
-	                  			  lblHelperText.setText("<html>No Finch or Hummingbird detected.<br> Plug in a robot and restart this program to check again");
-	                  			  statusMessage = "Opening Snap! with no robot blocks loaded...";
-	                  			  urlToOpen += "#open:http://localhost:22179/SayThisBlock.xml";
-	                  		  }
-                        	// The URL - set in startServer
+            		//Try the default browser if Chrome doesn't work
+	            	System.out.println("Error Opening Google Chrome. Now trying default browser...");
+	            	final Desktop dt;
+	            	if ( Desktop.isDesktopSupported() && (dt = Desktop.getDesktop()).isSupported(Desktop.Action.BROWSE))
+	                {
+	                    try{
+	                    	// The URL - set in startServer
                             dt.browse( new URI( urlToOpen ) );
                             // Set the status message to something like "Opening Snap! with x blocks loaded"
                             lblHelperText.setText(statusMessage);
-                            }
-                        catch ( URISyntaxException e )
-                            {
-                            System.out.println( e.getMessage() );
-                            }
-                        catch ( IOException e )
-                            {
-                            System.out.println( e.getMessage() );
-                            }
-                        }
+	                    }
+	                    catch(Exception e1){
+	                    	lblHelperText.setText("Error opening browser.");
+	                    	e1.printStackTrace();
+	                    }
+	                }
+	            	else{
+	            		lblHelperText.setText("Error opening browser.");
+	            	}
                 }
-				else {
-					lblHelperText.setText("Open Snap! button won't work until you install libgnome2-0");
-				}
 			}
 		});
 		btnOpenSnap.setContentAreaFilled(false);
 		btnOpenSnap.setBorderPainted(false);
 		btnOpenSnap.setBounds(100, 218, 233, 49);
-		btnOpenSnap.setToolTipText("Opens Snap! in your default browser");
+		btnOpenSnap.setToolTipText("Opens Snap! in Google Chrome or your default browser");
 		btnOpenSnap.setSelectedIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/OpenButton2Clicked.png")));
 		btnOpenSnap.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/OpenSnap.png")));
 		frmBirdbrainRobotServer.getContentPane().add(btnOpenSnap);
@@ -220,7 +280,7 @@ public class BirdBrainRobotServer {
 		lblHelperText.setBackground(Color.DARK_GRAY);
 		lblHelperText.setVerticalAlignment(SwingConstants.TOP);
 		lblHelperText.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblHelperText.setBounds(10, 321, 414, 80);
+		lblHelperText.setBounds(10, 360, 414, 80);
 		frmBirdbrainRobotServer.getContentPane().add(lblHelperText);
 		
 		chckbxOpenSnapLocally = new JCheckBox("Open Snap! locally (no cloud storage)");
@@ -230,6 +290,55 @@ public class BirdBrainRobotServer {
 		chckbxOpenSnapLocally.setBackground(Color.DARK_GRAY);
 		chckbxOpenSnapLocally.setBounds(110, 274, 272, 23);
 		frmBirdbrainRobotServer.getContentPane().add(chckbxOpenSnapLocally);
+		if(SystemUtils.IS_OS_WINDOWS || SystemUtils.IS_OS_MAC_OSX) { //hide Scratch button on Linux
+			btnOpenScratch = new JButton("");
+			btnOpenScratch.setFocusable(false);
+			btnOpenScratch.setRolloverIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/OpenScratchButtonClicked.png")));
+			btnOpenScratch.setDefaultCapable(false);
+			btnOpenScratch.setBorder(null);
+			btnOpenScratch.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg){
+					try{
+						if(SystemUtils.IS_OS_WINDOWS){
+		              	  final String arch = System.getProperty("sun.arch.data.model","");
+		              	  File scratch= new File(System.getenv("PROGRAMFILES")+"/Scratch 2/Scratch 2.exe"); 
+		              	  if("64".equals(arch) && !scratch.exists())
+		              		  scratch = new File(System.getenv("PROGRAMFILES(X86)")+"/Scratch 2/Scratch 2.exe");
+		              	  if(scratch.exists()){
+		              		  String[] scratchPath = {"cmd","/c","start","Scratch 2","/D",scratch.getParentFile().getPath(),"Scratch 2"};
+		              		  Process p = Runtime.getRuntime().exec(scratchPath);
+		              	  }
+		              	  else {
+		              		  throw new IOException("Cannot find Scratch on Windows. Is it installed?");
+		              	  }
+		                }
+		                else if(SystemUtils.IS_OS_MAC_OSX) {
+		                    File scratch = new File("/Applications/Scratch 2.app");
+		                    if(scratch.exists()) {
+		                        String[] scratchPath = {"/usr/bin/open","-a","/Applications/Scratch 2.app"};
+		                        Runtime.getRuntime().exec(scratchPath);
+		                    }
+		                    else {
+		                        //Error message if Scratch not found
+		                        throw new IOException("Cannot find Scratch on Mac. Is it installed?");
+		                    }
+		                }
+						lblHelperText.setText("Opening Scratch 2.0...");
+					}
+					catch(IOException e){
+						lblHelperText.setText(e.getMessage());
+                        System.out.println( e.getMessage() );
+					}
+				}
+			});
+			btnOpenScratch.setContentAreaFilled(false);
+			btnOpenScratch.setBorderPainted(false);
+			btnOpenScratch.setBounds(100, 304, 233, 49);
+			btnOpenScratch.setToolTipText("Opens Scratch 2.0 offline");
+			btnOpenScratch.setSelectedIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/OpenScratchButtonClicked.png")));
+			btnOpenScratch.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/OpenScratchButton.png")));
+			frmBirdbrainRobotServer.getContentPane().add(btnOpenScratch);
+		}
 		frmBirdbrainRobotServer.getContentPane().setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{btnOpenSnap}));
 	}
 	
@@ -248,7 +357,17 @@ public class BirdBrainRobotServer {
 			  
 			while(toRun) {
 				finchConnected = finch.connect();
+				try {
+					Thread.sleep(250);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				hummingbirdConnected = hummingbird.connect();
+				try {
+					Thread.sleep(250);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				if(finch.getConnected() && isFinch == false) {
 					finchServlet.setConnectionState(true);
 					resetServlet.setFinchConnectionState(true);
@@ -279,11 +398,7 @@ public class BirdBrainRobotServer {
 					lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdNotConnected.png")));
 					isHumm = false;
 				}
-				try {
-					Thread.sleep(50);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				
 			}
 			
 		}
@@ -387,6 +502,5 @@ public class BirdBrainRobotServer {
 		   e.printStackTrace();
 		  }
 
-		
 	}
 }

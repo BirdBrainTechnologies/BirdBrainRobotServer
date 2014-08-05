@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2013 by Jens Mönig
+    Copyright (C) 2014 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -149,13 +149,14 @@ useBlurredShadows, version, window, SpeechBubbleMorph, modules, StageMorph,
 fontHeight*/
 
 /*global SpriteMorph, Context, ListWatcherMorph, CellMorph,
-DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph*/
+DialogBoxMorph, BlockInputFragmentMorph, PrototypeHatBlockMorph, Costume*/
 
 /*global IDE_Morph, BlockDialogMorph, BlockEditorMorph, localize, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.blocks = '2013-October-08';
+modules.blocks = '2014-July-18';
+
 
 var SyntaxElementMorph;
 var BlockMorph;
@@ -517,6 +518,15 @@ SyntaxElementMorph.prototype.revertToDefaultInput = function (arg, noValues) {
     if (idx !== -1) {
         if (this instanceof BlockMorph) {
             deflt = this.labelPart(this.parseSpec(this.blockSpec)[idx]);
+            if (deflt instanceof InputSlotMorph && this.definition) {
+                deflt.setChoices.apply(
+                    deflt,
+                    this.definition.inputOptionsOfIdx(inp)
+                );
+                deflt.setContents(
+                    this.definition.defaultValueOfInputIdx(inp)
+                );
+            }
         } else if (this instanceof MultiArgMorph) {
             deflt = this.labelPart(this.slotSpec);
         } else if (this instanceof ReporterSlotMorph) {
@@ -642,7 +652,7 @@ SyntaxElementMorph.prototype.fixBlockColor = function (
 // SyntaxElementMorph label parts:
 
 SyntaxElementMorph.prototype.labelPart = function (spec) {
-    var part;
+    var part, tokens;
     if (spec[0] === '%' &&
             spec.length > 1 &&
             this.selector !== 'reportGetVar') {
@@ -655,6 +665,18 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
 
         // single-arg and specialized multi-arg slots:
         switch (spec) {
+        case '%imgsource':
+            part = new InputSlotMorph(
+                null, // text
+                false, // non-numeric
+                {
+                    'pen trails': ['pen trails'],
+                    'stage image': ['stage image']
+                },
+                true
+            );
+            part.setContents(['pen trails']);
+            break;
         case '%inputs':
             part = new MultiArgMorph('%s', 'with inputs');
             part.isStatic = false;
@@ -803,11 +825,30 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true // read-only
             );
             break;
+        case '%dates':
+            part = new InputSlotMorph(
+                null, // text
+                false, // non-numeric
+                {
+                    'year' : ['year'],
+                    'month' : ['month'],
+                    'date' : ['date'],
+                    'day of week' : ['day of week'],
+                    'hour' : ['hour'],
+                    'minute' : ['minute'],
+                    'second' : ['second'],
+                    'time in milliseconds' : ['time in milliseconds']
+                },
+                true // read-only
+            );
+            part.setContents(['date']);
+            break;
         case '%delim':
             part = new InputSlotMorph(
                 null, // text
                 false, // numeric?
                 {
+                    'letter' : ['letter'],
                     'whitespace' : ['whitespace'],
                     'line' : ['line'],
                     'tab' : ['tab'],
@@ -885,17 +926,13 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part = new InputSlotMorph(
                 null,
                 false,
-                {
-                /*
-                    color : 'color',
-                    fisheye : 'fisheye',
-                    whirl : 'whirl',
-                    pixelate : 'pixelate',
-                    mosaic : 'mosaic',
-                    brightness : 'brightness',
-                */
-                    ghost : ['ghost']
-                },
+                {   brightness : ['brightness'],
+                    ghost : ['ghost'],
+                    negative : ['negative'],
+                    comic: ['comic'],
+                    duplicate: ['duplicate'],
+                    confetti: ['confetti']
+                    },
                 true
             );
             part.setContents(['ghost']);
@@ -987,7 +1024,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 'attributesMenu',
                 true
             );
-            part.isStatic = true;
             break;
         case '%fun':
             part = new InputSlotMorph(
@@ -1028,6 +1064,33 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             part.setContents(['encode URI']);
+            break;
+        case '%stopChoices':
+            part = new InputSlotMorph(
+                null,
+                false,
+                {
+                    'all' : ['all'],
+                    'this script' : ['this script'],
+                    'this block' : ['this block']
+                },
+                true
+            );
+            part.setContents(['all']);
+            part.isStatic = true;
+            break;
+        case '%stopOthersChoices':
+            part = new InputSlotMorph(
+                null,
+                false,
+                {
+                    'all but this script' : ['all but this script'],
+                    'other scripts in sprite' : ['other scripts in sprite']
+                },
+                true
+            );
+            part.setContents(['all but this script']);
+            part.isStatic = true;
             break;
         case '%typ':
             part = new InputSlotMorph(
@@ -1157,7 +1220,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             );
             break;
 
-
     // symbols:
 
         case '%turtle':
@@ -1222,7 +1284,7 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
         case '%pause':
             part = new SymbolMorph('pause');
             part.size = this.fontSize;
-            part.color = new Color(160, 80, 0);
+            part.color = new Color(255, 220, 0);
             part.isProtectedLabel = true; // doesn't participate in zebraing
             part.shadowColor = this.color.darker(this.labelContrast);
             part.shadowOffset = MorphicPreferences.isFlat ?
@@ -1230,8 +1292,59 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
             part.drawNew();
             break;
         default:
-            // nop();
+            nop();
         }
+    } else if (spec[0] === '$' &&
+            spec.length > 1 &&
+            this.selector !== 'reportGetVar') {
+/*
+        // allow costumes as label symbols
+        // has issues when loading costumes (asynchronously)
+        // commented out for now
+
+        var rcvr = this.definition.receiver || this.receiver(),
+            id = spec.slice(1),
+            cst;
+        if (!rcvr) {return this.labelPart('%stop'); }
+        cst = detect(
+            rcvr.costumes.asArray(),
+            function (each) {return each.name === id; }
+        );
+        part = new SymbolMorph(cst);
+        part.size = this.fontSize * 1.5;
+        part.color = new Color(255, 255, 255);
+        part.isProtectedLabel = true; // doesn't participate in zebraing
+        part.drawNew();
+*/
+
+        // allow GUI symbols as label icons
+        // usage: $symbolName[-size-r-g-b], size and color values are optional
+        tokens = spec.slice(1).split('-');
+        if (!contains(SymbolMorph.prototype.names, tokens[0])) {
+            part = new StringMorph(spec);
+            part.fontName = this.labelFontName;
+            part.fontStyle = this.labelFontStyle;
+            part.fontSize = this.fontSize;
+            part.color = new Color(255, 255, 255);
+            part.isBold = true;
+            part.shadowColor = this.color.darker(this.labelContrast);
+            part.shadowOffset = MorphicPreferences.isFlat ?
+                    new Point() : this.embossing;
+            part.drawNew();
+            return part;
+        }
+        part = new SymbolMorph(tokens[0]);
+        part.size = this.fontSize * (+tokens[1] || 1.2);
+        part.color = new Color(
+            +tokens[2] === 0 ? 0 : +tokens[2] || 255,
+            +tokens[3] === 0 ? 0 : +tokens[3] || 255,
+            +tokens[4] === 0 ? 0 : +tokens[4] || 255
+        );
+        part.isProtectedLabel = tokens.length > 2; // zebra colors
+        part.shadowColor = this.color.darker(this.labelContrast);
+        part.shadowOffset = MorphicPreferences.isFlat ?
+                new Point() : this.embossing;
+        part.drawNew();
     } else {
         part = new StringMorph(spec);
         part.fontName = this.labelFontName;
@@ -1531,6 +1644,12 @@ SyntaxElementMorph.prototype.showBubble = function (value) {
         morphToShow.silentSetWidth(img.width);
         morphToShow.silentSetHeight(img.height);
         morphToShow.image = img;
+    } else if (value instanceof Costume) {
+        img = value.thumbnail(new Point(40, 40));
+        morphToShow = new Morph();
+        morphToShow.silentSetWidth(img.width);
+        morphToShow.silentSetHeight(img.height);
+        morphToShow.image = img;
     } else if (value instanceof Context) {
         img = value.image();
         morphToShow = new Morph();
@@ -1546,38 +1665,22 @@ SyntaxElementMorph.prototype.showBubble = function (value) {
         txt  = value.length > 500 ? value.slice(0, 500) + '...' : value;
         morphToShow = new TextMorph(
             txt,
-            this.fontSize,
-            null,
-            false,
-            false,
-            'center'
+            this.fontSize
         );
     } else if (value === null) {
         morphToShow = new TextMorph(
             '',
-            this.fontSize,
-            null,
-            false,
-            false,
-            'center'
+            this.fontSize
         );
     } else if (value === 0) {
         morphToShow = new TextMorph(
             '0',
-            this.fontSize,
-            null,
-            false,
-            false,
-            'center'
+            this.fontSize
         );
     } else if (value.toString) {
         morphToShow = new TextMorph(
             value.toString(),
-            this.fontSize,
-            null,
-            false,
-            false,
-            'center'
+            this.fontSize
         );
     }
     bubble = new SpeechBubbleMorph(
@@ -1838,7 +1941,8 @@ BlockMorph.prototype.parseSpec = function (spec) {
 
 BlockMorph.prototype.setSpec = function (spec) {
     var myself = this,
-        part;
+        part,
+        inputIdx = -1;
 
     if (!spec) {return; }
     this.parts().forEach(function (part) {
@@ -1848,6 +1952,9 @@ BlockMorph.prototype.setSpec = function (spec) {
         this.add(this.placeHolder());
     }
     this.parseSpec(spec).forEach(function (word) {
+        if (word[0] === '%') {
+            inputIdx += 1;
+        }
         part = myself.labelPart(word);
         myself.add(part);
         if (!(part instanceof CommandSlotMorph)) {
@@ -1865,6 +1972,12 @@ BlockMorph.prototype.setSpec = function (spec) {
         }
         if (myself.isPrototype) {
             myself.add(myself.placeHolder());
+        }
+        if (part instanceof InputSlotMorph && myself.definition) {
+            part.setChoices.apply(
+                part,
+                myself.definition.inputOptionsOfIdx(inputIdx)
+            );
         }
     });
     this.blockSpec = spec;
@@ -1909,6 +2022,7 @@ BlockMorph.prototype.userMenu = function () {
     var menu = new MenuMorph(this),
         world = this.world(),
         myself = this,
+        alternatives,
         blck;
 
     menu.addItem(
@@ -1916,22 +2030,24 @@ BlockMorph.prototype.userMenu = function () {
         'showHelp'
     );
     if (this.isTemplate) {
-        if (this.selector !== 'evaluateCustomBlock') {
-            menu.addItem(
-                "hide",
-                'hidePrimitive'
-            );
-        }
-        if (StageMorph.prototype.enableCodeMapping) {
-            menu.addLine();
-            menu.addItem(
-                'header mapping...',
-                'mapToHeader'
-            );
-            menu.addItem(
-                'code mapping...',
-                'mapToCode'
-            );
+        if (!(this.parent instanceof SyntaxElementMorph)) {
+            if (this.selector !== 'evaluateCustomBlock') {
+                menu.addItem(
+                    "hide",
+                    'hidePrimitive'
+                );
+            }
+            if (StageMorph.prototype.enableCodeMapping) {
+                menu.addLine();
+                menu.addItem(
+                    'header mapping...',
+                    'mapToHeader'
+                );
+                menu.addItem(
+                    'code mapping...',
+                    'mapToCode'
+                );
+            }
         }
         return menu;
     }
@@ -1964,6 +2080,14 @@ BlockMorph.prototype.userMenu = function () {
                 );
             }
         );
+    } else if (this.definition && this.alternatives) { // custom block
+        alternatives = this.alternatives();
+        if (alternatives.length > 0) {
+            menu.addItem(
+                'relabel...',
+                function () {myself.relabel(alternatives); }
+            );
+        }
     }
 
     menu.addItem(
@@ -1999,6 +2123,7 @@ BlockMorph.prototype.userMenu = function () {
     if (this.parentThatIsA(RingMorph)) {
         menu.addLine();
         menu.addItem("unringify", 'unringify');
+        menu.addItem("ringify", 'ringify');
         return menu;
     }
     if (this.parent instanceof ReporterSlotMorph
@@ -2045,16 +2170,18 @@ BlockMorph.prototype.developersMenu = function () {
 
 BlockMorph.prototype.hidePrimitive = function () {
     var ide = this.parentThatIsA(IDE_Morph),
+        dict,
         cat;
     if (!ide) {return; }
     StageMorph.prototype.hiddenPrimitives[this.selector] = true;
-    cat = {
+    dict = {
         doWarp: 'control',
         reifyScript: 'operators',
         reifyReporter: 'operators',
         reifyPredicate: 'operators',
         doDeclareVariables: 'variables'
-    }[this.selector] || this.category;
+    };
+    cat = dict[this.selector] || this.category;
     if (cat === 'lists') {cat = 'variables'; }
     ide.flushBlocksCache(cat);
     ide.refreshPalette();
@@ -2162,6 +2289,7 @@ BlockMorph.prototype.relabel = function (alternativeSelectors) {
     alternativeSelectors.forEach(function (sel) {
         var block = SpriteMorph.prototype.blockForSelector(sel);
         block.restoreInputs(oldInputs);
+        block.fixBlockColor(null, true);
         block.addShadow(new Point(3, 3));
         menu.addItem(
             block,
@@ -2181,7 +2309,7 @@ BlockMorph.prototype.setSelector = function (aSelector) {
     var oldInputs = this.inputs(),
         info;
     info = SpriteMorph.prototype.blocks[aSelector];
-    this.category = info.category;
+    this.setCategory(info.category);
     this.selector = aSelector;
     this.setSpec(localize(info.spec));
     this.restoreInputs(oldInputs);
@@ -2193,6 +2321,7 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
     // try to restore my previous inputs when my spec has been changed
     var i = 0,
         old,
+        nb,
         myself = this;
 
     this.inputs().forEach(function (inp) {
@@ -2200,7 +2329,17 @@ BlockMorph.prototype.restoreInputs = function (oldInputs) {
         if (old instanceof ReporterBlockMorph) {
             myself.silentReplaceInput(inp, old.fullCopy());
         } else if (old && inp instanceof InputSlotMorph) {
-            inp.setContents(old.evaluate());
+            // original - turns empty numberslots to 0:
+            // inp.setContents(old.evaluate());
+            // "fix" may be wrong b/c constants
+            if (old.contents) {
+                inp.setContents(old.contents().text);
+            }
+        } else if (old instanceof CSlotMorph && inp instanceof CSlotMorph) {
+            nb = old.nestedBlock();
+            if (nb) {
+                inp.nestedBlock(nb.fullCopy());
+            }
         }
         i += 1;
     });
@@ -2274,7 +2413,7 @@ BlockMorph.prototype.mapToHeader = function () {
     } else {
         help = 'Enter code that corresponds to the block\'s definition. ' +
             'Choose your own\nformal parameter names (ignoring the ones ' +
-            'shown .';
+            'shown).';
     }
     new DialogBoxMorph(
         this,
@@ -3208,6 +3347,7 @@ CommandBlockMorph.prototype.snap = function () {
 
 CommandBlockMorph.prototype.isStop = function () {
     return ([
+        'doStopThis',
         'doStop',
         'doStopBlock',
         'doStopAll',
@@ -3220,9 +3360,44 @@ CommandBlockMorph.prototype.isStop = function () {
 // CommandBlockMorph deleting
 
 CommandBlockMorph.prototype.userDestroy = function () {
+    if (this.nextBlock()) {
+        this.userDestroyJustThis();
+        return;
+    }
     var cslot = this.parentThatIsA(CSlotMorph);
     this.destroy();
     if (cslot) {
+        cslot.fixLayout();
+    }
+};
+
+CommandBlockMorph.prototype.userDestroyJustThis = function () {
+    // delete just this one block, reattach next block to the previous one,
+    var scripts = this.parentThatIsA(ScriptsMorph),
+        cs = this.parentThatIsA(CommandSlotMorph),
+        pb,
+        nb = this.nextBlock(),
+        above,
+        cslot = this.parentThatIsA(CSlotMorph);
+
+    if (this.parent) {
+        pb = this.parent.parentThatIsA(CommandBlockMorph);
+    }
+    if (pb && (pb.nextBlock() === this)) {
+        above = pb;
+    } else if (cs && (cs.nestedBlock() === this)) {
+        above = cs;
+    }
+    this.destroy();
+    if (nb) {
+        if (above instanceof CommandSlotMorph) {
+            above.nestedBlock(nb);
+        } else if (above instanceof CommandBlockMorph) {
+            above.nextBlock(nb);
+        } else {
+            scripts.add(nb);
+        }
+    } else if (cslot) {
         cslot.fixLayout();
     }
 };
@@ -4847,6 +5022,14 @@ ScriptsMorph.prototype.cleanUp = function () {
 };
 
 ScriptsMorph.prototype.exportScriptsPicture = function () {
+    var pic = this.scriptsPicture();
+    if (pic) {
+        window.open(pic.toDataURL());
+    }
+};
+
+ScriptsMorph.prototype.scriptsPicture = function () {
+    // private - answer a canvas containing the pictures of all scripts
     var boundingBox, pic, ctx;
     if (this.children.length === 0) {return; }
     boundingBox = this.children[0].fullBounds();
@@ -4867,7 +5050,7 @@ ScriptsMorph.prototype.exportScriptsPicture = function () {
             );
         }
     });
-    window.open(pic.toDataURL());
+    return pic;
 };
 
 ScriptsMorph.prototype.addComment = function () {
@@ -5206,7 +5389,7 @@ CommandSlotMorph.prototype.evaluate = function () {
 };
 
 CommandSlotMorph.prototype.isEmptySlot = function () {
-    return this.nestedBlock() === null;
+    return !this.isStatic && (this.nestedBlock() === null);
 };
 
 // CommandSlotMorph context menu ops
@@ -6088,7 +6271,7 @@ CSlotMorph.prototype.drawBottomEdge = function (context) {
     I am an editable text input slot. I can be either rectangular or
     rounded, and can have an optional drop-down menu. If I'm set to
     read-only I must have a drop-down menu and will assume a darker
-    shade of my    parent's color.
+    shade of my parent's color.
 
     my most important public attributes and accessors are:
 
@@ -6243,6 +6426,8 @@ InputSlotMorph.prototype.dropDownMenu = function () {
         if (Object.prototype.hasOwnProperty.call(choices, key)) {
             if (key[0] === '~') {
                 menu.addLine();
+            // } else if (key.indexOf('§_def') === 0) {
+            //     menu.addItem(choices[key].blockInstance(), choices[key]);
             } else {
                 menu.addItem(key, choices[key]);
             }
@@ -6332,7 +6517,7 @@ InputSlotMorph.prototype.collidablesMenu = function () {
         allNames = [];
 
     stage.children.forEach(function (morph) {
-        if (morph instanceof SpriteMorph) {
+        if (morph instanceof SpriteMorph && !morph.isClone) {
             if (morph.name !== rcvr.name) {
                 allNames = allNames.concat(morph.name);
             }
@@ -6459,6 +6644,11 @@ InputSlotMorph.prototype.attributesMenu = function () {
             dict[name] = name;
         });
     }
+    /*
+    obj.customBlocks.forEach(function (def, i) {
+        dict['§_def' + i] = def
+    });
+    */
     return dict;
 };
 
@@ -6542,6 +6732,23 @@ InputSlotMorph.prototype.getVarNamesDict = function () {
         return dict;
     }
     return {};
+};
+
+InputSlotMorph.prototype.setChoices = function (dict, readonly) {
+    // externally specify choices and read-only status,
+    // used for custom blocks
+    var cnts = this.contents();
+    this.choices = dict;
+    this.isReadOnly = readonly || false;
+    if (this.parent instanceof BlockMorph) {
+        this.parent.fixLabelColor();
+        if (!readonly) {
+            cnts.shadowOffset = new Point();
+            cnts.shadowColor = null;
+            cnts.setColor(new Color(0, 0, 0));
+        }
+    }
+    this.fixLayout();
 };
 
 // InputSlotMorph layout:
@@ -6791,7 +6998,6 @@ InputSlotMorph.prototype.drawNew = function () {
         }
     } else {
         r = (this.height() - (this.edge * 2)) / 2;
-        context.fillStyle = this.color.toString();
         context.beginPath();
         context.arc(
             r + this.edge,
@@ -7427,6 +7633,10 @@ TextSlotMorph.prototype.layoutChanged = function () {
     I display graphical symbols, such as special letters. I have been
     called into existence out of frustration about not being able to
     consistently use Unicode characters to the same ends.
+
+    Symbols can also display costumes, if one is specified in lieu
+    of a name property, although this feature is currently not being
+    used because of asynchronous image loading issues.
  */
 
 // SymbolMorph inherits from Morph:
@@ -7435,6 +7645,54 @@ SymbolMorph.prototype = new Morph();
 SymbolMorph.prototype.constructor = SymbolMorph;
 SymbolMorph.uber = Morph.prototype;
 
+// SymbolMorph available symbols:
+
+SymbolMorph.prototype.names = [
+    'square',
+    'pointRight',
+    'gears',
+    'file',
+    'fullScreen',
+    'normalScreen',
+    'smallStage',
+    'normalStage',
+    'turtle',
+    'stage',
+    'turtleOutline',
+    'pause',
+    'flag',
+    'octagon',
+    'cloud',
+    'cloudOutline',
+    'cloudGradient',
+    'turnRight',
+    'turnLeft',
+    'storage',
+    'poster',
+    'flash',
+    'brush',
+    'rectangle',
+    'rectangleSolid',
+    'circle',
+    'circleSolid',
+    'line',
+    'crosshairs',
+    'paintbucket',
+    'eraser',
+    'pipette',
+    'speechBubble',
+    'speechBubbleOutline',
+    'arrowUp',
+    'arrowUpOutline',
+    'arrowLeft',
+    'arrowLeftOutline',
+    'arrowDown',
+    'arrowDownOutline',
+    'arrowRight',
+    'arrowRightOutline',
+    'robot'
+];
+
 // SymbolMorph instance creation:
 
 function SymbolMorph(name, size, color, shadowOffset, shadowColor) {
@@ -7442,7 +7700,7 @@ function SymbolMorph(name, size, color, shadowOffset, shadowColor) {
 }
 
 SymbolMorph.prototype.init = function (
-    name,
+    name, // or costume
     size,
     color,
     shadowOffset,
@@ -7450,7 +7708,7 @@ SymbolMorph.prototype.init = function (
 ) {
     this.isProtectedLabel = false; // participate in zebraing
     this.isReadOnly = true;
-    this.name = name || 'square';
+    this.name = name || 'square'; // can also be a costume
     this.size = size || ((size === 0) ? 0 : 50);
     this.shadowOffset = shadowOffset || new Point(0, 0);
     this.shadowColor = shadowColor || null;
@@ -7503,7 +7761,12 @@ SymbolMorph.prototype.drawNew = function () {
 
 SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
     // private
+    if (this.name instanceof Costume) {
+        return this.name.thumbnail(new Point(this.symbolWidth(), this.size));
+    }
+
     var canvas = newCanvas(new Point(this.symbolWidth(), this.size));
+
     switch (this.name) {
     case 'square':
         return this.drawSymbolStop(canvas, aColor);
@@ -7569,6 +7832,28 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
         return this.drawSymbolEraser(canvas, aColor);
     case 'pipette':
         return this.drawSymbolPipette(canvas, aColor);
+    case 'speechBubble':
+        return this.drawSymbolSpeechBubble(canvas, aColor);
+    case 'speechBubbleOutline':
+        return this.drawSymbolSpeechBubbleOutline(canvas, aColor);
+    case 'arrowUp':
+        return this.drawSymbolArrowUp(canvas, aColor);
+    case 'arrowUpOutline':
+        return this.drawSymbolArrowUpOutline(canvas, aColor);
+    case 'arrowLeft':
+        return this.drawSymbolArrowLeft(canvas, aColor);
+    case 'arrowLeftOutline':
+        return this.drawSymbolArrowLeftOutline(canvas, aColor);
+    case 'arrowDown':
+        return this.drawSymbolArrowDown(canvas, aColor);
+    case 'arrowDownOutline':
+        return this.drawSymbolArrowDownOutline(canvas, aColor);
+    case 'arrowRight':
+        return this.drawSymbolArrowRight(canvas, aColor);
+    case 'arrowRightOutline':
+        return this.drawSymbolArrowRightOutline(canvas, aColor);
+    case 'robot':
+        return this.drawSymbolRobot(canvas, aColor);
     default:
         return canvas;
     }
@@ -7577,6 +7862,10 @@ SymbolMorph.prototype.symbolCanvasColored = function (aColor) {
 SymbolMorph.prototype.symbolWidth = function () {
     // private
     var size = this.size;
+
+    if (this.name instanceof Costume) {
+        return (size / this.name.height()) * this.name.width();
+    }
     switch (this.name) {
     case 'pointRight':
         return Math.sqrt(size * size - Math.pow(size / 2, 2));
@@ -7598,7 +7887,7 @@ SymbolMorph.prototype.symbolWidth = function () {
     case 'turnLeft':
         return size / 3 * 2;
     default:
-        return this.size;
+        return size;
     }
 };
 
@@ -8387,6 +8676,244 @@ SymbolMorph.prototype.drawSymbolPipette = function (canvas, color) {
     ctx.moveTo(n * 2, n);
     ctx.lineTo(n * 3, n * 2);
     ctx.stroke();
+
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolSpeechBubble = function (canvas, color) {
+    // answer a canvas showing a speech bubble
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        n = canvas.width / 3,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.fillStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(n, n * 2);
+    ctx.quadraticCurveTo(l, n * 2, l, n);
+    ctx.quadraticCurveTo(l, l, n, l);
+    ctx.lineTo(n * 2, l);
+    ctx.quadraticCurveTo(w - l, l, w - l, n);
+    ctx.quadraticCurveTo(w - l, n * 2, n * 2, n * 2);
+    ctx.lineTo(n / 2, h - l);
+    ctx.closePath();
+    ctx.fill();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolSpeechBubbleOutline = function (
+    canvas,
+    color
+) {
+    // answer a canvas showing a speech bubble
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        n = canvas.width / 3,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(n, n * 2);
+    ctx.quadraticCurveTo(l, n * 2, l, n);
+    ctx.quadraticCurveTo(l, l, n, l);
+    ctx.lineTo(n * 2, l);
+    ctx.quadraticCurveTo(w - l, l, w - l, n);
+    ctx.quadraticCurveTo(w - l, n * 2, n * 2, n * 2);
+    ctx.lineTo(n / 2, h - l);
+    ctx.closePath();
+    ctx.stroke();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolArrowUp = function (canvas, color) {
+    // answer a canvas showing an up arrow
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        n = canvas.width / 2,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.fillStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(l, n);
+    ctx.lineTo(n, l);
+    ctx.lineTo(w - l, n);
+    ctx.lineTo(w * 0.65, n);
+    ctx.lineTo(w * 0.65, h - l);
+    ctx.lineTo(w * 0.35, h - l);
+    ctx.lineTo(w * 0.35, n);
+    ctx.closePath();
+    ctx.fill();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolArrowUpOutline = function (canvas, color) {
+    // answer a canvas showing an up arrow
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        n = canvas.width / 2,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.strokeStyle = color.toString();
+    ctx.lineWidth = l * 2;
+    ctx.beginPath();
+    ctx.moveTo(l, n);
+    ctx.lineTo(n, l);
+    ctx.lineTo(w - l, n);
+    ctx.lineTo(w * 0.65, n);
+    ctx.lineTo(w * 0.65, h - l);
+    ctx.lineTo(w * 0.35, h - l);
+    ctx.lineTo(w * 0.35, n);
+    ctx.closePath();
+    ctx.stroke();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolArrowDown = function (canvas, color) {
+    // answer a canvas showing a down arrow
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width;
+    ctx.save();
+    ctx.translate(w, w);
+    ctx.rotate(radians(180));
+    this.drawSymbolArrowUp(canvas, color);
+    ctx.restore();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolArrowDownOutline = function (canvas, color) {
+    // answer a canvas showing a down arrow
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width;
+    ctx.save();
+    ctx.translate(w, w);
+    ctx.rotate(radians(180));
+    this.drawSymbolArrowUpOutline(canvas, color);
+    ctx.restore();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolArrowLeft = function (canvas, color) {
+    // answer a canvas showing a left arrow
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width;
+    ctx.save();
+    ctx.translate(0, w);
+    ctx.rotate(radians(-90));
+    this.drawSymbolArrowUp(canvas, color);
+    ctx.restore();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolArrowLeftOutline = function (canvas, color) {
+    // answer a canvas showing a left arrow
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width;
+    ctx.save();
+    ctx.translate(0, w);
+    ctx.rotate(radians(-90));
+    this.drawSymbolArrowUpOutline(canvas, color);
+    ctx.restore();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolArrowRight = function (canvas, color) {
+    // answer a canvas showing a right arrow
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width;
+    ctx.save();
+    ctx.translate(w, 0);
+    ctx.rotate(radians(90));
+    this.drawSymbolArrowUp(canvas, color);
+    ctx.restore();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolArrowRightOutline = function (canvas, color) {
+    // answer a canvas showing a right arrow
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width;
+    ctx.save();
+    ctx.translate(w, 0);
+    ctx.rotate(radians(90));
+    this.drawSymbolArrowUpOutline(canvas, color);
+    ctx.restore();
+    return canvas;
+};
+
+SymbolMorph.prototype.drawSymbolRobot = function (canvas, color) {
+    // answer a canvas showing a humanoid robot
+    var ctx = canvas.getContext('2d'),
+        w = canvas.width,
+        h = canvas.height,
+        n = canvas.width / 6,
+        n2 = n / 2,
+        l = Math.max(w / 20, 0.5);
+
+    ctx.fillStyle = color.toString();
+    //ctx.lineWidth = l * 2;
+
+    ctx.beginPath();
+    ctx.moveTo(n + l, n);
+    ctx.lineTo(n * 2, n);
+    ctx.lineTo(n * 2.5, n * 1.5);
+    ctx.lineTo(n * 3.5, n * 1.5);
+    ctx.lineTo(n * 4, n);
+    ctx.lineTo(n * 5 - l, n);
+    ctx.lineTo(n * 4, n * 3);
+    ctx.lineTo(n * 4, n * 4 - l);
+    ctx.lineTo(n * 2, n * 4 - l);
+    ctx.lineTo(n * 2, n * 3);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(n * 2.75, n + l);
+    ctx.lineTo(n * 2.4, n);
+    ctx.lineTo(n * 2.2, 0);
+    ctx.lineTo(n * 3.8, 0);
+    ctx.lineTo(n * 3.6, n);
+    ctx.lineTo(n * 3.25, n + l);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(n * 2.5, n * 4);
+    ctx.lineTo(n, n * 4);
+    ctx.lineTo(n2 + l, h);
+    ctx.lineTo(n * 2, h);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(n * 3.5, n * 4);
+    ctx.lineTo(n * 5, n * 4);
+    ctx.lineTo(w - (n2 + l), h);
+    ctx.lineTo(n * 4, h);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(n, n);
+    ctx.lineTo(l, n * 1.5);
+    ctx.lineTo(l, n * 3.25);
+    ctx.lineTo(n * 1.5, n * 3.5);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(n * 5, n);
+    ctx.lineTo(w - l, n * 1.5);
+    ctx.lineTo(w - l, n * 3.25);
+    ctx.lineTo(n * 4.5, n * 3.5);
+    ctx.closePath();
+    ctx.fill();
 
     return canvas;
 };
@@ -10140,7 +10667,7 @@ CommentMorph.prototype.userMenu = function () {
     );
     menu.addItem("delete", 'destroy');
     menu.addItem(
-        "picture...",
+        "comment pic...",
         function () {
             window.open(myself.fullImage().toDataURL());
         },

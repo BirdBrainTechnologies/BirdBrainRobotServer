@@ -25,7 +25,6 @@ public class FinchServletWrapper {
 	/* Get sensor data in a loop that runs at ~16 Hz */
 	private class SensorLoop implements Runnable {
 		public void run() {
-    
 			while(isConnected) {
 				try {
 					if(finch != null) 
@@ -33,10 +32,14 @@ public class FinchServletWrapper {
 						try {
 							// Each finch.get takes 8 ms, then sleep to allow other things to happen
 							accelerations = finch.getAccelerations();
+							Thread.sleep(12);
 							temperature = finch.getTemperature();
+							Thread.sleep(12);
 							obstacles = finch.getObstacleSensors();
+							Thread.sleep(12);
 							lights = finch.getLightSensors();
-							Thread.sleep(32);
+							Thread.sleep(12); 
+							
 						}
 						catch(NullPointerException ex) {
 							accelerations = null;
@@ -54,7 +57,6 @@ public class FinchServletWrapper {
 			        Thread.currentThread().interrupt(); // very important - causes the second interrupt to be thrown
 			        break;
 			     }
-				
 			}
 
 		}
@@ -99,7 +101,7 @@ public class FinchServletWrapper {
 		isConnected = false;
 		// Wait for the sensor loop to die, 100ms should do it
         try {
-            Thread.sleep(100);
+            Thread.sleep(500);
         } catch (InterruptedException ex) {
         }
 		finch.quit(); // Quit the Finch
