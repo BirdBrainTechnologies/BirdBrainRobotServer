@@ -1,7 +1,5 @@
 package birdbrain.finchandHummingbirdServer;
 
-import javax.swing.ImageIcon;
-
 import edu.cmu.ri.createlab.terk.robot.finch.DefaultFinchController;
 import edu.cmu.ri.createlab.terk.robot.finch.Finch;
 import edu.cmu.ri.createlab.terk.robot.finch.FinchController;

@@ -48,8 +48,6 @@ public class PollServlet extends HttpServlet
   
   protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException
   {
-	  String urlPath = req.getPathInfo();
-
 	  String endofline = System.getProperty("line.separator");
 	  // If you instantiated without sending a FinchServletWrapper object
 	  if(isFinchConnected) {
@@ -118,7 +116,6 @@ public class PollServlet extends HttpServlet
 			  for(int i = 1; i < 5; i++)
 			  {
 				  response.getWriter().print("voltage/" + i + " " + Math.floor(100*(double)sensors[i-1]/51)/100 + endofline);
-				  response.getWriter().print("sound/" + i + " " + sensors[i-1] + endofline);
 				  response.getWriter().print("raw/" + i + " " + (int)((double)sensors[i-1]/2.55) + endofline);
 			  }
 		  }
@@ -132,6 +129,17 @@ public class PollServlet extends HttpServlet
 			  if(distance != null)
 			  {
 				  response.getWriter().print("distance/" + i + " " + distance + endofline);
+			  }
+			  else {
+				  response.getWriter().print("_problem Hummingbird not connected");  
+			  }
+		  }
+		  for(int i = 1; i < 5; i++)
+		  {
+			  Integer sound = hummingbird.getSoundValue(i);
+			  if(sound != null)
+			  {
+				  response.getWriter().print("sound/" + i + " " + sound + endofline);
 			  }
 			  else {
 				  response.getWriter().print("_problem Hummingbird not connected");  

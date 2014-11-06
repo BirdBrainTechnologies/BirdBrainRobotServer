@@ -2,6 +2,7 @@ package birdbrain.finchandHummingbirdServer;
 
 import edu.cmu.ri.createlab.hummingbird.Hummingbird;
 import edu.cmu.ri.createlab.hummingbird.HummingbirdFactory;
+import edu.cmu.ri.createlab.hummingbird.HummingbirdHardwareType;
 
 /** Hummingbird servlet wrapper class, for use with Hummingbird servers */
 public class HummingbirdServletWrapper {
@@ -60,6 +61,7 @@ public class HummingbirdServletWrapper {
             } catch (InterruptedException ex) {
             }
             
+            
             if(hummingbird != null) {
                 isConnected = true;
                 sensorLoop = new Thread(new SensorLoop()); // Start reading sensors
@@ -95,7 +97,25 @@ public class HummingbirdServletWrapper {
 		//hummingbird = null;
 		return true;
 	}
-		
+	
+	public Boolean isDuo()
+	{
+		if(!isConnected) {
+			return null;
+		}
+		else
+		{
+			if(hummingbird.getHummingbirdProperties().getHardwareType().equals(HummingbirdHardwareType.DUO)) 
+            {
+            	return true;
+            }
+            else
+            {
+            	return false;
+            }
+		}
+	}
+	
 	//  The following functions just get the sensors - they don't call Hummingbird directly, they just get the last sensor value found in the sensor loop
 	public int[] getSensors() {
 		if(!isConnected || sensors == null) {
@@ -120,6 +140,26 @@ public class HummingbirdServletWrapper {
 		}
 	}
 	
+	public Integer getSoundValue(int port) {
+		if(!isConnected || sensors == null) {
+			return null;
+		}
+		else {
+			if(port > 0 && port < 5)
+				if(isDuo()) {
+					if(sensors[port-1] > 14)
+						return ((sensors[port-1]-15)*3/2);
+					else
+						return 0;
+				}
+				else {
+					return sensors[port-1];
+				}
+			else
+				return null;
+		}
+	}
+	
 	// Returns the sensor value at port n as a temperature in Celcius
 	public Double getTemperatureAtPort(int port) {
 		if(!isConnected || sensors == null) {
@@ -136,7 +176,37 @@ public class HummingbirdServletWrapper {
 		}
 	}
 	
-	/* Returns the sensor value at port n as a distance in cm
+	/* 
+	 * DESCRIPTION OF DERIVATION FOR DUO DISTANCE SENSOR
+	 * Our approach was to use a tape measure to measure the distance to our test object (a cardboard box)
+		We found the following values:
+		Distance (cm)  Reading (10-bit)
+		5	       820
+		9	       720
+		11	       600
+		14	       500
+		17	       420
+		19	       380
+		23	       340
+		27	       300
+		33	       260
+		41	       220
+		56	       180
+		77	       140
+		Infinity       120
+
+		We subtracted 120 from these readings (as this was the baseline noise level). Then we tried curve-fitting various curves. 
+		The closest approximation to the readings was a fifth-order polynomial, which is:
+		y = -0.000000000004789x5 + 0.000000010057143x4 - 0.000008279033021x3 + 0.003416264518201x2 - 0.756893112198934x + 90.707167605683000
+		Where y is distance and x is the raw sensor reading.
+
+		This approach seems to yield reasonably accurate results, however there is some variation in detected distance (large, flat, bright, objects appear "closer"
+		than darkly colored or curved objects). Accuracy is around +/-10 cm for readings above 40 cm, +/- 5cm for 20-40 cm, and +/- 3cm for 5-20 cm.
+
+	 ****************** 
+	 * 
+	 * DESCRIPTION OF DERIVATION FOR ORIGINAL DISTANCE SENSOR
+	 * Returns the sensor value at port n as a distance in cm
 	 * Did a fifth order polynomial regression at http://arachnoid.com/polysolve/index.html
 	 * Used the following (measured) data:
 	 * ADC reading  distance (cm)
@@ -163,22 +233,52 @@ public class HummingbirdServletWrapper {
 		else {
 			double distance;
 			double reading;
-			if(port > 0 && port < 5) {
-				reading = sensors[port-1];
-				// Cap the maximum sensor value to 80 cm
-				if(reading < 23)
-				{
-					distance = 80;
+			if(isDuo()) {
+				if(port > 0 && port < 5) {
+					reading = (double)sensors[port-1]*4;
+					// Cap the maximum sensor value to 80 cm
+				  if(reading < 130)
+				    distance = 100.0;
+				  else {
+					  reading = reading - 120; // subtract the noise floor of 120
+				    // If, after subtraction we're above 680, the sensor is saturated, indicates minimum sense-able distance (5 cm)
+				    if(reading > 680)
+				      distance = 5.0;
+				    // If not, we do a fifth order polynomial calculation that fits the data pretty well  
+				    else {
+				      double sensor_val_square = reading*reading; // Minimizing the number of times we calculate this
+				      distance = sensor_val_square*sensor_val_square*reading*-0.000000000004789
+				               + sensor_val_square*sensor_val_square*0.000000010057143
+				               - sensor_val_square*reading*0.000008279033021 
+				               + sensor_val_square*0.003416264518201 
+				               - reading*0.756893112198934 
+				               + 90.707167605683000;
+					  }
+					}
+					return (int)distance;	
 				}
-				else {
-					distance = 206.76903754529479-9.3402257299483011*reading + 0.19133513242939543*Math.pow(reading, 2) 
-		                - 0.0019720997497951645*Math.pow(reading, 3)  + 9.9382154479167215*Math.pow(10,-6)*Math.pow(reading, 4) 
-		  				- 1.9442731496914311*Math.pow(10, -8)*Math.pow(reading, 5) ;
-				}
-				return (int)distance;	
-			}
 			else
 				return null;
+			}
+			else {	
+				if(port > 0 && port < 5) {
+					reading = sensors[port-1];
+					// Cap the maximum sensor value to 80 cm
+					if(reading < 23)
+					{
+						distance = 80;
+					}
+					else {
+						distance = 206.76903754529479-9.3402257299483011*reading + 0.19133513242939543*Math.pow(reading, 2) 
+			                - 0.0019720997497951645*Math.pow(reading, 3)  + 9.9382154479167215*Math.pow(10,-6)*Math.pow(reading, 4) 
+			  				- 1.9442731496914311*Math.pow(10, -8)*Math.pow(reading, 5) ;
+					}
+					return (int)distance;	
+				}
+			else
+				return null;
+		
+			}
 		}
 	}
 	

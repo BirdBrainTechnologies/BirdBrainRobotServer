@@ -22,7 +22,6 @@ import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
@@ -153,7 +152,7 @@ public class BirdBrainRobotServer {
 		
 		lblHummingbirdpic = new JLabel("");
 		lblHummingbirdpic.setBounds(224, 7, 200, 200);
-		lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdNotConnected.png")));
+		lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdNotConnectedDuo.png")));
 		frmBirdbrainRobotServer.getContentPane().add(lblHummingbirdpic);
 		
 		btnOpenSnap = new JButton("");
@@ -306,7 +305,7 @@ public class BirdBrainRobotServer {
 		              		  scratch = new File(System.getenv("PROGRAMFILES(X86)")+"/Scratch 2/Scratch 2.exe");
 		              	  if(scratch.exists()){
 		              		  String[] scratchPath = {"cmd","/c","start","Scratch 2","/D",scratch.getParentFile().getPath(),"Scratch 2"};
-		              		  Process p = Runtime.getRuntime().exec(scratchPath);
+		              		  Runtime.getRuntime().exec(scratchPath);
 		              	  }
 		              	  else {
 		              		  throw new IOException("Cannot find Scratch on Windows. Is it installed?");
@@ -387,7 +386,12 @@ public class BirdBrainRobotServer {
 			    	hummingbirdServlet.setConnectionState(true);
 					resetServlet.setHummingbirdConnectionState(true);
 					pollServlet.setHummingbirdConnectionState(true);
-					lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdConnected.png")));
+					if(hummingbird.isDuo()) {
+						lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdDuoConnected.png")));
+					}
+					else if(hummingbird.isDuo() == false) {
+						lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdV1Connected.png")));	
+					}
 					isHumm = true;
 				}
 				else if (!hummingbird.getConnected() && isHumm == true) {
@@ -395,7 +399,7 @@ public class BirdBrainRobotServer {
 					resetServlet.setHummingbirdConnectionState(false);
 					pollServlet.setHummingbirdConnectionState(false);
 					pollServlet.setHummingbirdProblemReport(true);
-					lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdNotConnected.png")));
+					lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdNotConnectedDuo.png")));
 					isHumm = false;
 				}
 				
@@ -445,7 +449,12 @@ public class BirdBrainRobotServer {
 		  // Ditto for Hummingbird
 		  if(hummingbirdConnected) {
 			  hummingbirdServlet.setConnectionState(true);
-			  lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdConnected.png")));
+			  if(hummingbird.isDuo()) {
+					lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdDuoConnected.png")));
+				}
+				else if(hummingbird.isDuo() == false) {
+					lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdV1Connected.png")));	
+				}
 		  }
 		  else {
 			  hummingbirdServlet.setConnectionState(false);
@@ -457,7 +466,7 @@ public class BirdBrainRobotServer {
 			  URLConnection conn = url.openConnection();  
 			  conn.setConnectTimeout(3000);  
 			  conn.setReadTimeout(3000);  
-			  InputStream in = conn.getInputStream();
+			  conn.getInputStream();
 		  }
 		  catch(Exception e) {
 			  // If there's no connection, check the local checkbox and then disable it
