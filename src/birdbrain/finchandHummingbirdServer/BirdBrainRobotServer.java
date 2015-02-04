@@ -41,6 +41,11 @@ import java.awt.event.WindowEvent;
 import javax.swing.JCheckBox;
 
 import java.awt.Toolkit;
+import javax.swing.JPanel;
+import java.awt.FlowLayout;
+import javax.swing.JPopupMenu;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
 /**
@@ -74,6 +79,8 @@ public class BirdBrainRobotServer {
 	private JCheckBox chckbxOpenSnapLocally; // Checkbox for open button
 	private JButton btnOpenSnap; // Open Snap! button contained
 	private JButton btnOpenScratch;
+	
+	private SnapChooser chooser;
 	/**
 	 * Launch the application.
 	 */
@@ -111,6 +118,7 @@ public class BirdBrainRobotServer {
 			// If the window is closing, disconnect the Finch and Hummingbird, stop and destroy the server, and then exit
 			public void windowClosing(WindowEvent arg0) {
 				frmBirdbrainRobotServer.setVisible(false);
+								
 				if(connector != null) {
 					connector.stop(); //stop the connector thread
 				}
@@ -178,7 +186,8 @@ public class BirdBrainRobotServer {
       			  statusMessage = "Opening Snap! with Finch and Hummingbird blocks loaded...";
       		  }
       		  else if(finchConnected) {
-      			  urlToOpen += "#open:http://localhost:22179/FinchSnapBlocks.xml";
+      			  //urlToOpen += "#open:http://localhost:22179/FinchSnapBlocks.xml";
+      			  chooser = new SnapChooser(!chckbxOpenSnapLocally.isSelected());
       			  statusMessage = "Opening Snap! with Finch blocks loaded...";
       		  }
       		  else if(hummingbirdConnected) {
@@ -191,8 +200,9 @@ public class BirdBrainRobotServer {
       			  statusMessage = "Opening Snap! with no robot blocks loaded...";
       			  urlToOpen += "#open:http://localhost:22179/SayThisBlock.xml";
       		  }
-	                  		  
-      		  try{
+	          if(!finchConnected  || hummingbirdConnected)         		  
+	          {
+	        	  try{
             	// The URL - set in startServer
           		// Runs different command to open Snap in Chrome depending on OS (Windows, Mac, Linux supported)
                   if(SystemUtils.IS_OS_WINDOWS){
@@ -265,6 +275,7 @@ public class BirdBrainRobotServer {
 	            	}
                 }
 			}
+			}
 		});
 		btnOpenSnap.setContentAreaFilled(false);
 		btnOpenSnap.setBorderPainted(false);
@@ -304,8 +315,27 @@ public class BirdBrainRobotServer {
 		              	  if("64".equals(arch) && !scratch.exists())
 		              		  scratch = new File(System.getenv("PROGRAMFILES(X86)")+"/Scratch 2/Scratch 2.exe");
 		              	  if(scratch.exists()){
-		              		  String[] scratchPath = {"cmd","/c","start","Scratch 2","/D",scratch.getParentFile().getPath(),"Scratch 2"};
-		              		  Runtime.getRuntime().exec(scratchPath);
+		              		  
+		              		  if(finchConnected && hummingbirdConnected) {
+		              			String[] scratchPath = {"cmd","/c","start","ScratchStarters/FinchHummingbirdStart.sb2"};
+		              			Runtime.getRuntime().exec(scratchPath);
+		              		  }
+		              		  else if(finchConnected)
+		              		  {
+		              			String[] scratchPath = {"cmd","/c","start","ScratchStarters/FinchStart.sb2"};
+		              			Runtime.getRuntime().exec(scratchPath);
+		              		  }
+		              		  else if(hummingbirdConnected)
+		              		  {
+		              			String[] scratchPath = {"cmd","/c","start","ScratchStarters/HummingbirdStart.sb2"}; 
+		              			Runtime.getRuntime().exec(scratchPath);
+		              		  }
+		              		  else 
+		              		  {
+		              			String[] scratchPath = {"cmd","/c","start","Scratch 2","/D",scratch.getParentFile().getPath(),"Scratch 2"};
+		              			Runtime.getRuntime().exec(scratchPath);
+		              		  }
+		              		  
 		              	  }
 		              	  else {
 		              		  throw new IOException("Cannot find Scratch on Windows. Is it installed?");
@@ -314,8 +344,26 @@ public class BirdBrainRobotServer {
 		                else if(SystemUtils.IS_OS_MAC_OSX) {
 		                    File scratch = new File("/Applications/Scratch 2.app");
 		                    if(scratch.exists()) {
-		                        String[] scratchPath = {"/usr/bin/open","-a","/Applications/Scratch 2.app"};
-		                        Runtime.getRuntime().exec(scratchPath);
+		                    	 if(finchConnected && hummingbirdConnected) {
+			              			String[] scratchPath = {"/usr/bin/open","ScratchStarters/FinchHummingbirdStart.sb2"};
+			              			Runtime.getRuntime().exec(scratchPath);
+			              		  }
+			              		  else if(finchConnected)
+			              		  {
+			              			String[] scratchPath = {"/usr/bin/open","ScratchStarters/FinchStart.sb2"};
+			              			Runtime.getRuntime().exec(scratchPath);
+			              		  }
+			              		  else if(hummingbirdConnected)
+			              		  {
+			              			String[] scratchPath = {"/usr/bin/open","ScratchStarters/HummingbirdStart.sb2"}; 
+			              			Runtime.getRuntime().exec(scratchPath);
+			              		  }
+			              		  else 
+			              		  {
+			              			String[] scratchPath = {"/usr/bin/open","-a","/Applications/Scratch 2.app"};
+			                        Runtime.getRuntime().exec(scratchPath);
+			              		  }
+		                    	
 		                    }
 		                    else {
 		                        //Error message if Scratch not found
@@ -512,4 +560,5 @@ public class BirdBrainRobotServer {
 		  }
 
 	}
+	
 }

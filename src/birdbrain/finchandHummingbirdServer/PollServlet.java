@@ -90,23 +90,23 @@ public class PollServlet extends HttpServlet
 	            {
 	            finchOrientation = "Right_Wing_Down";
 	            }
-			  
-			  response.getWriter().print("temperature " + Math.floor(temperature*100)/100 + endofline);
-			  response.getWriter().print("leftLight " + (int)(lights[0]*100/255) + endofline);
-			  response.getWriter().print("rightLight " + (int)(lights[1]*100/255) + endofline);
-			  response.getWriter().print("leftObstacle " + obstacles[0] + endofline);
-			  response.getWriter().print("rightObstacle " + obstacles[1] + endofline);
-			  response.getWriter().print("orientation " + finchOrientation + endofline);
-			  response.getWriter().print("XAcceleration " + Math.floor(100*accels[0])/100 + endofline);
-			  response.getWriter().print("YAcceleration " + Math.floor(100*accels[1])/100 + endofline);
-			  response.getWriter().print("ZAcceleration " + Math.floor(100*accels[2])/100 + endofline);
+			         
+	          response.getWriter().print("temperature " + Math.floor(temperature*100)/100 + '\n' + endofline);
+			  response.getWriter().print("leftLight " + (int)(lights[0]*100/255) + '\n' + endofline);
+			  response.getWriter().print("rightLight " + (int)(lights[1]*100/255) + '\n' + endofline);
+			  response.getWriter().print("leftObstacle " +   obstacles[0] + '\n' + endofline);
+			  response.getWriter().print("rightObstacle " +  obstacles[1] + '\n' + endofline);
+			  response.getWriter().print("orientation " + finchOrientation + '\n' + endofline);
+			  response.getWriter().print("XAcceleration " + Math.floor(100*accels[0])/100 + '\n' + endofline);
+			  response.getWriter().print("YAcceleration " + Math.floor(100*accels[1])/100 + '\n' + endofline);
+			  response.getWriter().print("ZAcceleration " + Math.floor(100*accels[2])/100 + '\n' + endofline);
 		  	}
 		  else {
 			  response.getWriter().print("_problem Finch sensors not responding");
 		  }
 	  }
-	  else if(finchProblemReport){
-		  response.getWriter().print("_problem Finch not connected");  
+	  else if(finchProblemReport && !isHummingbirdConnected){
+		  response.getWriter().print("_problem Finch not connected" + '\n' + endofline);  
 	  }
 	  if(isHummingbirdConnected)
 	  {
@@ -115,8 +115,8 @@ public class PollServlet extends HttpServlet
 		  {
 			  for(int i = 1; i < 5; i++)
 			  {
-				  response.getWriter().print("voltage/" + i + " " + Math.floor(100*(double)sensors[i-1]/51)/100 + endofline);
-				  response.getWriter().print("raw/" + i + " " + (int)((double)sensors[i-1]/2.55) + endofline);
+				  response.getWriter().print("voltage/" + i + " " + Math.floor(100*(double)sensors[i-1]/51)/100 + '\n' + endofline);
+				  response.getWriter().print("raw/" + i + " " + (int)((double)sensors[i-1]/2.55) + '\n' + endofline);
 			  }
 		  }
 		  else 
@@ -128,10 +128,10 @@ public class PollServlet extends HttpServlet
 			  Integer distance = hummingbird.getDistanceAtPort(i);
 			  if(distance != null)
 			  {
-				  response.getWriter().print("distance/" + i + " " + distance + endofline);
+				  response.getWriter().print("distance/" + i + " " + distance + '\n' + endofline);
 			  }
 			  else {
-				  response.getWriter().print("_problem Hummingbird not connected");  
+				  response.getWriter().print("_problem Hummingbird sensors not responding");  
 			  }
 		  }
 		  for(int i = 1; i < 5; i++)
@@ -139,10 +139,10 @@ public class PollServlet extends HttpServlet
 			  Integer sound = hummingbird.getSoundValue(i);
 			  if(sound != null)
 			  {
-				  response.getWriter().print("sound/" + i + " " + sound + endofline);
+				  response.getWriter().print("sound/" + i + " " + sound + '\n' + endofline);
 			  }
 			  else {
-				  response.getWriter().print("_problem Hummingbird not connected");  
+				  response.getWriter().print("_problem Hummingbird sensors not responding");  
 			  }
 		  }
 		  for(int i = 1; i < 5; i++)
@@ -150,14 +150,14 @@ public class PollServlet extends HttpServlet
 			  Double temperature = hummingbird.getTemperatureAtPort(i);
 			  if(temperature != null)
 			  {
-				  response.getWriter().print("temperature/" + i + " " + temperature + endofline);
+				  response.getWriter().print("temperature/" + i + " " + temperature + '\n' + endofline);
 			  }
 			  else {
-				  response.getWriter().print("_problem Hummingbird not connected");  
+				  response.getWriter().print("_problem Hummingbird sensors not responding");  
 			  }
 		  }		  
 	  }
-	  else if(hummingbirdProblemReport){
+	  else if(hummingbirdProblemReport && !isFinchConnected){
 		  response.getWriter().print("_problem Hummingbird not connected");  
 	  }
   }
