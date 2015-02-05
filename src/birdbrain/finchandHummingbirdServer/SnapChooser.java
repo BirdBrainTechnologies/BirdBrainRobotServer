@@ -28,6 +28,8 @@ import java.net.URI;
 import org.apache.commons.lang.SystemUtils;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
 
 public class SnapChooser {
 
@@ -54,35 +56,39 @@ public class SnapChooser {
 		frame.getContentPane().setLayout(null);
 
 		
-		rdbtnSnapLevel = new JRadioButton("Snap! and Finch for ages 4-7");
+		rdbtnSnapLevel = new JRadioButton("Level 1, Simple Blocks");
+		rdbtnSnapLevel.setToolTipText("Blocks are iconic, great for pre-literate students!");
 		rdbtnSnapLevel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		rdbtnSnapLevel.setForeground(Color.WHITE);
 		rdbtnSnapLevel.setContentAreaFilled(false);
-		rdbtnSnapLevel.setBounds(131, 118, 156, 23);
+		rdbtnSnapLevel.setBounds(20, 47, 266, 23);
 		frame.getContentPane().add(rdbtnSnapLevel);
 		
-		rdbtnSnapLevel_1 = new JRadioButton("Snap! and Finch for ages 5-8");
+		rdbtnSnapLevel_1 = new JRadioButton("Level 2, Blocks with Parameters");
+		rdbtnSnapLevel_1.setToolTipText("Adds numbers from 0 to 10 to level 1 blocks");
 		rdbtnSnapLevel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		rdbtnSnapLevel_1.setForeground(Color.WHITE);
 		rdbtnSnapLevel_1.setContentAreaFilled(false);
-		rdbtnSnapLevel_1.setBounds(131, 153, 172, 23);
+		rdbtnSnapLevel_1.setBounds(20, 73, 266, 23);
 		frame.getContentPane().add(rdbtnSnapLevel_1);
 		
-		rdbtnSnapLevel_2 = new JRadioButton("Snap! and Finch for ages 6-9");
+		rdbtnSnapLevel_2 = new JRadioButton("Level 3, Parameters and Time");
+		rdbtnSnapLevel_2.setToolTipText("Provides more control over timing of blocks than level 2, and adds sensors");
 		rdbtnSnapLevel_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		rdbtnSnapLevel_2.setForeground(Color.WHITE);
 		rdbtnSnapLevel_2.setContentAreaFilled(false);
-		rdbtnSnapLevel_2.setBounds(131, 189, 183, 23);
+		rdbtnSnapLevel_2.setBounds(20, 99, 255, 23);
 		frame.getContentPane().add(rdbtnSnapLevel_2);
 		
-		rdbtnRegularSnap = new JRadioButton("Snap! and Finch for ages 10+");
+		rdbtnRegularSnap = new JRadioButton("Regular Snap!");
+		rdbtnRegularSnap.setToolTipText("Appropriate for ages 10 and up, powerful enough to use at a high school or undergraduate level!");
 		rdbtnRegularSnap.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		rdbtnRegularSnap.setForeground(Color.WHITE);
 		rdbtnRegularSnap.setSelected(true);
 		rdbtnRegularSnap.setContentAreaFilled(false);
-		rdbtnRegularSnap.setBounds(131, 229, 225, 23);
+		rdbtnRegularSnap.setBounds(20, 125, 266, 23);
 		frame.getContentPane().add(rdbtnRegularSnap);
-		frame.setBounds(100, 100, 413, 481);
+		frame.setBounds(100, 100, 301, 251);
 		
 		
 		
@@ -192,8 +198,16 @@ public class SnapChooser {
 		btnOpenSnap.setSelectedIcon(new ImageIcon(SnapChooser.class.getResource("/OpenButton2Clicked.png")));
 		btnOpenSnap.setBackground(Color.DARK_GRAY);
 		btnOpenSnap.setIcon(new ImageIcon(SnapChooser.class.getResource("/OpenSnap.png")));
-		btnOpenSnap.setBounds(0, 275, 397, 49);
+		btnOpenSnap.setBounds(0, 155, 286, 49);
 		frame.getContentPane().add(btnOpenSnap);
+		
+		JTextArea txtrPleaseSelectThe = new JTextArea();
+		txtrPleaseSelectThe.setText("Please select a programming level:");
+		txtrPleaseSelectThe.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		txtrPleaseSelectThe.setForeground(Color.WHITE);
+		txtrPleaseSelectThe.setBackground(Color.DARK_GRAY);
+		txtrPleaseSelectThe.setBounds(10, 11, 265, 37);
+		frame.getContentPane().add(txtrPleaseSelectThe);
 		frame.setVisible(true);
 	}
 }

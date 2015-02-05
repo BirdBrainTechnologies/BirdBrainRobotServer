@@ -8,6 +8,9 @@
 	    <welcome-file>HummingbirdSnapBlocks.xml</welcome-file>
 	    <welcome-file>FinchHummingbirdSnapBlocks.xml</welcome-file>
 	    <welcome-file>SayThisBlock.xml</welcome-file>
+	    <welcome-file>FinchLevel1.xml</welcome-file>
+	    <welcome-file>FinchLevel2.xml</welcome-file>
+	    <welcome-file>FinchLevel3.xml</welcome-file>
 	</welcome-file-list>
 
   <filter>

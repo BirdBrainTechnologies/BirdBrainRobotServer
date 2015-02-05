@@ -3,11 +3,14 @@
   <display-name>BirdBrainRobotServer</display-name>
 
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
+	    <welcome-file>index.html</welcome-file>
 	    <welcome-file>FinchSnapBlocks.xml</welcome-file>
 	    <welcome-file>HummingbirdSnapBlocks.xml</welcome-file>
 	    <welcome-file>FinchHummingbirdSnapBlocks.xml</welcome-file>
 	    <welcome-file>SayThisBlock.xml</welcome-file>
+	    <welcome-file>FinchLevel1.xml</welcome-file>
+	    <welcome-file>FinchLevel3.xml</welcome-file>
+	    <welcome-file>FinchLevel2.xml</welcome-file>
 	</welcome-file-list>
 
   <filter>
