@@ -69,7 +69,7 @@ public class BirdBrainRobotServer {
 	private HummingbirdServlet hummingbirdServlet;
 	private ResetServlet resetServlet;
 	private PollServlet pollServlet;
-	private String urlToOpenRemote = "http://snap.berkeley.edu/snapsource/snap.html"; // The URL to open when you click "Open Snap!". Depending on what's connected, this gets altered
+	private String urlToOpenRemote = "http://bit.ly/"; // The URL to open when you click "Open Snap!". Depending on what's connected, this gets altered
 	private String urlToOpenLocal = "http://localhost:22179/SnapOffline/snap.html"; // The local URL for Snap!
 	private String urlToOpen;
 	private String statusMessage; // The message we want to set the helper text to
@@ -81,7 +81,7 @@ public class BirdBrainRobotServer {
 	
 	private SnapChooser chooser;
 	
-	private String[] ports = SerialPortList.getPortNames();
+	private String[] ports;
 	
 	/**
 	 * Launch the application.
@@ -173,18 +173,17 @@ public class BirdBrainRobotServer {
 		// Open Snap should open Google Chrome
 		btnOpenSnap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-              // Check if they want to open stuff locally or remotely
-              if(chckbxOpenSnapLocally.isSelected()) {
-            	urlToOpen = urlToOpenLocal;
-              }
-              else {
-            	urlToOpen = urlToOpenRemote;
-              }
+          
               
               // Based on what's connected, load the appropriate blocks library by setting the URL
       		  // Notify the user through the status message
       		  if(finchConnected && hummingbirdConnected) {
-      			  urlToOpen += "#open:http://localhost:22179/FinchHummingbirdSnapBlocks.xml";
+      			  if(chckbxOpenSnapLocally.isSelected()) {
+      				  urlToOpen = urlToOpenLocal + "#open:http://localhost:22179/FinchHummingbirdSnapBlocks.xml";
+      			  }
+      			  else {
+      				  urlToOpen = urlToOpenRemote + "finchhummingbirdstart";
+      			  }
       			  statusMessage = "Opening Snap! with Finch and Hummingbird blocks loaded...";
       		  }
       		  else if(finchConnected) {
@@ -193,14 +192,24 @@ public class BirdBrainRobotServer {
       			  statusMessage = "Opening Snap! with Finch blocks loaded...";
       		  }
       		  else if(hummingbirdConnected) {
-      			  urlToOpen += "#open:http://localhost:22179/HummingbirdSnapBlocks.xml";
+      			if(chckbxOpenSnapLocally.isSelected()) {
+    				  urlToOpen = urlToOpenLocal + "#open:http://localhost:22179/HummingbirdSnapBlocks.xml";
+    			  }
+    			  else {
+    				  urlToOpen = urlToOpenRemote + "hummingbirdstart";
+    			  }
       			  statusMessage = "Opening Snap! with Hummingbird blocks loaded...";
       		  }
       		  else
       		  {
       			  lblHelperText.setText("<html>No Finch or Hummingbird detected.<br> Plug in a robot and restart this program to check again");
       			  statusMessage = "Opening Snap! with no robot blocks loaded...";
-      			  urlToOpen += "#open:http://localhost:22179/SayThisBlock.xml";
+      			  if(chckbxOpenSnapLocally.isSelected()) {
+    				  urlToOpen = urlToOpenLocal + "#open:http://localhost:22179/SayThisBlock.xml";
+    			  }
+    			  else {
+    				  urlToOpen = urlToOpenRemote + "SnapStart";
+    			  }
       		  }
 	          if(!finchConnected  || hummingbirdConnected)         		  
 	          {
@@ -345,20 +354,24 @@ public class BirdBrainRobotServer {
 		                }
 		                else if(SystemUtils.IS_OS_MAC_OSX) {
 		                    File scratch = new File("/Applications/Scratch 2.app");
+		                    String path = new File("").getAbsolutePath();
 		                    if(scratch.exists()) {
 		                    	 if(finchConnected && hummingbirdConnected) {
-			              			String[] scratchPath = {"/usr/bin/open","ScratchStarters/FinchHummingbirdStart.sb2"};
+		                    		path = path + "/ScratchStarters/FinchHummingbirdStart.sb2";
+		                    		String[] scratchPath = {"/usr/bin/open","-a","/Applications/Scratch 2.app", "--args", path};
 			              			Runtime.getRuntime().exec(scratchPath);
 			              		  }
 			              		  else if(finchConnected)
 			              		  {
-			              			String[] scratchPath = {"/usr/bin/open","ScratchStarters/FinchStart.sb2"};
-			              			Runtime.getRuntime().exec(scratchPath);
+			              			path = path + "/ScratchStarters/FinchStart.sb2";
+		                    		String[] scratchPath = {"/usr/bin/open","-a","/Applications/Scratch 2.app", "--args", path};
+				              		Runtime.getRuntime().exec(scratchPath);
 			              		  }
 			              		  else if(hummingbirdConnected)
 			              		  {
-			              			String[] scratchPath = {"/usr/bin/open","ScratchStarters/HummingbirdStart.sb2"}; 
-			              			Runtime.getRuntime().exec(scratchPath);
+			              			path = path + "/ScratchStarters/HummingbirdStart.sb2";
+		                    		String[] scratchPath = {"/usr/bin/open","-a","/Applications/Scratch 2.app", "--args", path};
+				              		Runtime.getRuntime().exec(scratchPath);
 			              		  }
 			              		  else 
 			              		  {
@@ -403,7 +416,8 @@ public class BirdBrainRobotServer {
 		}
 		
 		public void run() {
-			  
+
+			ports = SerialPortList.getPortNames();  
 			while(toRun) {
 				finchConnected = finch.connect();
 				try {
@@ -459,9 +473,11 @@ public class BirdBrainRobotServer {
 						  arduino = deviceFound((short) 0x2354, (short) 0x2333,UsbHostManager.getUsbServices().getRootUsbHub())
 								         || deviceFound((short) 0x2341, (short) 0x8036,UsbHostManager.getUsbServices().getRootUsbHub());
 						  String[] newPorts;
+						  
 						  if(arduino){
 							  lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdArduinoMode.png")));
 						  }else if(!(Arrays.equals(ports, SerialPortList.getPortNames()))){//test for different set of serial ports
+							  ports = SerialPortList.getPortNames();
 							  lblHummingbirdpic.setIcon(new ImageIcon(BirdBrainRobotServer.class.getResource("/HummingbirdNotConnectedDuo.png")));
 							  boolean found = false;
 		                      for(int i = 0;i<5;i++){ //check for bootloader presence a few times since it sometimes takes a second to show up
@@ -471,9 +487,10 @@ public class BirdBrainRobotServer {
 		                          }
 		                          else if(deviceFound((short)0x2354,(short)0x2444,UsbHostManager.getUsbServices().getRootUsbHub())) { //Hummingbird Duo bootloader VID & PID
 		                              found = true;
+		                              System.out.println("Found the duo");
 		                              break;
 		                          }
-		                          Thread.sleep(500);
+		                          Thread.sleep(1000);
 		                      }
 		                      newPorts = SerialPortList.getPortNames(); //refresh list of serial ports
 		                      if(newPorts.length >= ports.length && found) { //check for new serial port or different serial port
@@ -484,6 +501,11 @@ public class BirdBrainRobotServer {
 		                          }
 		                          else{
 		                              for(String newPort : newPorts){
+		                            	  System.out.println("New port " + newPort);
+		                            	  for(int i = 0; i < ports.length; i++)
+		                            	  {
+		                            		  System.out.println("Old port " + i + " " + ports[i]);
+		                            	  }
 		                                  if (!Arrays.asList(ports).contains(newPort)) { //find changed or new Serial port
 		                                      comport = newPort; //bootloader serial port found
 		                                      break;
@@ -500,7 +522,7 @@ public class BirdBrainRobotServer {
 		                              System.err.println("Error downloading Hummingbird firmware. Trying offline version.");
 		                              firmwareFile = "HummingbirdV2.hex";
 		                          }
-		                          
+		                          System.out.println("Comport is " + comport + " And firmware is " + firmwareFile);
 		                           if(!comport.equals("") && !firmwareFile.equals("")) {
 		                                lblHelperText.setText("Reset Detected. Trying to revert to Hummingbird mode.");
 		                                Process p;
@@ -517,7 +539,7 @@ public class BirdBrainRobotServer {
 		                                    }
 		                                    else if(SystemUtils.IS_OS_MAC_OSX){
 		                                        avrdude = "./avrdude_mac";
-		                                        avrconf = "./avrdude.conf";
+		                                        avrconf = "./avrdude_mac.conf";
 		                                    }
 		                                    String[] command={avrdude, "-p", "atmega32u4", "-P", comport, "-c", "avr109", "-C", avrconf, "-b", "9600", "-U", "flash:w:" + firmwareFile+":i"};
 		                                    //run avrdude
@@ -543,7 +565,7 @@ public class BirdBrainRobotServer {
 							  lblHelperText.setText("");
 						  }
 					  }catch (UsbException usbEx) {
-		                    lblHelperText.setText("Status: Error with USB connection");
+		                 //   lblHelperText.setText("Status: Error with USB connection");
 		                    usbEx.printStackTrace();
 		                } catch (InterruptedException iEx) {
 		                    iEx.printStackTrace();
@@ -664,6 +686,7 @@ public class BirdBrainRobotServer {
 	public boolean deviceFound(short vid, short pid, UsbHub hub) {
         for (UsbDevice device : (List<UsbDevice>) hub.getAttachedUsbDevices()) { //iterate through all USB devices
             UsbDeviceDescriptor descriptor = device.getUsbDeviceDescriptor();
+            
             if ((descriptor.idVendor() == vid && descriptor.idProduct() == pid) || //matching device VID & PID
                     (device.isUsbHub() && deviceFound(vid, pid,(UsbHub) device))) //if device is hub, search devices in hub
                 return true;

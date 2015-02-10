@@ -57,7 +57,7 @@ public class SnapChooser {
 
 		
 		rdbtnSnapLevel = new JRadioButton("Level 1, Simple Blocks");
-		rdbtnSnapLevel.setToolTipText("Blocks are iconic, great for pre-literate students!");
+		rdbtnSnapLevel.setToolTipText("Blocks are iconic, great for preliterate students!");
 		rdbtnSnapLevel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		rdbtnSnapLevel.setForeground(Color.WHITE);
 		rdbtnSnapLevel.setContentAreaFilled(false);
@@ -80,7 +80,7 @@ public class SnapChooser {
 		rdbtnSnapLevel_2.setBounds(20, 99, 255, 23);
 		frame.getContentPane().add(rdbtnSnapLevel_2);
 		
-		rdbtnRegularSnap = new JRadioButton("Regular Snap!");
+		rdbtnRegularSnap = new JRadioButton("Level 4, Regular Snap!");
 		rdbtnRegularSnap.setToolTipText("Appropriate for ages 10 and up, powerful enough to use at a high school or undergraduate level!");
 		rdbtnRegularSnap.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		rdbtnRegularSnap.setForeground(Color.WHITE);
@@ -95,24 +95,31 @@ public class SnapChooser {
 		JButton btnOpenSnap = new JButton("");
 		btnOpenSnap.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String urlToOpen;
-				if(cloud) {
-					urlToOpen = "http://snap.berkeley.edu/snapsource/snap.html"; // The URL to open when you click "Open Snap!". Depending on what's connected, this gets altered
-				}
-				else {
-					urlToOpen = "http://localhost:22179/SnapOffline/snap.html"; // The local URL for Snap!
-				}
+				String urlToOpen = "http://localhost:22179/SnapOffline/snap.html"; // The local URL for Snap!
+				
 				if(rdbtnRegularSnap.isSelected()) {
-					urlToOpen += "#open:http://localhost:22179/FinchSnapBlocks.xml";
+					if(cloud)
+						urlToOpen = "http://bit.ly/finchstart";
+					else
+						urlToOpen += "#open:http://localhost:22179/FinchSnapBlocks.xml";
 				}
 				else if(rdbtnSnapLevel.isSelected()) {
-					urlToOpen += "#open:http://localhost:22179/FinchLevel1.xml";
+					if(cloud)
+						urlToOpen = "http://bit.ly/finchlevel1";
+					else
+						urlToOpen += "#open:http://localhost:22179/FinchLevel1.xml";
 				}
 				else if(rdbtnSnapLevel_1.isSelected()) {
-					urlToOpen += "#open:http://localhost:22179/FinchLevel2.xml";
+					if(cloud)
+						urlToOpen = "http://bit.ly/finchlevel2";
+					else
+						urlToOpen += "#open:http://localhost:22179/FinchLevel2.xml";
 				}
 				else if(rdbtnSnapLevel_2.isSelected()) {
-					urlToOpen += "#open:http://localhost:22179/FinchLevel3.xml";
+					if(cloud)
+						urlToOpen = "http://bit.ly/finchlevel3";
+					else
+						urlToOpen += "#open:http://localhost:22179/FinchLevel3.xml";
 				}
 	  		  
 			  try{
