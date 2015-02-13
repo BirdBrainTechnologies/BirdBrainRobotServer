@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -125,7 +125,7 @@ PrototypeHatBlockMorph*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.objects = '2014-October-08';
+modules.objects = '2015-January-28';
 
 var SpriteMorph;
 var StageMorph;
@@ -793,6 +793,12 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'sensing',
             spec: 'frames'
         },
+        reportThreadCount: {
+            dev: true,
+            type: 'reporter',
+            category: 'sensing',
+            spec: 'processes'
+        },
         doAsk: {
             type: 'command',
             category: 'sensing',
@@ -1151,6 +1157,13 @@ SpriteMorph.prototype.initBlocks = function () {
             category: 'lists',
             spec: 'map %repRing over %l'
         },
+        doForEach: {
+            dev: true,
+            type: 'command',
+            category: 'lists',
+            spec: 'for %upvar in %l %cs',
+            defaults: [localize('each item')]
+        },
 
         // Code mapping - experimental
         doMapCodeOrHeader: { // experimental
@@ -1302,6 +1315,7 @@ SpriteMorph.prototype.init = function (globals) {
     this.anchor = null;
     this.nestingScale = 1;
     this.rotatesWithAnchor = true;
+    this.layers = null; // cache for dragging nested sprites, don't serialize
 
     this.blocksCache = {}; // not to be serialized (!)
     this.paletteCache = {}; // not to be serialized (!)
@@ -1674,6 +1688,20 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         return menu;
     }
 
+    function addVar(pair) {
+        if (pair) {
+            if (myself.variables.silentFind(pair[0])) {
+                myself.inform('that name is already in use');
+            } else {
+                myself.addVariable(pair[0], pair[1]);
+                myself.toggleVariableWatcher(pair[0], pair[1]);
+                myself.blocksCache[cat] = null;
+                myself.paletteCache[cat] = null;
+                myself.parentThatIsA(IDE_Morph).refreshPalette();
+            }
+        }
+    }
+
     if (cat === 'motion') {
 
         blocks.push(block('forward'));
@@ -1897,6 +1925,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
+            blocks.push(watcherToggle('reportThreadCount'));
+            blocks.push(block('reportThreadCount'));
             blocks.push(block('colorFiltered'));
             blocks.push(block('reportStackSize'));
             blocks.push(block('reportFrameCount'));
@@ -1967,15 +1997,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             function () {
                 new VariableDialogMorph(
                     null,
-                    function (pair) {
-                        if (pair && !myself.variables.silentFind(pair[0])) {
-                            myself.addVariable(pair[0], pair[1]);
-                            myself.toggleVariableWatcher(pair[0], pair[1]);
-                            myself.blocksCache[cat] = null;
-                            myself.paletteCache[cat] = null;
-                            myself.parentThatIsA(IDE_Morph).refreshPalette();
-                        }
-                    },
+                    addVar,
                     myself
                 ).prompt(
                     'Variable name',
@@ -2057,6 +2079,8 @@ SpriteMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('reportMap'));
+            blocks.push('-');
+            blocks.push(block('doForEach'));
         }
 
     /////////////////////////////////
@@ -2164,8 +2188,8 @@ SpriteMorph.prototype.freshPalette = function (category) {
             var defs = SpriteMorph.prototype.blocks,
                 hiddens = StageMorph.prototype.hiddenPrimitives;
             return Object.keys(hiddens).some(function (any) {
-                return defs[any].category === category ||
-                    contains((more[category] || []), any);
+                return !isNil(defs[any]) && (defs[any].category === category
+                    || contains((more[category] || []), any));
             });
         }
 
@@ -2204,7 +2228,7 @@ SpriteMorph.prototype.freshPalette = function (category) {
                     var hiddens = StageMorph.prototype.hiddenPrimitives,
                         defs = SpriteMorph.prototype.blocks;
                     Object.keys(hiddens).forEach(function (sel) {
-                        if (defs[sel].category === category) {
+                        if (defs[sel] && (defs[sel].category === category)) {
                             delete StageMorph.prototype.hiddenPrimitives[sel];
                         }
                     });
@@ -2619,7 +2643,9 @@ SpriteMorph.prototype.userMenu = function () {
     menu.addItem("duplicate", 'duplicate');
     menu.addItem("delete", 'remove');
     menu.addItem("move", 'move');
-    menu.addItem("edit", 'edit');
+    if (!this.isClone) {
+        menu.addItem("edit", 'edit');
+    }
     menu.addLine();
     if (this.anchor) {
         menu.addItem(
@@ -2635,6 +2661,7 @@ SpriteMorph.prototype.userMenu = function () {
 };
 
 SpriteMorph.prototype.exportSprite = function () {
+    if (this.isCoone) {return; }
     var ide = this.parentThatIsA(IDE_Morph);
     if (ide) {
         ide.exportSprite(this);
@@ -2731,7 +2758,7 @@ SpriteMorph.prototype.setColor = function (aColor) {
     var x = this.xPosition(),
         y = this.yPosition();
     if (!this.color.eq(aColor)) {
-        this.color = aColor;
+        this.color = aColor.copy();
         this.drawNew();
         this.gotoXY(x, y);
     }
@@ -3128,13 +3155,11 @@ SpriteMorph.prototype.positionTalkBubble = function () {
     bubble.changed();
 };
 
-// dragging and dropping adjustments b/c of talk bubbles
+// dragging and dropping adjustments b/c of talk bubbles and parts
 
 SpriteMorph.prototype.prepareToBeGrabbed = function (hand) {
-    var bubble = this.talkBubble();
-    if (!bubble) {return null; }
     this.removeShadow();
-    bubble.hide();
+    this.recordLayers();
     if (!this.bounds.containsPoint(hand.position())) {
         this.setCenter(hand.position());
     }
@@ -3142,6 +3167,7 @@ SpriteMorph.prototype.prepareToBeGrabbed = function (hand) {
 };
 
 SpriteMorph.prototype.justDropped = function () {
+    this.restoreLayers();
     this.positionTalkBubble();
 };
 
@@ -3232,8 +3258,11 @@ SpriteMorph.prototype.setCenter = function (aPoint, justMe) {
 
 SpriteMorph.prototype.nestingBounds = function () {
     // same as fullBounds(), except that it uses "parts" instead of children
-    var result;
-    result = this.bounds;
+    // and special cases the costume-less "arrow" shape's bounding box
+    var result = this.bounds;
+    if (!this.costume && this.penBounds) {
+        result = this.penBounds.translateBy(this.position());
+    }
     this.parts.forEach(function (part) {
         if (part.isVisible) {
             result = result.merge(part.nestingBounds());
@@ -3504,6 +3533,7 @@ SpriteMorph.prototype.mouseClickLeft = function () {
 };
 
 SpriteMorph.prototype.mouseDoubleClick = function () {
+    if (this.isClone) {return; }
     this.edit();
 };
 
@@ -3557,6 +3587,16 @@ SpriteMorph.prototype.reportMouseY = function () {
     var stage = this.parentThatIsA(StageMorph);
     if (stage) {
         return stage.reportMouseY();
+    }
+    return 0;
+};
+
+// SpriteMorph thread count (for debugging)
+
+SpriteMorph.prototype.reportThreadCount = function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (stage) {
+        return stage.threads.processes.length;
     }
     return 0;
 };
@@ -4003,6 +4043,33 @@ SpriteMorph.prototype.allAnchors = function () {
         result = result.concat(this.anchor.allAnchors());
     }
     return result;
+};
+
+SpriteMorph.prototype.recordLayers = function () {
+    var stage = this.parentThatIsA(StageMorph);
+    if (!stage) {
+        this.layerCache = null;
+        return;
+    }
+    this.layers = this.allParts();
+    this.layers.forEach(function (part) {
+        var bubble = part.talkBubble();
+        if (bubble) {bubble.hide(); }
+    });
+    this.layers.sort(function (x, y) {
+        return stage.children.indexOf(x) < stage.children.indexOf(y) ?
+                -1 : 1;
+    });
+};
+
+SpriteMorph.prototype.restoreLayers = function () {
+    if (this.layers && this.layers.length > 1) {
+        this.layers.forEach(function (sprite) {
+            sprite.comeToFront();
+            sprite.positionTalkBubble();
+        });
+    }
+    this.layers = null;
 };
 
 // SpriteMorph highlighting
@@ -4858,6 +4925,20 @@ StageMorph.prototype.blockTemplates = function (category) {
         );
     }
 
+    function addVar(pair) {
+        if (pair) {
+            if (myself.variables.silentFind(pair[0])) {
+                myself.inform('that name is already in use');
+            } else {
+                myself.addVariable(pair[0], pair[1]);
+                myself.toggleVariableWatcher(pair[0], pair[1]);
+                myself.blocksCache[cat] = null;
+                myself.paletteCache[cat] = null;
+                myself.parentThatIsA(IDE_Morph).refreshPalette();
+            }
+        }
+    }
+
     if (cat === 'motion') {
 
         txt = new TextMorph(localize(
@@ -5027,6 +5108,8 @@ StageMorph.prototype.blockTemplates = function (category) {
             txt.setColor(this.paletteTextColor);
             blocks.push(txt);
             blocks.push('-');
+            blocks.push(watcherToggle('reportThreadCount'));
+            blocks.push(block('reportThreadCount'));
             blocks.push(block('colorFiltered'));
             blocks.push(block('reportStackSize'));
             blocks.push(block('reportFrameCount'));
@@ -5099,15 +5182,7 @@ StageMorph.prototype.blockTemplates = function (category) {
             function () {
                 new VariableDialogMorph(
                     null,
-                    function (pair) {
-                        if (pair && !myself.variables.silentFind(pair[0])) {
-                            myself.addVariable(pair[0], pair[1]);
-                            myself.toggleVariableWatcher(pair[0], pair[1]);
-                            myself.blocksCache[cat] = null;
-                            myself.paletteCache[cat] = null;
-                            myself.parentThatIsA(IDE_Morph).refreshPalette();
-                        }
-                    },
+                    addVar,
                     myself
                 ).prompt(
                     'Variable name',
@@ -5183,6 +5258,8 @@ StageMorph.prototype.blockTemplates = function (category) {
             blocks.push(txt);
             blocks.push('-');
             blocks.push(block('reportMap'));
+            blocks.push('-');
+            blocks.push(block('doForEach'));
         }
 
     /////////////////////////////////
@@ -5321,7 +5398,7 @@ StageMorph.prototype.thumbnail = function (extentPoint, excludedSprite) {
         this.dimensions.y * this.scale
     );
     this.children.forEach(function (morph) {
-        if (morph !== excludedSprite) {
+        if (morph.isVisible && (morph !== excludedSprite)) {
             fb = morph.fullBounds();
             fimg = morph.fullImage();
             if (fimg.width && fimg.height) {
@@ -5482,6 +5559,9 @@ StageMorph.prototype.watcherFor =
 
 StageMorph.prototype.getLastAnswer
     = SpriteMorph.prototype.getLastAnswer;
+
+StageMorph.prototype.reportThreadCount
+    = SpriteMorph.prototype.reportThreadCount;
 
 // StageMorph message broadcasting
 
@@ -6731,7 +6811,7 @@ WatcherMorph.prototype.object = function () {
 WatcherMorph.prototype.isGlobal = function (selector) {
     return contains(
         ['getLastAnswer', 'getLastMessage', 'getTempo', 'getTimer',
-             'reportMouseX', 'reportMouseY'],
+             'reportMouseX', 'reportMouseY', 'reportThreadCount'],
         selector
     );
 };

@@ -9,7 +9,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2015 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -106,7 +106,7 @@ SymbolMorph, isNil*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.byob = '2014-September-30';
+modules.byob = '2015-January-21';
 
 // Declarations
 
@@ -209,12 +209,14 @@ CustomBlockDefinition.prototype.copyAndBindTo = function (sprite) {
 
     c.receiver = sprite; // only for (kludgy) serialization
     c.declarations = copy(this.declarations); // might have to go deeper
-    c.body = Process.prototype.reify.call(
-        null,
-        this.body.expression,
-        new List(this.inputNames())
-    );
-    c.body.outerContext = null;
+    if (c.body) {
+        c.body = Process.prototype.reify.call(
+            null,
+            this.body.expression,
+            new List(this.inputNames())
+        );
+        c.body.outerContext = null;
+    }
 
     return c;
 };
@@ -688,7 +690,8 @@ CustomCommandBlockMorph.prototype.labelPart = function (spec) {
         return CustomCommandBlockMorph.uber.labelPart.call(this, spec);
     }
     if ((spec[0] === '%') && (spec.length > 1)) {
-        part = new BlockInputFragmentMorph(spec.slice(1));
+        // part = new BlockInputFragmentMorph(spec.slice(1));
+        part = new BlockInputFragmentMorph(spec.replace(/%/g, ''));
     } else {
         part = new BlockLabelFragmentMorph(spec);
         part.fontSize = this.fontSize;
@@ -1648,7 +1651,7 @@ BlockEditorMorph.prototype.init = function (definition, target) {
     scripts = new ScriptsMorph(target);
     scripts.isDraggable = false;
     scripts.color = IDE_Morph.prototype.groupColor;
-    scripts.texture = IDE_Morph.prototype.scriptsPaneTexture;
+    scripts.cachedTexture = IDE_Morph.prototype.scriptsPaneTexture;
     scripts.cleanUpMargin = 10;
 
     proto = new PrototypeHatBlockMorph(this.definition);
