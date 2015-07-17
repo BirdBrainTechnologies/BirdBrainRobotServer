@@ -473,21 +473,27 @@ public class BirdBrainRobotServer {
 					try {
 						linkToInstaller = new URI("https://github.com/BirdBrainTechnologies/BirdBrainRobotServer/raw/master/Packages/Windows/BirdBrainRobotServerInstaller.msi");
 						desktop.browse(linkToInstaller);
-					} catch (URISyntaxException | IOException e) {
+					} catch (URISyntaxException e1){
+						e1.printStackTrace();
+					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				} else if (SystemUtils.IS_OS_MAC_OSX) {
 					try {
 						linkToInstaller = new URI("https://github.com/BirdBrainTechnologies/BirdBrainRobotServer/raw/master/Packages/Mac/BirdBrainRobotServer16.dmg");
 						desktop.browse(linkToInstaller);
-					} catch (URISyntaxException | IOException e) {
+					} catch (URISyntaxException e1){
+						e1.printStackTrace();
+					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				} else { // linux
 						try {
 							linkToInstaller = new URI("https://github.com/BirdBrainTechnologies/BirdBrainRobotServer/raw/master/Packages/Linux/BirdBrainRobotServer.deb");
 							desktop.browse(linkToInstaller);
-						} catch (URISyntaxException | IOException e) {
+						} catch (URISyntaxException e1){
+							e1.printStackTrace();
+						} catch (IOException e) {
 							e.printStackTrace();
 						}
 				}
