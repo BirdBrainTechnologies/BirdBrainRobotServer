@@ -919,10 +919,8 @@ public class BirdBrainRobotServer {
 					"https://raw.githubusercontent.com/BirdBrainTechnologies/BirdBrainRobotServer/master/VERSION.txt");
 			s = new Scanner(latestVersionURL.openStream());
 			newestVersion = Double.parseDouble(s.nextLine());
-		} catch (MalformedURLException e1) {
-			e1.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			newestVersion = 0.0; //If we failed to get file, just assume we shouldn't update
 		} finally {
 			s.close();
 		}
