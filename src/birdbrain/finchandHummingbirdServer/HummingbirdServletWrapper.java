@@ -11,6 +11,11 @@ public class HummingbirdServletWrapper {
 	private boolean isConnected; // Flag that is true if a hummingbird is discovered
 
 	private int[] sensors;
+	private Integer[] vibrations = {0,0};
+	private Integer[] leds = {0,0,0,0};
+	private int[][] trileds = {{0,0,0},{0,0,0}};
+	private Integer[] motors = {0,0};
+	private Integer[] servos = {0,0,0,0};
 	private Thread sensorLoop;
 	public boolean getConnected() {
 		return isConnected;
@@ -61,8 +66,8 @@ public class HummingbirdServletWrapper {
             } catch (InterruptedException ex) {
             }
             
-            
             if(hummingbird != null) {
+            	hummingbird.emergencyStop();
                 isConnected = true;
                 sensorLoop = new Thread(new SensorLoop()); // Start reading sensors
                 sensorLoop.start();
@@ -158,6 +163,32 @@ public class HummingbirdServletWrapper {
 			else
 				return null;
 		}
+	}
+	
+	public Integer getLEDValue(int port){
+		if(port > 0 && port < 5)
+			return leds[port - 1];
+		return null;
+	}
+	public int[] getTriLEDValue(int port){
+		if(port > 0 && port < 3)
+			return trileds[port - 1];
+		return null;
+	}
+	public Integer getVibrationValue(int port){
+		if(port > 0 && port < 3)
+			return vibrations[port - 1];
+		return null;
+	}
+	public Integer getMotorValue(int port){
+		if(port > 0 && port < 3)
+			return motors[port - 1];
+		return null;
+	}
+	public Integer getServoValue(int port){
+		if(port > 0 && port < 5)
+			return servos[port - 1];
+		return null;
 	}
 	
 	// Returns the sensor value at port n as a temperature in Celcius
@@ -317,7 +348,10 @@ public class HummingbirdServletWrapper {
 						intensity = 100;
 					if(intensity < 0)
 						intensity = 0;
-					hummingbird.setLED(port-1, (int)(intensity*2.55));
+					if(leds[port-1] != intensity){
+						hummingbird.setLED(port-1, (int)(intensity*2.55));
+						leds[port-1] = intensity;
+					}
 					return true;
 				}
 			}
@@ -343,7 +377,10 @@ public class HummingbirdServletWrapper {
 						speed = 100;
 					if(speed < -100)
 						speed = -100;
-					hummingbird.setMotorVelocity(port-1, (int)(speed*2.55));
+					if(motors[port-1] != speed){
+						hummingbird.setMotorVelocity(port-1, (int)(speed*2.55));
+						motors[port-1] = speed;
+					}
 					return true;
 				}
 			}
@@ -367,7 +404,10 @@ public class HummingbirdServletWrapper {
 						position = 180;
 					if(position < 0)
 						position = 0;
-					hummingbird.setServoPosition(port-1, (int)(position*215/180));
+					if(servos[port-1] != position){
+						hummingbird.setServoPosition(port-1, (int)(position*215/180));
+						servos[port-1] = position;
+					}
 					return true;
 				}
 			}
@@ -409,8 +449,12 @@ public class HummingbirdServletWrapper {
 						blueLED = 100;
 					if(blueLED < 0)
 						blueLED = 0;
-					
-					hummingbird.setFullColorLED(port-1, (int)(redLED*2.55), (int)(greenLED*2.55), (int)(blueLED*2.55));
+					if(trileds[port-1][0] != redLED || trileds[port-1][1] != greenLED || trileds[port-1][2] != blueLED){
+						hummingbird.setFullColorLED(port-1, (int)(redLED*2.55), (int)(greenLED*2.55), (int)(blueLED*2.55));
+						trileds[port-1][0] = redLED;
+						trileds[port-1][1] = greenLED;
+						trileds[port-1][2] = blueLED;
+					}
 					return true;
 				}
 			}
@@ -436,7 +480,11 @@ public class HummingbirdServletWrapper {
 						intensity = 100;
 					if(intensity < 0)
 						intensity = 0;
-					hummingbird.setVibrationMotorSpeed(port-1, (int)(intensity*2.55));
+					
+					if(vibrations[port-1] != intensity){
+						hummingbird.setVibrationMotorSpeed(port-1, (int)(intensity*2.55));
+						vibrations[port-1] = intensity;
+					}
 					return true;
 				}
 			}

@@ -72,6 +72,20 @@ public class HummingbirdServlet extends HttpServlet
 						  response.getWriter().print((int)(sensors[0]/2.55)+ " " + (int)(sensors[1]/2.55) + " " + (int)(sensors[2]/2.55) + " " + (int)(sensors[3]/2.55));
 					  }
 				  }
+				  else if(urlPath.substring(4,8).equals("led/")) {
+					  Integer ledVal = null;
+					  try {
+						  	ledVal = hummingbird.getLEDValue((int)(Double.parseDouble(urlPath.substring(8))));
+						  }
+						  // You've just sent a non-number, so the "set" did not work 
+						  catch(NumberFormatException e) {
+							  response.getWriter().println("specified port not a number");
+						  }
+					  if(ledVal == null) 
+						  response.getWriter().print("null");
+					  else
+						  response.getWriter().print(ledVal);
+				  }
 				  else if(urlPath.substring(4,10).equals("sound/")) {
 					  Integer sound = null;
 					  try {
@@ -87,6 +101,34 @@ public class HummingbirdServlet extends HttpServlet
 					  else {
 						  response.getWriter().print(sound);
 					  }
+				  }
+				  else if(urlPath.substring(4,10).equals("motor/")) {
+					  Integer motorVal = null;
+					  try {
+						  motorVal = hummingbird.getMotorValue((int)(Double.parseDouble(urlPath.substring(10))));
+						  }
+						  // You've just sent a non-number, so the "set" did not work 
+						  catch(NumberFormatException e) {
+							  response.getWriter().println("specified port not a number");
+						  }
+					  if(motorVal == null) 
+						  response.getWriter().print("null");
+					  else
+						  response.getWriter().print(motorVal);
+				  }
+				  else if(urlPath.substring(4,10).equals("servo/")) {
+					  Integer servoVal = null;
+					  try {
+						  servoVal = hummingbird.getServoValue((int)(Double.parseDouble(urlPath.substring(10))));
+						  }
+						  // You've just sent a non-number, so the "set" did not work 
+						  catch(NumberFormatException e) {
+							  response.getWriter().println("specified port not a number");
+						  }
+					  if(servoVal == null) 
+						  response.getWriter().print("null");
+					  else
+						  response.getWriter().print(servoVal);
 				  }
 				  else if(urlPath.substring(4,11).equals("sensor/")) {
 					  Integer sensor = null;
@@ -106,6 +148,20 @@ public class HummingbirdServlet extends HttpServlet
 						  response.getWriter().print((int)(sensor/2.55));
 					  }
 				  }
+				  else if(urlPath.substring(4,11).equals("triled/")) {
+					  int[] triVal = null;
+					  try {
+						  triVal =  hummingbird.getTriLEDValue((int)(Double.parseDouble(urlPath.substring(11))));
+						  }
+						  // You've just sent a non-number, so the "set" did not work 
+						  catch(NumberFormatException e) {
+							  response.getWriter().println("specified port not a number");
+						  }
+					  if(triVal == null) 
+						  response.getWriter().print("null");
+					  else
+						  response.getWriter().print(triVal[0] + " " + triVal[1] + " " + triVal[2]);
+				  }
 				  else if(urlPath.substring(4,13).equals("distance/")) {
 					  Integer distance = null;
 					  try {
@@ -121,6 +177,20 @@ public class HummingbirdServlet extends HttpServlet
 					  else {
 						  response.getWriter().print(distance);
 					  }
+				  }
+				  else if(urlPath.substring(4,14).equals("vibration/")) {
+					  Integer vibVal = null;
+					  try {
+						  vibVal = hummingbird.getVibrationValue((int)(Double.parseDouble(urlPath.substring(14))));
+						  }
+						  // You've just sent a non-number, so the "set" did not work 
+						  catch(NumberFormatException e) {
+							  response.getWriter().println("specified port not a number");
+						  }
+					  if(vibVal == null) 
+						  response.getWriter().print("null");
+					  else
+						  response.getWriter().print(vibVal);
 				  }
 				  else if(urlPath.substring(4,16).equals("temperature/")) {
 					  Double temperature = null;
