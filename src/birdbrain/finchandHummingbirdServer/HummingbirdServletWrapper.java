@@ -336,7 +336,16 @@ public class HummingbirdServletWrapper {
 				int lastSlash = setter.lastIndexOf('/');
 				try {
 					port = (int)(Double.parseDouble(setter.substring(4,lastSlash)));
-					intensity = (int)(Double.parseDouble(setter.substring(lastSlash+1)));
+					String tempIntense = setter.substring(lastSlash+1);
+					if (tempIntense.charAt(0) == '+'){
+						tempIntense = tempIntense.substring(1);
+						intensity = leds[port-1] + (int)(Double.parseDouble(tempIntense));
+					} else if (tempIntense.charAt(0) == '~'){
+						tempIntense = tempIntense.substring(1);
+						intensity = leds[port-1] - (int)(Double.parseDouble(tempIntense));
+					} else{
+						intensity = (int)(Double.parseDouble(tempIntense));
+					}
 				}
 				// You've just sent a non-number, so the "set" did not work 
 				catch(NumberFormatException e) {
@@ -364,8 +373,18 @@ public class HummingbirdServletWrapper {
 				try {
 					// in case someone sends "1.0" to port
 					port = (int)(Double.parseDouble(setter.substring(6,lastSlash)));
-					// Handle fractional speeds
-					speed = (int)(Double.parseDouble(setter.substring(lastSlash+1)));
+					
+					String tempSpeed = setter.substring(lastSlash+1);
+					if (tempSpeed.charAt(0) == '+'){
+						tempSpeed = tempSpeed.substring(1);
+						speed = motors[port-1] + (int)(Double.parseDouble(tempSpeed));
+					} else if (tempSpeed.charAt(0) == '~'){
+						tempSpeed = tempSpeed.substring(1);
+						speed = motors[port-1] - (int)(Double.parseDouble(tempSpeed));
+					} else{
+						// Handle fractional speeds
+						speed = (int)(Double.parseDouble(tempSpeed));
+					}
 				}
 				// You've just sent a non-number, so the "set" did not work 
 				catch(NumberFormatException e) {
@@ -391,8 +410,20 @@ public class HummingbirdServletWrapper {
 				int position = 0;
 				int lastSlash = setter.lastIndexOf('/');
 				try {
-					port = (int)(Double.parseDouble(setter.substring(6,lastSlash)));
-					position = (int)(Double.parseDouble(setter.substring(lastSlash+1)));
+					port = (int)(Double.parseDouble(setter.substring(6,lastSlash)));	
+					
+					String tempPosition = setter.substring(lastSlash+1);
+					if (tempPosition.charAt(0) == '+'){
+						tempPosition = tempPosition.substring(1);
+						position = servos[port-1] + (int)(Double.parseDouble(tempPosition));
+					} else if (tempPosition.charAt(0) == '~'){
+						tempPosition = tempPosition.substring(1);
+						position = servos[port-1] - (int)(Double.parseDouble(tempPosition));
+					} else{
+						// Handle fractional speeds
+						position = (int)(Double.parseDouble(tempPosition));
+					}
+
 				}
 				// You've just sent a non-number, so the "set" did not work 
 				catch(NumberFormatException e) {
@@ -425,9 +456,40 @@ public class HummingbirdServletWrapper {
 				
 				try {
 					port = (int)(Double.parseDouble(setter.substring(7,slashes[0])));
-					redLED = (int)(Double.parseDouble(setter.substring(slashes[0]+1, slashes[1])));
-					greenLED = (int)(Double.parseDouble(setter.substring(slashes[1]+1, slashes[2])));
-					blueLED = (int)(Double.parseDouble(setter.substring(slashes[2]+1)));
+					
+					String tempRed = setter.substring(slashes[0]+1, slashes[1]);
+					String tempGreen = setter.substring(slashes[1]+1, slashes[2]);
+					String tempBlue = setter.substring(slashes[2]+1);
+					
+					if (tempRed.charAt(0) == '+'){
+						tempRed = tempRed.substring(1);
+						redLED = trileds[port-1][0] + (int)(Double.parseDouble(tempRed));
+					} else if (tempRed.charAt(0) == '~'){
+						tempRed = tempRed.substring(1);
+						redLED = trileds[port-1][0] - (int)(Double.parseDouble(tempRed));
+					} else{
+						redLED = (int)(Double.parseDouble(tempRed));
+					}
+					
+					if (tempGreen.charAt(0) == '+'){
+						tempGreen = tempGreen.substring(1);
+						greenLED = trileds[port-1][1] + (int)(Double.parseDouble(tempGreen));
+					} else if (tempGreen.charAt(0) == '~'){
+						tempGreen = tempGreen.substring(1);
+						greenLED = trileds[port-1][1] - (int)(Double.parseDouble(tempGreen));
+					} else{
+						greenLED = (int)(Double.parseDouble(tempGreen));
+					}
+					
+					if (tempBlue.charAt(0) == '+'){
+						tempBlue = tempBlue.substring(1);
+						blueLED = trileds[port-1][2] + (int)(Double.parseDouble(tempBlue));
+					} else if (tempBlue.charAt(0) == '~'){
+						tempBlue = tempBlue.substring(1);
+						blueLED = trileds[port-1][2] - (int)(Double.parseDouble(tempBlue));
+					} else{
+						blueLED = (int)(Double.parseDouble(tempBlue));
+					}	
 				}
 				// You've just sent a non-number, so the "set" did not work 
 				catch(NumberFormatException e) {
@@ -467,7 +529,17 @@ public class HummingbirdServletWrapper {
 				
 				try {
 					port = (int)(Double.parseDouble(setter.substring(10,lastSlash)));
-					intensity = (int)(Double.parseDouble(setter.substring(lastSlash+1)));
+					
+					String tempIntense = setter.substring(lastSlash+1);
+					if (tempIntense.charAt(0) == '+'){
+						tempIntense = tempIntense.substring(1);
+						intensity = vibrations[port-1] + (int)(Double.parseDouble(tempIntense));
+					} else if (tempIntense.charAt(0) == '~'){
+						tempIntense = tempIntense.substring(1);
+						intensity = vibrations[port-1] - (int)(Double.parseDouble(tempIntense));
+					} else{
+						intensity = (int)(Double.parseDouble(tempIntense));
+					}
 				}
 				// You've just sent a non-number, so the "set" did not work 
 				catch(NumberFormatException e) {
