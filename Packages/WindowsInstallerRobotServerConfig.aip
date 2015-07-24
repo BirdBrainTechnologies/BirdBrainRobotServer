@@ -12,10 +12,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="www.hummingbirdkit.com/learning/software/snap"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:4"/>
     <ROW Property="Manufacturer" Value="BirdBrain Technologies LLC"/>
-    <ROW Property="ProductCode" Value="1033:{28117907-C585-421B-8F3E-B315F3F29452} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{AC6E1DD1-30B4-40B9-930A-69114B9235EB} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="BirdBrain Robot Server"/>
-    <ROW Property="ProductVersion" Value="1.6.0" Type="32"/>
+    <ROW Property="ProductVersion" Value="1.8.1" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{8BDC4AC2-8872-4D1B-9C99-608A686ECD4A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
@@ -41,8 +41,8 @@
     <ROW Component="FinchHummingbirdStart.sb2" ComponentId="{C6A3A48E-EDFA-42B9-BC39-0C97D5335B6F}" Directory_="ScratchStarters_Dir" Attributes="0" KeyPath="FinchHummingbirdStart.sb2" Type="0"/>
     <ROW Component="MANIFEST.MF" ComponentId="{BF087C89-DC96-408B-8E77-2DD9150290F6}" Directory_="METAINF_Dir" Attributes="0" KeyPath="MANIFEST.MF" Type="0"/>
     <ROW Component="ProductInformation" ComponentId="{10EB577F-69C6-4435-92DD-9AF02EFE52CE}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
-    <ROW Component="addCustomBlock.png" ComponentId="{24AE10B1-D830-40C1-A918-DFE353AF38AF}" Directory_="help_Dir" Attributes="0" KeyPath="addCustomBlock.png" Type="0"/>
-    <ROW Component="agpl.txt" ComponentId="{6AA0956C-8D23-433E-933A-C313871C7901}" Directory_="SnapOffline_Dir" Attributes="0" KeyPath="agpl.txt" Type="0"/>
+    <ROW Component="addCustomBlock.png" ComponentId="{9895119F-92C0-4E63-9340-F8BB3891E259}" Directory_="help_Dir" Attributes="0" KeyPath="addCustomBlock.png" Type="0"/>
+    <ROW Component="agpl.txt" ComponentId="{97B4EAB5-EBB6-450D-AB6F-D60B8577983D}" Directory_="SnapOffline_Dir" Attributes="0" KeyPath="agpl.txt" Type="0"/>
     <ROW Component="avrdude.conf" ComponentId="{088E0340-8C6E-4CC0-986A-393BB9FB3386}" Directory_="APPDIR" Attributes="0" KeyPath="avrdude.conf" Type="0"/>
     <ROW Component="avrdude.exe" ComponentId="{E76D3B42-78F9-40C2-99EA-100220023D78}" Directory_="APPDIR" Attributes="0" KeyPath="avrdude.exe"/>
     <ROW Component="libusb0.dll" ComponentId="{A1B9FE5E-7406-4556-84AE-9F5ED61CFDFD}" Directory_="APPDIR" Attributes="0" KeyPath="libusb0.dll"/>
@@ -64,12 +64,14 @@
     <ROW File="FinchSnapBlocks.xml" Component_="FinchHummingbirdSnapBlocks.xml" FileName="FINCHS~1.XML|FinchSnapBlocks.xml" Attributes="0" SourcePath="Windows\WebContent\FinchSnapBlocks.xml" SelfReg="false" NextFile="HummingbirdSnapBlocks.xml"/>
     <ROW File="FinchStart.sb2" Component_="FinchHummingbirdStart.sb2" FileName="FINCHS~1.SB2|FinchStart.sb2" Attributes="0" SourcePath="Windows\ScratchStarters\FinchStart.sb2" SelfReg="false" NextFile="HummingbirdStart.sb2"/>
     <ROW File="HummingbirdSnapBlocks.xml" Component_="FinchHummingbirdSnapBlocks.xml" FileName="HUMMIN~1.XML|HummingbirdSnapBlocks.xml" Attributes="0" SourcePath="Windows\WebContent\HummingbirdSnapBlocks.xml" SelfReg="false" NextFile="index.html"/>
-    <ROW File="HummingbirdStart.sb2" Component_="FinchHummingbirdStart.sb2" FileName="HUMMIN~1.SB2|HummingbirdStart.sb2" Attributes="0" SourcePath="Windows\ScratchStarters\HummingbirdStart.sb2" SelfReg="false"/>
+    <ROW File="HummingbirdStart.sb2" Component_="FinchHummingbirdStart.sb2" FileName="HUMMIN~1.SB2|HummingbirdStart.sb2" Attributes="0" SourcePath="Windows\ScratchStarters\HummingbirdStart.sb2" SelfReg="false" NextFile="VERSION.txt"/>
     <ROW File="HummingbirdV2.hex" Component_="avrdude.conf" FileName="HUMMIN~1.HEX|HummingbirdV2.hex" Attributes="0" SourcePath="Windows\HummingbirdV2.hex" SelfReg="false" NextFile="javax.usb.properties"/>
     <ROW File="MANIFEST.MF" Component_="MANIFEST.MF" FileName="MANIFEST.MF" Attributes="0" SourcePath="Windows\WebContent\META-INF\MANIFEST.MF" SelfReg="false" NextFile="SayThisBlock.xml"/>
-    <ROW File="SayThisBlock.xml" Component_="FinchHummingbirdSnapBlocks.xml" FileName="SAYTHI~1.XML|SayThisBlock.xml" Attributes="0" SourcePath="Windows\WebContent\SayThisBlock.xml" SelfReg="false" NextFile="agpl.txt"/>
+    <ROW File="README.md" Component_="agpl.txt" FileName="README.md" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\README.md" SelfReg="false" NextFile="readme.txt"/>
+    <ROW File="SayThisBlock.xml" Component_="FinchHummingbirdSnapBlocks.xml" FileName="SAYTHI~1.XML|SayThisBlock.xml" Attributes="0" SourcePath="Windows\WebContent\SayThisBlock.xml" SelfReg="false" NextFile="web.xml"/>
     <ROW File="SnapConnectivityStrategy.pdf" Component_="agpl.txt" FileName="SNAP!C~1.PDF|Snap! Connectivity Strategy.pdf" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\Snap! Connectivity Strategy.pdf" SelfReg="false" NextFile="snap.html"/>
     <ROW File="SnapManual.pdf" Component_="addCustomBlock.png" FileName="SNAPMA~1.PDF|SnapManual.pdf" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\SnapManual.pdf" SelfReg="false" NextFile="throw.png"/>
+    <ROW File="VERSION.txt" Component_="avrdude.conf" FileName="VERSION.txt" Attributes="0" SourcePath="Windows\VERSION.txt" SelfReg="false" NextFile="agpl.txt"/>
     <ROW File="addCustomBlock.png" Component_="addCustomBlock.png" FileName="ADDCUS~1.PNG|addCustomBlock.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\addCustomBlock.png" SelfReg="false" NextFile="addVariable.png"/>
     <ROW File="addVariable.png" Component_="addCustomBlock.png" FileName="ADDVAR~1.PNG|addVariable.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\addVariable.png" SelfReg="false" NextFile="BLANK.png"/>
     <ROW File="agpl.txt" Component_="agpl.txt" FileName="agpl.txt" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\agpl.txt" SelfReg="false" NextFile="alonzo.svg"/>
@@ -158,9 +160,10 @@
     <ROW File="gotoXY.png" Component_="addCustomBlock.png" FileName="gotoXY.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\gotoXY.png" SelfReg="false" NextFile="hide.png"/>
     <ROW File="gui.js" Component_="agpl.txt" FileName="gui.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\gui.js" SelfReg="false" NextFile="addCustomBlock.png"/>
     <ROW File="hide.png" Component_="addCustomBlock.png" FileName="hide.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\hide.png" SelfReg="false" NextFile="ifthenelse.png"/>
-    <ROW File="history.txt" Component_="agpl.txt" FileName="history.txt" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\history.txt" SelfReg="false" NextFile="langbn.js"/>
+    <ROW File="history.txt" Component_="agpl.txt" FileName="history.txt" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\history.txt" SelfReg="false" NextFile="index.html_1"/>
     <ROW File="ifthenelse.png" Component_="addCustomBlock.png" FileName="IFTHEN~1.PNG|ifthenelse.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\ifthenelse.png" SelfReg="false" NextFile="joinwords.png"/>
     <ROW File="index.html" Component_="FinchHummingbirdSnapBlocks.xml" FileName="INDEX~1.HTM|index.html" Attributes="0" SourcePath="Windows\WebContent\index.html" SelfReg="false" NextFile="MANIFEST.MF"/>
+    <ROW File="index.html_1" Component_="agpl.txt" FileName="INDEX~1.HTM|index.html" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\index.html" SelfReg="false" NextFile="langbn.js"/>
     <ROW File="javax.usb.properties" Component_="avrdude.conf" FileName="JAVAXU~1.PRO|javax.usb.properties" Attributes="0" SourcePath="Windows\javax.usb.properties" SelfReg="false" NextFile="libusb0.dll"/>
     <ROW File="joinwords.png" Component_="addCustomBlock.png" FileName="JOINWO~1.PNG|joinwords.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\joinwords.png" SelfReg="false" NextFile="keepitemssuchthatfrom.png"/>
     <ROW File="keepitemssuchthatfrom.png" Component_="addCustomBlock.png" FileName="KEEPIT~1.PNG|keepitemssuchthatfrom.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\keepitemssuchthatfrom.png" SelfReg="false" NextFile="listsentence.png"/>
@@ -178,7 +181,8 @@
     <ROW File="langja.js" Component_="agpl.txt" FileName="lang-ja.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ja.js" SelfReg="false" NextFile="langja_HIRA.js"/>
     <ROW File="langja_HIRA.js" Component_="agpl.txt" FileName="LANG-J~1.JS|lang-ja_HIRA.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ja_HIRA.js" SelfReg="false" NextFile="langkn.js"/>
     <ROW File="langkn.js" Component_="agpl.txt" FileName="lang-kn.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-kn.js" SelfReg="false" NextFile="langko.js"/>
-    <ROW File="langko.js" Component_="agpl.txt" FileName="lang-ko.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ko.js" SelfReg="false" NextFile="langnl.js"/>
+    <ROW File="langko.js" Component_="agpl.txt" FileName="lang-ko.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ko.js" SelfReg="false" NextFile="langml.js"/>
+    <ROW File="langml.js" Component_="agpl.txt" FileName="lang-ml.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ml.js" SelfReg="false" NextFile="langnl.js"/>
     <ROW File="langnl.js" Component_="agpl.txt" FileName="lang-nl.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-nl.js" SelfReg="false" NextFile="langno.js"/>
     <ROW File="langno.js" Component_="agpl.txt" FileName="lang-no.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-no.js" SelfReg="false" NextFile="langpl.js"/>
     <ROW File="langpl.js" Component_="agpl.txt" FileName="lang-pl.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-pl.js" SelfReg="false" NextFile="langpt.js"/>
@@ -186,7 +190,9 @@
     <ROW File="langpt_BR.js" Component_="agpl.txt" FileName="LANG-P~1.JS|lang-pt_BR.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-pt_BR.js" SelfReg="false" NextFile="langru.js"/>
     <ROW File="langru.js" Component_="agpl.txt" FileName="lang-ru.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ru.js" SelfReg="false" NextFile="langsi.js"/>
     <ROW File="langsi.js" Component_="agpl.txt" FileName="lang-si.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-si.js" SelfReg="false" NextFile="langsv.js"/>
-    <ROW File="langsv.js" Component_="agpl.txt" FileName="lang-sv.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-sv.js" SelfReg="false" NextFile="langtw.js"/>
+    <ROW File="langsv.js" Component_="agpl.txt" FileName="lang-sv.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-sv.js" SelfReg="false" NextFile="langta.js"/>
+    <ROW File="langta.js" Component_="agpl.txt" FileName="lang-ta.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ta.js" SelfReg="false" NextFile="langte.js"/>
+    <ROW File="langte.js" Component_="agpl.txt" FileName="lang-te.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-te.js" SelfReg="false" NextFile="langtw.js"/>
     <ROW File="langtw.js" Component_="agpl.txt" FileName="lang-tw.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-tw.js" SelfReg="false" NextFile="langzh.js"/>
     <ROW File="langzh.js" Component_="agpl.txt" FileName="lang-zh.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-zh.js" SelfReg="false" NextFile="lists.js"/>
     <ROW File="libusb0.dll" Component_="libusb0.dll" FileName="libusb0.dll" Attributes="0" SourcePath="Windows\libusb0.dll" SelfReg="false" NextFile="libusb0.sys"/>
@@ -203,7 +209,7 @@
     <ROW File="morphic.txt" Component_="agpl.txt" FileName="morphic.txt" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\morphic.txt" SelfReg="false" NextFile="multiple.html"/>
     <ROW File="multiple.html" Component_="agpl.txt" FileName="MULTIP~1.HTM|multiple.html" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\multiple.html" SelfReg="false" NextFile="objects.js"/>
     <ROW File="objects.js" Component_="agpl.txt" FileName="objects.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\objects.js" SelfReg="false" NextFile="paint.js"/>
-    <ROW File="paint.js" Component_="agpl.txt" FileName="paint.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\paint.js" SelfReg="false" NextFile="readme.txt"/>
+    <ROW File="paint.js" Component_="agpl.txt" FileName="paint.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\paint.js" SelfReg="false" NextFile="README.md"/>
     <ROW File="playSound.png" Component_="addCustomBlock.png" FileName="PLAYSO~1.PNG|playSound.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\playSound.png" SelfReg="false" NextFile="playSound_.png"/>
     <ROW File="playSound_.png" Component_="addCustomBlock.png" FileName="PLAYSO~2.PNG|playSound_.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\playSound_.png" SelfReg="false" NextFile="receiveClick.png"/>
     <ROW File="readme.txt" Component_="agpl.txt" FileName="readme.txt" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\readme.txt" SelfReg="false" NextFile="scriptsPaneTexture.gif"/>
@@ -285,7 +291,7 @@
     <ROW File="xPosition.png" Component_="addCustomBlock.png" FileName="XPOSIT~1.PNG|xPosition.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\xPosition.png" SelfReg="false" NextFile="yPosition.png"/>
     <ROW File="xml.js" Component_="agpl.txt" FileName="xml.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\xml.js" SelfReg="false" NextFile="ypr.js"/>
     <ROW File="yPosition.png" Component_="addCustomBlock.png" FileName="YPOSIT~1.PNG|yPosition.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\yPosition.png" SelfReg="false" NextFile="history.txt"/>
-    <ROW File="ypr.js" Component_="agpl.txt" FileName="ypr.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\ypr.js" SelfReg="false" NextFile="web.xml"/>
+    <ROW File="ypr.js" Component_="agpl.txt" FileName="ypr.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\ypr.js" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
     <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="." PackageFileName="BirdBrainRobotServerInstaller" Languages="en" InstallationType="4" UseLargeSchema="true"/>

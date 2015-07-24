@@ -83,7 +83,7 @@ ArgLabelMorph, localize, XML_Element, hex_sha512*/
 
 // Global stuff ////////////////////////////////////////////////////////
 
-modules.threads = '2015-January-12';
+modules.threads = '2015-June-25';
 
 var ThreadManager;
 var Process;
@@ -339,7 +339,7 @@ ThreadManager.prototype.findProcess = function (block) {
 */
 
 Process.prototype = {};
-Process.prototype.contructor = Process;
+Process.prototype.constructor = Process;
 Process.prototype.timeout = 500; // msecs after which to force yield
 Process.prototype.isCatchingErrors = true;
 
@@ -1153,13 +1153,16 @@ Process.prototype.doDeclareVariables = function (varNames) {
 Process.prototype.doSetVar = function (varName, value) {
     var varFrame = this.context.variables,
         name = varName;
-
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
-            name = name.expression.blockSpec;
+            name.variables.setVar(
+                name.expression.blockSpec,
+                value
+            );
+            return;
         }
     }
-    varFrame.setVar(name, value);
+    varFrame.setVar(name, value, this.blockReceiver());
 };
 
 Process.prototype.doChangeVar = function (varName, value) {
@@ -1168,10 +1171,14 @@ Process.prototype.doChangeVar = function (varName, value) {
 
     if (name instanceof Context) {
         if (name.expression.selector === 'reportGetVar') {
-            name = name.expression.blockSpec;
+            name.variables.changeVar(
+                name.expression.blockSpec,
+                value
+            );
+            return;
         }
     }
-    varFrame.changeVar(name, value);
+    varFrame.changeVar(name, value, this.blockReceiver());
 };
 
 Process.prototype.reportGetVar = function () {
@@ -1323,6 +1330,8 @@ Process.prototype.doDeleteFromList = function (index, list) {
     }
     if (this.inputOption(index) === 'last') {
         idx = list.length();
+    } else if (isNaN(+this.inputOption(index))) {
+        return null;
     }
     list.remove(idx);
 };
@@ -1807,6 +1816,7 @@ Process.prototype.doAsk = function (data) {
         isStage = this.blockReceiver() instanceof StageMorph,
         activePrompter;
 
+    stage.keysPressed = {};
     if (!this.prompter) {
         activePrompter = detect(
             stage.children,
@@ -1926,7 +1936,7 @@ Process.prototype.reportTypeOf = function (thing) {
     if (thing === true || (thing === false)) {
         return 'Boolean';
     }
-    if (!isNaN(parseFloat(thing))) {
+    if (!isNaN(+thing)) {
         return 'number';
     }
     if (isString(thing)) {
@@ -2112,14 +2122,14 @@ Process.prototype.reportMonadic = function (fname, n) {
     case 'ln':
         result = Math.log(x);
         break;
-    case 'log':
-        result = 0;
+    case 'log': // base 10
+        result =  Math.log(x) / Math.LN10;
         break;
     case 'e^':
         result = Math.exp(x);
         break;
     case '10^':
-        result = 0;
+        result = Math.pow(10, x);
         break;
     default:
         nop();
@@ -2175,6 +2185,9 @@ Process.prototype.reportJoinWords = function (aList) {
 // Process string ops
 
 Process.prototype.reportLetter = function (idx, string) {
+    if (string instanceof List) { // catch a common user error
+        return '';
+    }
     var i = +(idx || 0),
         str = (string || '').toString();
     return str[i - 1] || '';
@@ -2627,31 +2640,30 @@ Process.prototype.reportTimer = function () {
 };
 
 // Process Dates and times in Snap
-// Map block options to built-in functions
-var dateMap = {
-    'year' : 'getFullYear',
-    'month' : 'getMonth',
-    'date': 'getDate',
-    'day of week' : 'getDay',
-    'hour' : 'getHours',
-    'minute' : 'getMinutes',
-    'second' : 'getSeconds',
-    'time in milliseconds' : 'getTime'
-};
-
 Process.prototype.reportDate = function (datefn) {
-    var inputFn = this.inputOption(datefn),
-        currDate = new Date(),
-        func = dateMap[inputFn],
-        result = currDate[func]();
+    var currDate, func, result,
+        inputFn = this.inputOption(datefn),
+        // Map block options to built-in functions
+        dateMap = {
+            'year' : 'getFullYear',
+            'month' : 'getMonth',
+            'date': 'getDate',
+            'day of week' : 'getDay',
+            'hour' : 'getHours',
+            'minute' : 'getMinutes',
+            'second' : 'getSeconds',
+            'time in milliseconds' : 'getTime'
+        };
 
     if (!dateMap[inputFn]) { return ''; }
+    currDate = new Date();
+    func = dateMap[inputFn];
+    result = currDate[func]();
 
     // Show months as 1-12 and days as 1-7
     if (inputFn === 'month' || inputFn === 'day of week') {
         result += 1;
     }
-
     return result;
 };
 

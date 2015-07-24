@@ -316,7 +316,7 @@ public class HummingbirdServletWrapper {
 	
 	/* Parses the Hummingbird output string and sets it
 	   * out/motor/port/speed (port 1 or 2, speed -100 to 100)
-	   * out/servo/port/position (port 1 to 4, position 0 to 160)
+	   * out/servo/port/position (port 1 to 4, position 0 to 180)
 	   * out/vibration/port/speed (port 1 or 2, speed 0 to 100)
 	   * out/led/port/intensity (port 1 to 4, intensity 0 to 100)
 	   * out/triled/port/R/G/B (port 1 or 2, R, G, B are intensities 0 to 100)
@@ -403,7 +403,7 @@ public class HummingbirdServletWrapper {
 					return true;
 				}
 			}
-			// Sets servo, arguments are 0 to 160
+			// Sets servo, arguments are 0 to 180
 			// out/servo/port/position
 			else if(setter.substring(0,5).equals("servo")) {
 				int port= 0;

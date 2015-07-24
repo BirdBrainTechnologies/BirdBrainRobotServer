@@ -2435,3 +2435,95 @@ ______
 ------
 * GUI: Added url switch #cloud: to open a shared project in edit mode
 
+150220
+------
+* Malayam, Tamil and Telagu translations, thanks, Vinay Kumar!!
+* Un-hide “Save to disk” feature (currently supported by both Chrome and Firefox, but not by Safari)
+* Update German translation
+* GUI: Make “project data in URLs” a hidden dev option (prevent long urls per default)
+
+150223
+------
+* Blocks, Objects: Add user-interaction choices to the “When I am ...” hat block
+* Update German translation
+* Store: Avoid incompatibility warning for very old (pre-earmarked) projects
+
+150224
+------
+* Store: fixed #725
+
+150228
+------
+* Blocks, Store, GUI: Cache inputs, accelerates evaluating recursive reporters and warped / turbo recursive commands by up to 40%
+* Objects: slightly optimize warped / turbo execution
+* Threads: fixed #715
+* BYOB: fixed #716
+
+150302
+------
+* BYOB: fixed #730
+
+150306
+------
+* Blocks: fixed #736
+
+150309
+------
+* Blocks: fixed #738
+* GUI, Blocks: Only enable input caching for blocks
+
+150315
+------
+* Store: fixed #743
+* GUI, html: switch from beta to release candidate
+
+150325
+------
+* Threads: fixed #752
+
+150415
+------
+* Threads: flush Stage>>keysPressed when prompting the user
+* Objects: fixed #770
+
+150426
+------
+* Store: fixed #784
+
+150501
+------
+* Morphic, Blocks: select all text when first clicking an input slot
+* BYOB: indicate numeric inputs in the block prototype with the # sign
+* Threads: return empty string when querying first letter of a list
+* GUI: hide “save to disk” option behind shift-click again (has issues in Chrome)
+* GUI: parameters for embedding projects in iFrames, thanks, Bernat!
+
+=== Release v4.0 ===
+
+150518
+------
+* Objects, GUI: Fix encoding for exported sprites (esp. comments)
+* Portuguese translation update, thanks, Manuel!!
+
+150521
+------
+* BYOB: Fix encoding for exported libraries of global blocks
+
+150523
+------
+* BYOB: Fix encoding glitch
+
+150608
+------
+* Blocks: Fixed #820
+
+150625
+------
+* Morphic, Objects, Blocks, XML: Optimizations and dramatic speed-up. Thanks, Nathan!!
+* Objects: push maximum clone count up to 1000, tweak Note::play
+
+=== Start with v4.0.1 ===
+
+150626
+------
+* Morphic: Fix Inspector duplication, update documentation
