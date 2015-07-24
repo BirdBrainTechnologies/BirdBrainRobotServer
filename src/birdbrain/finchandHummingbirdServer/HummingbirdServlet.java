@@ -228,6 +228,14 @@ public class HummingbirdServlet extends HttpServlet
 				  response.getWriter().print("Wrong output setting request"); 
 			  }
 		  }
+		  else if (urlPath.substring(1,7).equals("change")){
+			  if(hummingbird.changeOutput(urlPath.substring(8))) {
+				  response.getWriter().print("Output changed");
+			  }
+			  else {
+				  response.getWriter().print("Wrong output changer request"); 
+			  }
+		  }
 		  // If you wrote hummingbird as part of the url, you get garbage
 		  else {
 			  response.getWriter().print("Wrong Hummingbird request"); 

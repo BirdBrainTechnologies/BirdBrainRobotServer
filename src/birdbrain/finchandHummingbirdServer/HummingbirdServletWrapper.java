@@ -566,4 +566,185 @@ public class HummingbirdServletWrapper {
 		
 	}
 	
+	/* Parses the Hummingbird output string and sets it
+	   * change/motor/port/speed (port 1 or 2, speed -100 to 100)
+	   * change/servo/port/position (port 1 to 4, position 0 to 160)
+	   * change/vibration/port/speed (port 1 or 2, speed 0 to 100)
+	   * change/led/port/intensity (port 1 to 4, intensity 0 to 100)
+	   * change/triled/port/R/G/B (port 1 or 2, R, G, B are intensities 0 to 100)
+	*/
+	public boolean changeOutput(String setter)
+	{
+		if(!isConnected) {
+			return false;
+		}
+		else
+		{
+			// Sets LED, arguments are 0 to 100
+			// out/led/port/intensity
+			if(setter.substring(0,3).equals("led")) {
+				int port= 0;
+				int intensity = 0;
+				int lastSlash = setter.lastIndexOf('/');
+				try {
+					port = (int)(Double.parseDouble(setter.substring(4,lastSlash)));
+					intensity = leds[port-1] + (int)(Double.parseDouble(setter.substring(lastSlash+1)));
+				}
+				// You've just sent a non-number, so the "set" did not work 
+				catch(NumberFormatException e) {
+					return false;
+				}
+				if(port > 0 && port < 5) 
+				{
+					if(intensity > 100)
+						intensity = 100;
+					if(intensity < 0)
+						intensity = 0;
+					if(leds[port-1] != intensity){
+						hummingbird.setLED(port-1, (int)(intensity*2.55));
+						leds[port-1] = intensity;
+					}
+					return true;
+				}
+			}
+			// Sets motor, arguments are -100 to 100
+			// out/motor/port/speed
+			else if(setter.substring(0,5).equals("motor")) {
+				int port= 0;
+				int speed = 0;
+				int lastSlash = setter.lastIndexOf('/');
+				try {
+					// in case someone sends "1.0" to port
+					port = (int)(Double.parseDouble(setter.substring(6,lastSlash)));
+					speed = motors[port-1] + (int)(Double.parseDouble(setter.substring(lastSlash+1)));
+				}
+				// You've just sent a non-number, so the "set" did not work 
+				catch(NumberFormatException e) {
+					return false;
+				}
+				if(port == 1 || port == 2) 
+				{
+					if(speed > 100)
+						speed = 100;
+					if(speed < -100)
+						speed = -100;
+					if(motors[port-1] != speed){
+						hummingbird.setMotorVelocity(port-1, (int)(speed*2.55));
+						motors[port-1] = speed;
+					}
+					return true;
+				}
+			}
+			// Sets servo, arguments are 0 to 160
+			// out/servo/port/position
+			else if(setter.substring(0,5).equals("servo")) {
+				int port= 0;
+				int position = 0;
+				int lastSlash = setter.lastIndexOf('/');
+				try {
+					port = (int)(Double.parseDouble(setter.substring(6,lastSlash)));	
+					position = servos[port-1] + (int)(Double.parseDouble(setter.substring(lastSlash+1)));
+				}
+				// You've just sent a non-number, so the "set" did not work 
+				catch(NumberFormatException e) {
+					return false;
+				}
+				if(port > 0 && port < 5) 
+				{
+					if(position > 180)
+						position = 180;
+					if(position < 0)
+						position = 0;
+					if(servos[port-1] != position){
+						hummingbird.setServoPosition(port-1, (int)(position*215/180));
+						servos[port-1] = position;
+					}
+					return true;
+				}
+			}
+			// Sets Tri-color LED, arguments are 0 to 100 for R, G, B
+			// out/triled/port/red/green/blue
+			else if(setter.substring(0,6).equals("triled")) {
+				int port= 0;
+				int redLED = 0;
+				int greenLED = 0;
+				int blueLED = 0;
+				int [] slashes = new int[3];
+				slashes[0] = setter.indexOf('/', 7);
+				slashes[1] = setter.indexOf('/', slashes[0]+1);
+				slashes[2] = setter.lastIndexOf('/');
+				
+				try {
+					port = (int)(Double.parseDouble(setter.substring(7,slashes[0])));
+					redLED = trileds[port-1][0] + (int)(Double.parseDouble(setter.substring(slashes[0]+1, slashes[1])));
+					greenLED = trileds[port-1][1] + (int)(Double.parseDouble(setter.substring(slashes[1]+1, slashes[2])));
+					blueLED = trileds[port-1][2] + (int)(Double.parseDouble(setter.substring(slashes[2]+1)));
+					
+				}
+				// You've just sent a non-number, so the "set" did not work 
+				catch(NumberFormatException e) {
+					return false;
+				}
+				if(port == 1 || port == 2) 
+				{
+					if(redLED > 100)
+						redLED = 100;
+					if(redLED < 0)
+						redLED = 0;
+					
+					if(greenLED > 100)
+						greenLED = 100;
+					if(greenLED < 0)
+						greenLED = 0;
+					
+					if(blueLED > 100)
+						blueLED = 100;
+					if(blueLED < 0)
+						blueLED = 0;
+					if(trileds[port-1][0] != redLED || trileds[port-1][1] != greenLED || trileds[port-1][2] != blueLED){
+						hummingbird.setFullColorLED(port-1, (int)(redLED*2.55), (int)(greenLED*2.55), (int)(blueLED*2.55));
+						trileds[port-1][0] = redLED;
+						trileds[port-1][1] = greenLED;
+						trileds[port-1][2] = blueLED;
+					}
+					return true;
+				}
+			}
+			// Sets vibration motor, arguments are 0 to 100
+			// out/vibration/port/intensity
+			else if(setter.substring(0,9).equals("vibration")) {
+				int port= 0;
+				int intensity = 0;
+				int lastSlash = setter.lastIndexOf('/');
+				
+				try {
+					port = (int)(Double.parseDouble(setter.substring(10,lastSlash)));
+					intensity = vibrations[port-1] + (int)(Double.parseDouble(setter.substring(lastSlash+1)));
+				}
+				// You've just sent a non-number, so the "set" did not work 
+				catch(NumberFormatException e) {
+					return false;
+				}
+				
+				if(port == 1 || port == 2) 
+				{
+					if(intensity > 100)
+						intensity = 100;
+					if(intensity < 0)
+						intensity = 0;
+					
+					if(vibrations[port-1] != intensity){
+						hummingbird.setVibrationMotorSpeed(port-1, (int)(intensity*2.55));
+						vibrations[port-1] = intensity;
+					}
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+	}
+	
+	
 }
