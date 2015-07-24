@@ -6,19 +6,51 @@
 	<dict>
 		<key>Resources/Java/BirdBrainRobotServer.jar</key>
 		<data>
-		8YLJIebMEsFttb9+XTe7FTYwK0w=
+		iswKdNxxiXzR1Q+XZyYa308AbHs=
+		</data>
+		<key>Resources/Java/HummingbirdV2.hex</key>
+		<data>
+		v5EXQ0Kfw33xyrOlfkHXRt1VchA=
+		</data>
+		<key>Resources/Java/ScratchStarters/FinchHummingbirdStart.sb2</key>
+		<data>
+		yZAVib/R0A1LCy2PmV9qZrO1lKg=
+		</data>
+		<key>Resources/Java/ScratchStarters/FinchStart.sb2</key>
+		<data>
+		emgaW6E4C9uf5A322R1TvgWaVvc=
+		</data>
+		<key>Resources/Java/ScratchStarters/HummingbirdStart.sb2</key>
+		<data>
+		ObLqSsCA21qZRzyU3cAen6z+68s=
+		</data>
+		<key>Resources/Java/VERSION.txt</key>
+		<data>
+		7QIMNHpZ3qLsg7ZufXIQ+SJkbg0=
 		</data>
 		<key>Resources/Java/WebContent/FinchHummingbirdSnapBlocks.xml</key>
 		<data>
-		4SvDmCFbB8G1SaXOKmRrJ28oe94=
+		Zbi8LWGNi8WVrjUYHoWGzG26l1E=
+		</data>
+		<key>Resources/Java/WebContent/FinchLevel1.xml</key>
+		<data>
+		MFd83Tw6MtIKeHn1GBTsscItr9s=
+		</data>
+		<key>Resources/Java/WebContent/FinchLevel2.xml</key>
+		<data>
+		3JJBa4oGu4gjppn2coKp9VI8OXA=
+		</data>
+		<key>Resources/Java/WebContent/FinchLevel3.xml</key>
+		<data>
+		Fy8JPJzz03/+ARFC7W2KlLHWl98=
 		</data>
 		<key>Resources/Java/WebContent/FinchSnapBlocks.xml</key>
 		<data>
-		X5iGal3bra95UmUT/wU15RRLN5s=
+		cjABWI2eXgQEqSTm05ivU/i0J30=
 		</data>
 		<key>Resources/Java/WebContent/HummingbirdSnapBlocks.xml</key>
 		<data>
-		+XnewX4Gs9rn577Uwhk0oqXMrfo=
+		tha6PMI9cgkmDDgRqYylZzN9Oao=
 		</data>
 		<key>Resources/Java/WebContent/META-INF/MANIFEST.MF</key>
 		<data>
@@ -42,11 +74,11 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/blocks.js</key>
 		<data>
-		A0vjyO2L2H2MMZulurluDNIpSGs=
+		hqa3AN+ZT2GVZ/O1Bx45NrXaWm0=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/byob.js</key>
 		<data>
-		aIM1ctwhyhvWrqAu7c12HBxcH04=
+		FefRLIFNOC1xw+1GP6ibGsyOiGU=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/click.wav</key>
 		<data>
@@ -54,15 +86,19 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/cloud.js</key>
 		<data>
-		ujRG8tNlStRdSeytlsQAlGwhaVw=
+		E/+in8q1MKsjk5rvdEdnf+mQmdk=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/contributing to BYOB4.txt</key>
 		<data>
 		W1fbslQf3DpXZRpN1AlhjbB5x4U=
 		</data>
+		<key>Resources/Java/WebContent/SnapOffline/favicon.ico</key>
+		<data>
+		rlzr7lrRJNRwJjqBGvL197aYQno=
+		</data>
 		<key>Resources/Java/WebContent/SnapOffline/gui.js</key>
 		<data>
-		c9N7GTo6CKyLw8A38rofEjyYRYU=
+		ph8Dgt0bPOkl4mr7IULa8OZv/ZQ=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/help/BLANK.png</key>
 		<data>
@@ -686,7 +722,7 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/history.txt</key>
 		<data>
-		CeRQX/A19Htybe1Hn2V6Kr3Tt4s=
+		NpN3JslNr8WAWoOuy/YXwBBp8CU=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-bn.js</key>
 		<data>
@@ -694,7 +730,7 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-ca.js</key>
 		<data>
-		NyVsFMFDQGZj4H4epkzVdGclReA=
+		fc5XvdwM5K3DOHQkPBbuOOGXbeU=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-cs.js</key>
 		<data>
@@ -730,7 +766,7 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-it.js</key>
 		<data>
-		k7FNbfFiLvgN9McwTA/iQL1xrqE=
+		2MNaSFpk/wFqn7vt1hy0uo8Bw4A=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-ja.js</key>
 		<data>
@@ -740,9 +776,13 @@
 		<data>
 		ghWZz3YOhgJ9s0h4Ds+eVJEapnQ=
 		</data>
+		<key>Resources/Java/WebContent/SnapOffline/lang-kn.js</key>
+		<data>
+		AsIdqjjboGgy25UQ+g8DOD/3MEk=
+		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-ko.js</key>
 		<data>
-		yCYPT1vChLOz0dgNOYlW8cxqSco=
+		wqiRSZMVvxBkhvcwEtb4MzKQd/Y=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-nl.js</key>
 		<data>
@@ -758,7 +798,7 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-pt.js</key>
 		<data>
-		t9uceGvPV2FjNBiq6Zj4/q/5WJs=
+		LIEpYmi8PNTr3S6jVHBQrP7ATv4=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-pt_BR.js</key>
 		<data>
@@ -772,6 +812,10 @@
 		<data>
 		MAIH9baB5njc5JgeEnWn6YNZcss=
 		</data>
+		<key>Resources/Java/WebContent/SnapOffline/lang-sv.js</key>
+		<data>
+		5xPE8DMF4xnkm/zLThpA1DQ495Y=
+		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-tw.js</key>
 		<data>
 		efHmD0iHm0PSnGjvf1T8NdnM1Ow=
@@ -782,15 +826,15 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lists.js</key>
 		<data>
-		MunWq3psMnFR1Lz/T7IgRoAF2sM=
+		kMOmx3jxPZLAUOxzdLJQDSjFxgA=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/locale.js</key>
 		<data>
-		hmlEyO5e4yOHLcxilkTl8RPjULk=
+		CR+ZuOJB0+IISQ4T/5x/l36dykI=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/manifest.mf</key>
 		<data>
-		Sc0u01G5QBiZ0JV99EtmyDwNYsg=
+		ldNDxixQxpfXaa7bDzrnO6AHFPk=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/minimal.html</key>
 		<data>
@@ -802,7 +846,7 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/morphic.js</key>
 		<data>
-		R4EAFTnfpHKAtoiAwI2OCn7MlaE=
+		q7y9mARWOKJhXQsr0S5gUMqBczc=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/morphic.txt</key>
 		<data>
@@ -814,7 +858,7 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/objects.js</key>
 		<data>
-		r75Xc2IYnI6BFDbd8ndYqBeuEuk=
+		kW76LsW+TlaZs50N4wxDnrFxjKA=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/paint.js</key>
 		<data>
@@ -834,7 +878,7 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/snap.html</key>
 		<data>
-		DxBx023vuZ+fyQvE6DrdDMbvnwI=
+		DpQKnN3/CQpbyP8NMpYNwYQOr1I=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/snap_logo_sm.png</key>
 		<data>
@@ -842,15 +886,15 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/store.js</key>
 		<data>
-		LnN8cZFVYtRT+iy5d5wDI2Kq//Q=
+		HVNqW7euIACuq6JKS+llKNXrE5s=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/threads.js</key>
 		<data>
-		DlJeQ0wkd8OPEXgXK3+eEy53StU=
+		0QZzdfzNzOkln8KXxiT8btq/X7g=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/tools.xml</key>
 		<data>
-		UbJLQHS5Xmxq8vAJphVBl+lj1Po=
+		XrC8hUI7CS/71FzhXlhPUWL3tNc=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/translating Snap.txt</key>
 		<data>
@@ -870,11 +914,23 @@
 		</data>
 		<key>Resources/Java/WebContent/WEB-INF/web.xml</key>
 		<data>
-		Q6Iy4zgzqPNjWMCtLHu1ju9t0UM=
+		FRX1CAiiMNEzdIPV8QHi5n3sLgc=
 		</data>
 		<key>Resources/Java/WebContent/index.html</key>
 		<data>
-		gM/Rp8GmbAcJjgu8NertWKm47ko=
+		w2eR0DEFd1KOrYnHjO/oWdyEMgo=
+		</data>
+		<key>Resources/Java/avrdude_mac</key>
+		<data>
+		yXUcNUwJkSTl255tOHjMv9nE5OM=
+		</data>
+		<key>Resources/Java/avrdude_mac.conf</key>
+		<data>
+		3l4QjI8w71GiWXuCSIYu5S1hVQk=
+		</data>
+		<key>Resources/Java/javax.usb.properties</key>
+		<data>
+		pEEfXXINeOreZH+AH0q2PUPS+DI=
 		</data>
 		<key>Resources/Java/libhidapi32.dylib</key>
 		<data>
@@ -883,6 +939,14 @@
 		<key>Resources/Java/libhidapi64.dylib</key>
 		<data>
 		DqILRrLIqvmY9c1ubbBAtatYwUQ=
+		</data>
+		<key>Resources/Java/libusb0.dll</key>
+		<data>
+		OiOEaACabeo+T3CCEzkYXlbqO2k=
+		</data>
+		<key>Resources/Java/libusb0.sys</key>
+		<data>
+		lDhXOu4XjGj0m/pa1xEy0GxN+ps=
 		</data>
 		<key>Resources/LightBulbKnockedOut.icns</key>
 		<data>
@@ -893,19 +957,51 @@
 	<dict>
 		<key>Resources/Java/BirdBrainRobotServer.jar</key>
 		<data>
-		8YLJIebMEsFttb9+XTe7FTYwK0w=
+		iswKdNxxiXzR1Q+XZyYa308AbHs=
+		</data>
+		<key>Resources/Java/HummingbirdV2.hex</key>
+		<data>
+		v5EXQ0Kfw33xyrOlfkHXRt1VchA=
+		</data>
+		<key>Resources/Java/ScratchStarters/FinchHummingbirdStart.sb2</key>
+		<data>
+		yZAVib/R0A1LCy2PmV9qZrO1lKg=
+		</data>
+		<key>Resources/Java/ScratchStarters/FinchStart.sb2</key>
+		<data>
+		emgaW6E4C9uf5A322R1TvgWaVvc=
+		</data>
+		<key>Resources/Java/ScratchStarters/HummingbirdStart.sb2</key>
+		<data>
+		ObLqSsCA21qZRzyU3cAen6z+68s=
+		</data>
+		<key>Resources/Java/VERSION.txt</key>
+		<data>
+		7QIMNHpZ3qLsg7ZufXIQ+SJkbg0=
 		</data>
 		<key>Resources/Java/WebContent/FinchHummingbirdSnapBlocks.xml</key>
 		<data>
-		4SvDmCFbB8G1SaXOKmRrJ28oe94=
+		Zbi8LWGNi8WVrjUYHoWGzG26l1E=
+		</data>
+		<key>Resources/Java/WebContent/FinchLevel1.xml</key>
+		<data>
+		MFd83Tw6MtIKeHn1GBTsscItr9s=
+		</data>
+		<key>Resources/Java/WebContent/FinchLevel2.xml</key>
+		<data>
+		3JJBa4oGu4gjppn2coKp9VI8OXA=
+		</data>
+		<key>Resources/Java/WebContent/FinchLevel3.xml</key>
+		<data>
+		Fy8JPJzz03/+ARFC7W2KlLHWl98=
 		</data>
 		<key>Resources/Java/WebContent/FinchSnapBlocks.xml</key>
 		<data>
-		X5iGal3bra95UmUT/wU15RRLN5s=
+		cjABWI2eXgQEqSTm05ivU/i0J30=
 		</data>
 		<key>Resources/Java/WebContent/HummingbirdSnapBlocks.xml</key>
 		<data>
-		+XnewX4Gs9rn577Uwhk0oqXMrfo=
+		tha6PMI9cgkmDDgRqYylZzN9Oao=
 		</data>
 		<key>Resources/Java/WebContent/META-INF/MANIFEST.MF</key>
 		<data>
@@ -929,11 +1025,11 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/blocks.js</key>
 		<data>
-		A0vjyO2L2H2MMZulurluDNIpSGs=
+		hqa3AN+ZT2GVZ/O1Bx45NrXaWm0=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/byob.js</key>
 		<data>
-		aIM1ctwhyhvWrqAu7c12HBxcH04=
+		FefRLIFNOC1xw+1GP6ibGsyOiGU=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/click.wav</key>
 		<data>
@@ -941,15 +1037,19 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/cloud.js</key>
 		<data>
-		ujRG8tNlStRdSeytlsQAlGwhaVw=
+		E/+in8q1MKsjk5rvdEdnf+mQmdk=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/contributing to BYOB4.txt</key>
 		<data>
 		W1fbslQf3DpXZRpN1AlhjbB5x4U=
 		</data>
+		<key>Resources/Java/WebContent/SnapOffline/favicon.ico</key>
+		<data>
+		rlzr7lrRJNRwJjqBGvL197aYQno=
+		</data>
 		<key>Resources/Java/WebContent/SnapOffline/gui.js</key>
 		<data>
-		c9N7GTo6CKyLw8A38rofEjyYRYU=
+		ph8Dgt0bPOkl4mr7IULa8OZv/ZQ=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/help/BLANK.png</key>
 		<data>
@@ -1573,7 +1673,7 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/history.txt</key>
 		<data>
-		CeRQX/A19Htybe1Hn2V6Kr3Tt4s=
+		NpN3JslNr8WAWoOuy/YXwBBp8CU=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-bn.js</key>
 		<data>
@@ -1581,7 +1681,7 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-ca.js</key>
 		<data>
-		NyVsFMFDQGZj4H4epkzVdGclReA=
+		fc5XvdwM5K3DOHQkPBbuOOGXbeU=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-cs.js</key>
 		<data>
@@ -1617,7 +1717,7 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-it.js</key>
 		<data>
-		k7FNbfFiLvgN9McwTA/iQL1xrqE=
+		2MNaSFpk/wFqn7vt1hy0uo8Bw4A=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-ja.js</key>
 		<data>
@@ -1627,9 +1727,13 @@
 		<data>
 		ghWZz3YOhgJ9s0h4Ds+eVJEapnQ=
 		</data>
+		<key>Resources/Java/WebContent/SnapOffline/lang-kn.js</key>
+		<data>
+		AsIdqjjboGgy25UQ+g8DOD/3MEk=
+		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-ko.js</key>
 		<data>
-		yCYPT1vChLOz0dgNOYlW8cxqSco=
+		wqiRSZMVvxBkhvcwEtb4MzKQd/Y=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-nl.js</key>
 		<data>
@@ -1645,7 +1749,7 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-pt.js</key>
 		<data>
-		t9uceGvPV2FjNBiq6Zj4/q/5WJs=
+		LIEpYmi8PNTr3S6jVHBQrP7ATv4=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-pt_BR.js</key>
 		<data>
@@ -1659,6 +1763,10 @@
 		<data>
 		MAIH9baB5njc5JgeEnWn6YNZcss=
 		</data>
+		<key>Resources/Java/WebContent/SnapOffline/lang-sv.js</key>
+		<data>
+		5xPE8DMF4xnkm/zLThpA1DQ495Y=
+		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lang-tw.js</key>
 		<data>
 		efHmD0iHm0PSnGjvf1T8NdnM1Ow=
@@ -1669,15 +1777,15 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/lists.js</key>
 		<data>
-		MunWq3psMnFR1Lz/T7IgRoAF2sM=
+		kMOmx3jxPZLAUOxzdLJQDSjFxgA=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/locale.js</key>
 		<data>
-		hmlEyO5e4yOHLcxilkTl8RPjULk=
+		CR+ZuOJB0+IISQ4T/5x/l36dykI=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/manifest.mf</key>
 		<data>
-		Sc0u01G5QBiZ0JV99EtmyDwNYsg=
+		ldNDxixQxpfXaa7bDzrnO6AHFPk=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/minimal.html</key>
 		<data>
@@ -1689,7 +1797,7 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/morphic.js</key>
 		<data>
-		R4EAFTnfpHKAtoiAwI2OCn7MlaE=
+		q7y9mARWOKJhXQsr0S5gUMqBczc=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/morphic.txt</key>
 		<data>
@@ -1701,7 +1809,7 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/objects.js</key>
 		<data>
-		r75Xc2IYnI6BFDbd8ndYqBeuEuk=
+		kW76LsW+TlaZs50N4wxDnrFxjKA=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/paint.js</key>
 		<data>
@@ -1721,7 +1829,7 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/snap.html</key>
 		<data>
-		DxBx023vuZ+fyQvE6DrdDMbvnwI=
+		DpQKnN3/CQpbyP8NMpYNwYQOr1I=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/snap_logo_sm.png</key>
 		<data>
@@ -1729,15 +1837,15 @@
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/store.js</key>
 		<data>
-		LnN8cZFVYtRT+iy5d5wDI2Kq//Q=
+		HVNqW7euIACuq6JKS+llKNXrE5s=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/threads.js</key>
 		<data>
-		DlJeQ0wkd8OPEXgXK3+eEy53StU=
+		0QZzdfzNzOkln8KXxiT8btq/X7g=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/tools.xml</key>
 		<data>
-		UbJLQHS5Xmxq8vAJphVBl+lj1Po=
+		XrC8hUI7CS/71FzhXlhPUWL3tNc=
 		</data>
 		<key>Resources/Java/WebContent/SnapOffline/translating Snap.txt</key>
 		<data>
@@ -1757,11 +1865,23 @@
 		</data>
 		<key>Resources/Java/WebContent/WEB-INF/web.xml</key>
 		<data>
-		Q6Iy4zgzqPNjWMCtLHu1ju9t0UM=
+		FRX1CAiiMNEzdIPV8QHi5n3sLgc=
 		</data>
 		<key>Resources/Java/WebContent/index.html</key>
 		<data>
-		gM/Rp8GmbAcJjgu8NertWKm47ko=
+		w2eR0DEFd1KOrYnHjO/oWdyEMgo=
+		</data>
+		<key>Resources/Java/avrdude_mac</key>
+		<data>
+		yXUcNUwJkSTl255tOHjMv9nE5OM=
+		</data>
+		<key>Resources/Java/avrdude_mac.conf</key>
+		<data>
+		3l4QjI8w71GiWXuCSIYu5S1hVQk=
+		</data>
+		<key>Resources/Java/javax.usb.properties</key>
+		<data>
+		pEEfXXINeOreZH+AH0q2PUPS+DI=
 		</data>
 		<key>Resources/Java/libhidapi32.dylib</key>
 		<data>
@@ -1770,6 +1890,14 @@
 		<key>Resources/Java/libhidapi64.dylib</key>
 		<data>
 		DqILRrLIqvmY9c1ubbBAtatYwUQ=
+		</data>
+		<key>Resources/Java/libusb0.dll</key>
+		<data>
+		OiOEaACabeo+T3CCEzkYXlbqO2k=
+		</data>
+		<key>Resources/Java/libusb0.sys</key>
+		<data>
+		lDhXOu4XjGj0m/pa1xEy0GxN+ps=
 		</data>
 		<key>Resources/LightBulbKnockedOut.icns</key>
 		<data>
