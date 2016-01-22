@@ -133,6 +133,20 @@ public class BirdBrainRobotServer {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		if (SystemUtils.IS_OS_MAC_OSX){
+			//disable AppNap
+			String command1 = "defaults write com.birdbraintechnologies.robotserver NSAppSleepDisabled -bool YES";
+			String command2 = "defaults write com.google.Chrome.app.Default-gkedchhhodbbiojogfhkfieobopcmjnj NSAppSleepDisabled -bool YES";
+			String command3 = "defaults write com.google.Chrome.app.Default-agekgdamojgfpbfknfebdopkokldcjko NSAppSleepDisabled -bool YES";
+			try {
+				Runtime.getRuntime().exec(command1);
+				Runtime.getRuntime().exec(command2);
+				Runtime.getRuntime().exec(command3);	
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}				
+		}
 		frmBirdbrainRobotServer = new JFrame();
 		frmBirdbrainRobotServer.setIconImage(
 				Toolkit.getDefaultToolkit().getImage(BirdBrainRobotServer.class
@@ -928,7 +942,8 @@ public class BirdBrainRobotServer {
 		} catch (IOException e) {
 			newestVersion = 0.0; //If we failed to get file, just assume we shouldn't update
 		} finally {
-			s.close();
+			if (s != null)
+				s.close();
 		}
 		try {
 			//opens the version file on pc
