@@ -53,6 +53,8 @@ public class FinchServlet extends HttpServlet
    * in/accelerationY
    * in/accelerationZ
    * in/temperature
+   * in/lastTappedTime
+   * in/lastShakenTime
    *
    */
   
@@ -216,6 +218,12 @@ public class FinchServlet extends HttpServlet
 			  else if(urlPath.substring(4).equals("temperature")) {
 				  response.getWriter().print(Math.floor(finch.getTemperature()*100)/100);
 				 
+			  }
+			  else if(urlPath.substring(4).equals("lastTappedTime")) {
+				  response.getWriter().print(finch.getLastTappedTime());
+			  }
+			  else if(urlPath.substring(4).equals("lastShakenTime")) {
+				  response.getWriter().print(finch.getLastShakenTime());
 			  }
 			  // If the Finch is active and you wrote "in" but the remainder is garbage, send an error message
 			  else {
