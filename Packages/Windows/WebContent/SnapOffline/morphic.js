@@ -8,7 +8,7 @@
     written by Jens Mönig
     jens@moenig.org
 
-    Copyright (C) 2015 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -54,7 +54,9 @@
         (6) development and user modes
         (7) turtle graphics
         (8) damage list housekeeping
-        (9) minifying morphic.js
+        (9) supporting high-resolution "retina" screens
+        (10 animations
+        (11) minifying morphic.js
     VIII. acknowledgements
     IX. contributors
 
@@ -65,6 +67,7 @@
     indentation indicating inheritance. Refer to this list to get a
     contextual overview:
 
+    Animation
     Color
     Node
         Morph
@@ -104,10 +107,10 @@
     the following list shows the order in which all constructors are
     defined. Use this list to locate code in this document:
 
-
     Global settings
     Global functions
 
+    Animation
     Color
     Point
     Rectangle
@@ -147,12 +150,13 @@
     III. yet to implement
     ---------------------
     - keyboard support for scroll frames and lists
+    - full keyboard support for menus (partial support exists)
     - virtual keyboard support for Android and IE
 
 
     IV. open issues
     ----------------
-    - blurry shadows don't work well in Chrome
+    - clipboard support (copy & paste) for non-textual data
 
 
     V. browser compatibility
@@ -163,12 +167,15 @@
 
     - Firefox for Windows
     - Firefox for Mac
-    - Chrome for Windows (blurry shadows have some issues)
+    - Firefox for Android
+    - Chrome for Windows
     - Chrome for Mac
-    - Safari for Windows
+    - Chrome for Android
+    - Safari for Windows (deprecated)
     - safari for Mac
     - Safari for iOS (mobile)
     - IE for Windows
+    - Edge for Windows
     - Opera for Windows
     - Opera for Mac
 
@@ -258,10 +265,11 @@
                 window.onload = function () {
                     world = new WorldMorph(
                         document.getElementById('world'));
-                    setInterval(loop, 50);
+                    loop();
                 };
 
                 function loop() {
+                    requestAnimationFrame(loop);
                     world.doOneCycle();
                 }
             </script>
@@ -305,10 +313,11 @@
                         document.getElementById('world1'), false);
                     world2 = new WorldMorph(
                         document.getElementById('world2'), false);
-                    setInterval(loop, 50);
+                    loop();
                 };
 
                 function loop() {
+                    requestAnimationFrame(loop);
                     world1.doOneCycle();
                     world2.doOneCycle();
                 }
@@ -330,7 +339,7 @@
     (c) an application
     -------------------
     Of course, most of the time you don't want to just plain use the
-    standard Morhic World "as is" out of the box, but write your own
+    standard Morphic World "as is" out of the box, but write your own
     application (something like Scratch!) in it. For such an
     application you'll create your own morph prototypes, perhaps
     assemble your own "window frame" and bring it all to life in a
@@ -373,10 +382,11 @@
                         x = 0;
                         y += 1;
                     }
-                    setInterval(loop, 50);
+                    loop();
                 };
 
                 function loop() {
+                    requestAnimationFrame(loop);
                     world.doOneCycle();
                 }
             </script>
@@ -966,7 +976,7 @@
     single submorph's changes tremendous performance improvements can be
     achieved by setting the trackChanges flag to false before propagating
     the layout changes, setting it to true again and then storing the full
-    bounds of the surrounding morph. An an example refer to the
+    bounds of the surrounding morph. As an example refer to the
 
         moveBy()
 
@@ -982,8 +992,84 @@
     methods of SyntaxElementMorph in the Snap application.
 
 
-    (9) minifying morphic.js
-    ------------------------
+    (9) supporting high-resolution "retina" screens
+    -----------------------------------------------
+    By default retina support gets installed when Morphic.js loads. There
+    are two global functions that let you test for retina availability:
+
+        isRetinaSupported() - Bool, answers if retina support is available
+        isRetinaEnabled()   - Bool, answers if currently in retina mode
+
+    and two more functions that let you control retina support if it is
+    available:
+
+        enableRetinaSupport()
+        disableRetinaSupport()
+
+    Both of these internally test whether retina is available, so they are
+    safe to call directly. For an example how to make retina support
+    user-specifiable refer to
+
+        Snap! >> guis.js >> toggleRetina()
+
+    Even when in retina mode it often makes sense to use normal-resolution
+    canvasses for simple shapes in order to save system resources and
+    optimize performance. Examples are costumes and backgrounds in Snap.
+    In Morphic you can create new canvas elements using
+    
+        newCanvas(extentPoint [, nonRetinaFlag])
+
+    If retina support is enabled such new canvasses will automatically be
+    high-resolution canvasses, unless the newCanvas() function is given an
+    otherwise optional second Boolean <true> argument that explicitly makes
+    it a non-retina canvas.
+
+    Not the whole canvas API is supported by Morphic's retina utilities.
+    Especially if your code uses putImageData() you will want to "downgrade"
+    a target high-resolution canvas to a normal-resolution ("non-retina")
+    one before using
+
+        normalizeCanvas(aCanvas [, copyFlag])
+
+    This will change the target canvas' resolution in place (!). If you
+    pass in the optional second Boolean <true> flag the function returns
+    a non-retina copy and leaves the target canvas unchanged. An example
+    of this normalize mechanism is converting the penTrails layer of Snap's
+    stage (high-resolution) into a sprite-costume (normal resolution).
+
+
+    (10) animations
+    ---------------
+    Animations handle gradual transitions between one state and another over a
+    period of time. Transition effects can be specified using easing functions.
+    An easing function maps a fraction of the transition time to a fraction of
+    the state delta. This way accelerating / decelerating and bouncing sliding
+    effects can be accomplished.
+
+    Animations are generic and not limited to motion, i.e. they can also handle
+    other transitions such as color changes, transparency fadings, growing,
+    shrinking, turning etc.
+
+    Animations need to be stepped by a scheduler, e. g. an interval function.
+    In Morphic the preferred way to run an animation is to register it with
+    the World by adding it to the World's animation queue. The World steps each
+    registered animation once per display cycle independently of the Morphic
+    stepping mechanism.
+
+    For an example how to use animations look at how the Morph's methods
+    
+        glideTo()
+        fadeTo()
+
+    and
+    
+        slideBackTo()
+
+    are implemented.
+
+
+    (11) minifying morphic.js
+    -------------------------
     Coming from Smalltalk and being a Squeaker at heart I am a huge fan
     of browsing the code itself to make sense of it. Therefore I have
     included this documentation and (too little) inline comments so all
@@ -1028,7 +1114,8 @@
     I have originally written morphic.js in Florian Balmer's Notepad2
     editor for Windows, later switched to Apple's Dashcode and later
     still to Apple's Xcode. I've also come to depend on both Douglas
-    Crockford's JSLint, Mozilla's Firebug and Google's Chrome to get
+    Crockford's JSLint and later the JSHint project, as well as on
+    Mozilla's Firebug and Google's Chrome to get
     it right.
 
 
@@ -1039,16 +1126,18 @@
     background texture handling, countless bug fixes and optimizations.
     Ian Reynolds contributed backspace key handling for Chrome.
     Davide Della Casa contributed performance optimizations for Firefox.
+    Jason N (@cyderize) contributed native copy & paste for text editing.
+    Bartosz Leper contributed retina display support.
+    Brian Harvey contributed to the design and implemenatation of submenus.
 
     - Jens Mönig
 */
 
 // Global settings /////////////////////////////////////////////////////
 
-/*global window, HTMLCanvasElement, getMinimumFontHeight, FileReader, Audio,
-FileList, getBlurredShadowSupport*/
+/*global window, HTMLCanvasElement, FileReader, Audio, FileList*/
 
-var morphicVersion = '2015-June-26';
+var morphicVersion = '2017-January-09';
 var modules = {}; // keep track of additional loaded modules
 var useBlurredShadows = getBlurredShadowSupport(); // check for Chrome-bug
 
@@ -1068,7 +1157,8 @@ var standardSettings = {
     useVirtualKeyboard: true,
     isTouchDevice: false, // turned on by touch events, don't set
     rasterizeSVGs: false,
-    isFlat: false
+    isFlat: false,
+    grabThreshold: 5
 };
 
 var touchScreenSettings = {
@@ -1087,10 +1177,39 @@ var touchScreenSettings = {
     useVirtualKeyboard: true,
     isTouchDevice: false,
     rasterizeSVGs: false,
-    isFlat: false
+    isFlat: false,
+    grabThreshold: 5
 };
 
 var MorphicPreferences = standardSettings;
+
+// first, try enabling support for retina displays - can be turned off later
+
+/*
+    Support for retina displays has been pioneered and contributed by
+    Bartosz Leper.
+
+    NOTE: this will make changes to the HTMLCanvasElement that - mostly -
+    make Morphic usable on retina displays in very high resolution mode
+    with crisp fonts and clear fine lines without you (the programmer)
+    needing to know any specifics, provided both the display and the browser
+    support these (Safari currently doesn't), otherwise these utilities will
+    not be installed.
+    If you don't want your Morphic application to support retina resolutions
+    you don't have to edit this morphic.js file to comment out the next line
+    of code, instead you can simply call
+
+        disableRetinaSupport();
+
+    before you create your World(s) in the html page. Disabling retina
+    support also will simply do nothing if retina support is not possible
+    or already disabled, so it's equally safe to call.
+
+    For an example how to make retina support user-specifiable refer to
+    Snap! >> guis.js >> toggleRetina()
+*/
+
+enableRetinaSupport();
 
 // Global Functions ////////////////////////////////////////////////////
 
@@ -1160,13 +1279,23 @@ function fontHeight(height) {
     return minHeight * 1.2; // assuming 1/5 font size for ascenders
 }
 
-function newCanvas(extentPoint) {
+function isWordChar(aCharacter) {
+    // can't use \b or \w because they ignore diacritics
+    return aCharacter.match(/[A-zÀ-ÿ0-9]/);
+}
+
+function newCanvas(extentPoint, nonRetina) {
     // answer a new empty instance of Canvas, don't display anywhere
+    // nonRetina - optional Boolean "false"
+    // by default retina support is automatic
     var canvas, ext;
     ext = extentPoint || {x: 0, y: 0};
     canvas = document.createElement('canvas');
     canvas.width = ext.x;
     canvas.height = ext.y;
+    if (nonRetina && canvas.isRetinaEnabled) {
+        canvas.isRetinaEnabled = false;
+    }
     return canvas;
 }
 
@@ -1270,6 +1399,481 @@ function copy(target) {
     }
     return c;
 }
+
+// Retina Display Support //////////////////////////////////////////////
+
+/*
+    By default retina support gets installed when Morphic.js loads. There
+    are two global functions that let you test for retina availability:
+
+        isRetinaSupported() - Boolean, whether retina support is available
+        isRetinaEnabled()   - Boolean, whether currently in retina mode
+
+    and two more functions that let you control retina support if it is
+    available:
+
+        enableRetinaSupport()
+        disableRetinaSupport()
+
+    Both of these internally test whether retina is available, so they are
+    safe to call directly.
+
+    Even when in retina mode it often makes sense to use non-high-resolution
+    canvasses for simple shapes in order to save system resources and
+    optimize performance. Examples are costumes and backgrounds in Snap.
+    In Morphic you can create new canvas elements using
+    
+        newCanvas(extentPoint [, nonRetinaFlag])
+
+    If retina support is enabled such new canvasses will automatically be
+    high-resolution canvasses, unless the newCanvas() function is given an
+    otherwise optional second Boolean <true> argument that explicitly makes
+    it a non-retina canvas.
+
+    Not the whole canvas API is supported by Morphic's retina utilities.
+    Especially if your code uses putImageData() you will want to "downgrade"
+    a target high-resolution canvas to a normal-resolution ("non-retina")
+    one before using
+
+        normalizeCanvas(aCanvas [, copyFlag])
+
+    This will change the target canvas' resolution in place (!). If you
+    pass in the optional second Boolean <true> flag the function returns
+    a non-retina copy and leaves the target canvas unchanged. An example
+    of this normalize mechanism is converting the penTrails layer of Snap's
+    stage (high-resolution) into a sprite-costume (normal resolution).
+*/
+
+function enableRetinaSupport() {
+/*
+    === contributed by Bartosz Leper ===
+
+    This installs a series of utilities that allow using Canvas the same way
+    on retina and non-retina displays. If the display is a retina one, the
+    underlying dimensions of the Canvas elements are doubled, but this will
+    be transparent to the code that uses Canvas. All dimensions read or
+    written to the Canvas element will be scaled appropriately.
+
+    NOTE: This implementation is not exhaustive; it only implements what is
+    needed by the Snap! UI.
+    
+    [Jens]: like all other retina screen support implementations I've seen
+    Bartosz's patch also does not address putImageData() compatibility when
+    mixing retina-enabled and non-retina canvasses. If you need to manipulate
+    pixels in such mixed canvasses, make sure to "downgrade" them all using
+    normalizeCanvas() below.
+*/
+
+    // Get the window's pixel ratio for canvas elements.
+    // See: http://www.html5rocks.com/en/tutorials/canvas/hidpi/
+    var ctx = document.createElement("canvas").getContext("2d"),
+        backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
+            ctx.mozBackingStorePixelRatio ||
+            ctx.msBackingStorePixelRatio ||
+            ctx.oBackingStorePixelRatio ||
+            ctx.backingStorePixelRatio || 1,
+
+    // Unfortunately, it's really hard to make this work well when changing
+    // zoom level, so let's leave it like this right now, and stick to
+    // whatever the ratio was in the beginning.
+
+        // originalDevicePixelRatio = window.devicePixelRatio,
+
+    // [Jens]: As of summer 2016 non-integer devicePixelRatios lead to
+    // artifacts when blitting images onto canvas elements in all browsers
+    // except Chrome, especially Firefox, Edge, IE (Safari doesn't even
+    // support retina mode as implemented here).
+    // therefore - to ensure crisp fonts - use the ceiling of whatever
+    // the devicePixelRatio is. This needs more memory, but looks nicer.
+
+        originalDevicePixelRatio = Math.ceil(window.devicePixelRatio),
+
+        canvasProto = HTMLCanvasElement.prototype,
+        contextProto = CanvasRenderingContext2D.prototype,
+
+    // [Jens]: keep track of original properties in a dictionary
+    // so they can be iterated over and restored
+        uber = {
+            drawImage: contextProto.drawImage,
+            getImageData: contextProto.getImageData,
+
+            width: Object.getOwnPropertyDescriptor(
+                canvasProto,
+                'width'
+            ),
+            height: Object.getOwnPropertyDescriptor(
+                canvasProto,
+                'height'
+            ),
+            shadowOffsetX: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowOffsetX'
+            ),
+            shadowOffsetY: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowOffsetY'
+            ),
+            shadowBlur: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowBlur'
+            )
+        };
+
+    // [Jens]: only install retina utilities if the display supports them
+    if (backingStorePixelRatio === originalDevicePixelRatio) {return; }
+    // [Jens]: check whether properties can be overridden, needed for Safari
+    if (Object.keys(uber).some(function (any) {
+        var prop = uber[any];
+        return prop.hasOwnProperty('configurable') && (!prop.configurable);
+    })) {return; }
+
+    function getPixelRatio(imageSource) {
+        return imageSource.isRetinaEnabled ?
+            (originalDevicePixelRatio || 1) / backingStorePixelRatio : 1;
+    }
+
+    canvasProto._isRetinaEnabled = true;
+    // [Jens]: remember the original non-retina properties,
+    // so they can be restored again
+    canvasProto._bak = uber;
+
+    Object.defineProperty(canvasProto, 'isRetinaEnabled', {
+        get: function() {
+            return this._isRetinaEnabled;
+        },
+        set: function(enabled) {
+            var prevPixelRatio = getPixelRatio(this),
+                prevWidth = this.width,
+                prevHeight = this.height;
+
+            this._isRetinaEnabled = enabled;
+            if (getPixelRatio(this) != prevPixelRatio) {
+                this.width = prevWidth;
+                this.height = prevHeight;
+            }
+        },
+        configurable: true // [Jens]: allow to be deleted an reconfigured
+    });
+
+    Object.defineProperty(canvasProto, 'width', {
+        get: function() {
+            return uber.width.get.call(this) / getPixelRatio(this);
+        },
+        set: function(width) {
+            try { // workaround one of FF's dreaded NS_ERROR_FAILURE bugs
+                // this should be taken out as soon as FF gets fixed again
+                var pixelRatio = getPixelRatio(this),
+                    context;
+                uber.width.set.call(this, width * pixelRatio);
+                context = this.getContext('2d');
+                context.restore();
+                context.save();
+                context.scale(pixelRatio, pixelRatio);
+            } catch (err) {
+                console.log('Retina Display Support Problem', err);
+                uber.width.set.call(this, width);
+            }
+        }
+    });
+
+    Object.defineProperty(canvasProto, 'height', {
+        get: function() {
+            return uber.height.get.call(this) / getPixelRatio(this);
+        },
+        set: function(height) {
+            var pixelRatio = getPixelRatio(this),
+                context;
+            uber.height.set.call(this, height * pixelRatio);
+            context = this.getContext('2d');
+            context.restore();
+            context.save();
+            context.scale(pixelRatio, pixelRatio);
+        }
+    });
+
+    contextProto.drawImage = function(image) {
+        var pixelRatio = getPixelRatio(image),
+            sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight;
+        
+        // Different signatures of drawImage() method have different
+        // parameter assignments.
+        switch (arguments.length) {
+            case 9:
+                sx = arguments[1];
+                sy = arguments[2];
+                sWidth = arguments[3];
+                sHeight = arguments[4];
+                dx = arguments[5];
+                dy = arguments[6];
+                dWidth = arguments[7];
+                dHeight = arguments[8];
+                break;
+
+            case 5:
+                sx = 0;
+                sy = 0;
+                sWidth = image.width;
+                sHeight = image.height;
+                dx = arguments[1];
+                dy = arguments[2];
+                dWidth = arguments[3];
+                dHeight = arguments[4];
+                break;
+
+            case 3:
+                sx = 0;
+                sy = 0;
+                sWidth = image.width;
+                sHeight = image.height;
+                dx = arguments[1];
+                dy = arguments[2];
+                dWidth = image.width;
+                dHeight = image.height;
+                break;
+
+            default:
+                throw Error('Called drawImage() with ' + arguments.length +
+                        ' arguments');
+        }
+        uber.drawImage.call(
+                this, image,
+                sx * pixelRatio, sy * pixelRatio,
+                sWidth * pixelRatio, sHeight * pixelRatio,
+                dx, dy,
+                dWidth, dHeight);
+    };
+
+    contextProto.getImageData = function(sx, sy, sw, sh) {
+        var pixelRatio = getPixelRatio(this.canvas);
+        return uber.getImageData.call(
+                this,
+                sx * pixelRatio, sy * pixelRatio,
+                sw * pixelRatio, sh * pixelRatio);
+    };
+
+    Object.defineProperty(contextProto, 'shadowOffsetX', {
+        get: function() {
+            return uber.shadowOffsetX.get.call(this) /
+                getPixelRatio(this.canvas);
+        },
+        set: function(offset) {
+            var pixelRatio = getPixelRatio(this.canvas);
+            uber.shadowOffsetX.set.call(this, offset * pixelRatio);
+        }
+    });
+
+    Object.defineProperty(contextProto, 'shadowOffsetY', {
+        get: function() {
+            return uber.shadowOffsetY.get.call(this) /
+                getPixelRatio(this.canvas);
+        },
+        set: function(offset) {
+            var pixelRatio = getPixelRatio(this.canvas);
+            uber.shadowOffsetY.set.call(this, offset * pixelRatio);
+        }
+    });
+
+    Object.defineProperty(contextProto, 'shadowBlur', {
+        get: function() {
+            return uber.shadowBlur.get.call(this) /
+                getPixelRatio(this.canvas);
+        },
+        set: function(blur) {
+            var pixelRatio = getPixelRatio(this.canvas);
+            uber.shadowBlur.set.call(this, blur * pixelRatio);
+        }
+    });
+}
+
+function isRetinaSupported () {
+    var ctx = document.createElement("canvas").getContext("2d"),
+        backingStorePixelRatio = ctx.webkitBackingStorePixelRatio ||
+            ctx.mozBackingStorePixelRatio ||
+            ctx.msBackingStorePixelRatio ||
+            ctx.oBackingStorePixelRatio ||
+            ctx.backingStorePixelRatio || 1,
+        canvasProto = HTMLCanvasElement.prototype,
+        contextProto = CanvasRenderingContext2D.prototype,
+        uber = {
+            drawImage: contextProto.drawImage,
+            getImageData: contextProto.getImageData,
+
+            width: Object.getOwnPropertyDescriptor(
+                canvasProto,
+                'width'
+            ),
+            height: Object.getOwnPropertyDescriptor(
+                canvasProto,
+                'height'
+            ),
+            shadowOffsetX: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowOffsetX'
+            ),
+            shadowOffsetY: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowOffsetY'
+            ),
+            shadowBlur: Object.getOwnPropertyDescriptor(
+                contextProto,
+                'shadowBlur'
+            )
+        };
+    return backingStorePixelRatio !== window.devicePixelRatio &&
+        !(Object.keys(uber).some(function (any) {
+            var prop = uber[any];
+            return prop.hasOwnProperty('configurable') && (!prop.configurable);
+        })
+    );
+}
+
+function isRetinaEnabled () {
+    return HTMLCanvasElement.prototype.hasOwnProperty('_isRetinaEnabled');
+}
+
+function disableRetinaSupport() {
+    // uninstalls Retina utilities. Make sure to re-create every Canvas
+    // element afterwards
+    var canvasProto, contextProto, uber;
+    if (!isRetinaEnabled()) {return; }
+    canvasProto = HTMLCanvasElement.prototype;
+    contextProto = CanvasRenderingContext2D.prototype;
+    uber = canvasProto._bak;
+    Object.defineProperty(canvasProto, 'width', uber.width);
+    Object.defineProperty(canvasProto, 'height', uber.height);
+    contextProto.drawImage = uber.drawImage;
+    contextProto.getImageData = uber.getImageData;
+    Object.defineProperty(contextProto, 'shadowOffsetX', uber.shadowOffsetX);
+    Object.defineProperty(contextProto, 'shadowOffsetY', uber.shadowOffsetY);
+    Object.defineProperty(contextProto, 'shadowBlur', uber.shadowBlur);
+    delete canvasProto._isRetinaEnabled;
+    delete canvasProto.isRetinaEnabled;
+    delete canvasProto._bak;
+}
+
+function normalizeCanvas(aCanvas, getCopy) {
+    // make sure aCanvas is non-retina, otherwise convert it in place (!)
+    // or answer a normalized copy if the "getCopy" flag is <true>
+    var cpy;
+    if (!aCanvas.isRetinaEnabled) {return aCanvas; }
+    cpy = newCanvas(new Point(aCanvas.width, aCanvas.height), true);
+    cpy.getContext('2d').drawImage(aCanvas, 0, 0);
+    if (getCopy) {return cpy; }
+    aCanvas.isRetinaEnabled = false;
+    aCanvas.width = cpy.width;
+    aCanvas.height = cpy.height;
+    aCanvas.getContext('2d').drawImage(cpy, 0, 0);
+    return aCanvas;
+}
+
+// Animations //////////////////////////////////////////////////////////////
+
+/*
+    Animations handle gradual transitions between one state and another over a
+    period of time. Transition effects can be specified using easing functions.
+    An easing function maps a fraction of the transition time to a fraction of
+    the state delta. This way accelerating / decelerating and bouncing sliding
+    effects can be accomplished.
+
+    Animations are generic and not limited to motion, i.e. they can also handle
+    other transitions such as color changes, transparency fadings, growing,
+    shrinking, turning etc.
+
+    Animations need to be stepped by a scheduler, e. g. an interval function.
+    In Morphic the preferred way to run an animation is to register it with
+    the World by adding it to the World's animation queue. The World steps each
+    registered animation once per display cycle independently of the Morphic
+    stepping mechanism.
+
+    For an example how to use animations look at how the Morph's methods
+    
+        glideTo()
+        fadeTo()
+
+    and
+    
+        slideBackTo()
+
+    are implemented.
+*/
+
+// Animation instance creation:
+
+function Animation(setter, getter, delta, duration, easing, onComplete) {
+    this.setter = setter; // function
+    this.getter = getter; // function
+    this.delta = delta || 0; // number
+    this.duration = duration || 0; // milliseconds
+    this.easing = isString(easing) ? // string or function
+            this.easings[easing] || this.easings.sinusoidal
+                : easing || this.easings.sinusoidal;
+    this.onComplete = onComplete || null; // optional callback
+    this.endTime = null;
+    this.destination = null;
+    this.isActive = false;
+    this.start();
+}
+
+Animation.prototype.easings = {
+    // dictionary of a few pre-defined easing functions used to transition
+    // two states
+
+    // ease both in and out:
+    linear: function (t) {return t; },
+    sinusoidal: function (t) {return 1 - Math.cos(radians(t * 90)); },
+    quadratic: function (t) {
+        return t < 0.5 ?
+                2 * t * t
+                    : ((4 - (2 * t)) * t) - 1;
+    },
+    cubic: function (t) {
+        return t < 0.5 ?
+                4 * t * t * t
+                    : ((t - 1) * ((2 * t) - 2) * ((2 * t) - 2)) + 1;
+    },
+    elastic: function (t) {
+        return (t -= 0.5) < 0 ?
+            (0.01 + 0.01 / t) * Math.sin(50 * t)
+                : (0.02 - 0.01 / t) * Math.sin(50 * t) + 1;
+    },
+
+    // ease in only:
+    sine_in: function (t) {return 1 - Math.sin(radians(90 + (t * 90))); },
+    quad_in: function (t) {return t * t; },
+    cubic_in: function (t) {return t * t * t; },
+    elastic_in: function (t) {
+        return (0.04 - 0.04 / t) * Math.sin(25 * t) + 1;
+    },
+
+    // ease out only:
+    sine_out: function (t) {return Math.sin(radians(t * 90)); },
+    quad_out: function (t) {return t * (2 - t); },
+    elastic_out: function (t) {return 0.04 * t / (--t) * Math.sin(25 * t); }
+};
+
+Animation.prototype.start = function () {
+    // (re-) activate the animation, e.g. if is has previously completed,
+    // make sure to plug it into something that repeatedly triggers step(),
+    // e.g. the World's animations queue
+    this.endTime = Date.now() + this.duration;
+    this.destination = this.getter.call(this) + this.delta;
+    this.isActive = true;
+};
+
+Animation.prototype.step = function () {
+    if (!this.isActive) {return; }
+    var now = Date.now();
+    if (now > this.endTime) {
+        this.setter(this.destination);
+        this.isActive = false;
+        if (this.onComplete) {this.onComplete(); }
+    } else {
+        this.setter(
+            this.destination -
+                (this.delta * this.easing((this.endTime - now) / this.duration))
+        );
+    }
+};
 
 // Colors //////////////////////////////////////////////////////////////
 
@@ -1433,6 +2037,14 @@ Color.prototype.dansDarker = function () {
         vv = Math.max(hsv[2] - 0.16, 0);
     result.set_hsv(hsv[0], hsv[1], vv);
     return result;
+};
+
+Color.prototype.inverted = function () {
+    return new Color(
+        255 - this.r,
+        255 - this.g,
+        255 - this.b
+    );
 };
 
 // Points //////////////////////////////////////////////////////////////
@@ -1927,7 +2539,7 @@ Rectangle.prototype.round = function () {
 Rectangle.prototype.spread = function () {
     // round me by applying floor() to my origin and ceil() to my corner
     // expand by 1 to be on the safe side, this eliminates rounding
-    // artefacts caused by Safari's auto-scaling on retina displays
+    // artifacts caused by Safari's auto-scaling on retina displays
     return this.origin.floor().corner(this.corner.ceil()).expandBy(1);
 };
 
@@ -2079,6 +2691,20 @@ Node.prototype.forAllChildren = function (aFunction) {
     aFunction.call(null, this);
 };
 
+Node.prototype.anyChild = function (aPredicate) {
+    // includes myself
+    var i;
+    if (aPredicate.call(null, this)) {
+        return true;
+    }
+    for (i = 0; i < this.children.length; i += 1) {
+        if (this.children[i].anyChild(aPredicate)) {
+            return true;
+        }
+    }
+    return false;
+};
+
 Node.prototype.allLeafs = function () {
     var result = [];
     this.allChildren().forEach(function (element) {
@@ -2177,7 +2803,7 @@ Morph.uber = Node.prototype;
     single submorph's changes tremendous performance improvements can be
     achieved by setting the trackChanges flag to false before propagating
     the layout changes, setting it to true again and then storing the full
-    bounds of the surrounding morph. An an example refer to the
+    bounds of the surrounding morph. As an example refer to the
 
         fixLayout()
 
@@ -2203,7 +2829,10 @@ function Morph() {
 Morph.prototype.init = function (noDraw) {
     Morph.uber.init.call(this);
     this.isMorph = true;
+    this.image = null;
     this.bounds = new Rectangle(0, 0, 50, 40);
+    this.cachedFullImage = null;
+    this.cachedFullBounds = null;
     this.color = new Color(80, 80, 80);
     this.texture = null; // optional url of a fill-image
     this.cachedTexture = null; // internal cache of actual bg image
@@ -2280,9 +2909,7 @@ Morph.prototype.nextSteps = function (arrayOfFunctions) {
     }
 };
 
-Morph.prototype.step = function () {
-    nop();
-};
+Morph.prototype.step = nop;
 
 // Morph accessing - geometry getting:
 
@@ -2408,6 +3035,9 @@ Morph.prototype.silentMoveBy = function (delta) {
     var children = this.children,
         i = children.length;
     this.bounds = this.bounds.translateBy(delta);
+    if (this.cachedFullBounds) {
+        this.cachedFullBounds = this.cachedFullBounds.translateBy(delta);
+    }
     // ugly optimization avoiding forEach()
     for (i; i > 0; i -= 1) {
         children[i - 1].silentMoveBy(delta);
@@ -2501,9 +3131,40 @@ Morph.prototype.keepWithin = function (aMorph) {
     }
 };
 
+Morph.prototype.scrollIntoView = function () {
+    var leftOff, rightOff, topOff, bottomOff,
+        sf = this.parentThatIsA(ScrollFrameMorph);
+    if (!sf) {return; }
+    rightOff = Math.min(
+        this.fullBounds().right() - sf.right(),
+        sf.contents.right() - sf.right()
+    );
+    if (rightOff > 0) {
+        sf.contents.moveBy(new Point(-rightOff, 0));
+    }
+    leftOff = this.fullBounds().left() - sf.left();
+    if (leftOff < 0) {
+        sf.contents.moveBy(new Point(-leftOff, 0));
+    }
+    topOff = this.fullBounds().top() - sf.top();
+    if (topOff < 0) {
+        sf.contents.moveBy(new Point(0, -topOff));
+    }
+    bottomOff = this.fullBounds().bottom() - sf.bottom();
+    if (bottomOff > 0) {
+        sf.contents.moveBy(new Point(0, -bottomOff));
+    }
+    sf.adjustScrollBars();
+};
+
 // Morph accessing - dimensional changes requiring a complete redraw
 
-Morph.prototype.setExtent = function (aPoint) {
+Morph.prototype.setExtent = function (aPoint, silently) {
+    // silently avoids redrawing the receiver
+    if (silently) {
+        this.silentSetExtent(aPoint);
+        return;
+    }
     if (!aPoint.eq(this.extent())) {
         this.changed();
         this.silentSetExtent(aPoint);
@@ -2610,31 +3271,33 @@ Morph.prototype.drawCachedTexture = function () {
 */
 
 Morph.prototype.drawOn = function (aCanvas, aRect) {
-    var rectangle, area, delta, src, context, w, h, sl, st;
+    var rectangle, area, delta, src, context, w, h, sl, st,
+        pic = this.cachedFullImage || this.image,
+        bounds = this.cachedFullBounds || this.bounds;
     if (!this.isVisible) {
         return null;
     }
-    rectangle = aRect || this.bounds();
-    area = rectangle.intersect(this.bounds).round();
+    rectangle = aRect || bounds;
+    area = rectangle.intersect(bounds);
     if (area.extent().gt(new Point(0, 0))) {
-        delta = this.position().neg();
-        src = area.copy().translateBy(delta).round();
+        delta = bounds.position().neg();
+        src = area.copy().translateBy(delta);
         context = aCanvas.getContext('2d');
         context.globalAlpha = this.alpha;
 
         sl = src.left();
         st = src.top();
-        w = Math.min(src.width(), this.image.width - sl);
-        h = Math.min(src.height(), this.image.height - st);
+        w = Math.min(src.width(), pic.width - sl);
+        h = Math.min(src.height(), pic.height - st);
 
         if (w < 1 || h < 1) {
             return null;
         }
 
         context.drawImage(
-            this.image,
-            src.left(),
-            src.top(),
+            pic,
+            sl,
+            st,
             w,
             h,
             area.left(),
@@ -2642,42 +3305,6 @@ Morph.prototype.drawOn = function (aCanvas, aRect) {
             w,
             h
         );
-
-    /* "for debugging purposes:"
-
-        try {
-            context.drawImage(
-                this.image,
-                src.left(),
-                src.top(),
-                w,
-                h,
-                area.left(),
-                area.top(),
-                w,
-                h
-            );
-        } catch (err) {
-            alert('internal error\n\n' + err
-                + '\n ---'
-                + '\n canvas: ' + aCanvas
-                + '\n canvas.width: ' + aCanvas.width
-                + '\n canvas.height: ' + aCanvas.height
-                + '\n ---'
-                + '\n image: ' + this.image
-                + '\n image.width: ' + this.image.width
-                + '\n image.height: ' + this.image.height
-                + '\n ---'
-                + '\n w: ' + w
-                + '\n h: ' + h
-                + '\n sl: ' + sl
-                + '\n st: ' + st
-                + '\n area.left: ' + area.left()
-                + '\n area.top ' + area.top()
-                );
-        }
-    */
-
     }
 };
 
@@ -2686,8 +3313,9 @@ Morph.prototype.fullDrawOn = function (aCanvas, aRect) {
     if (!this.isVisible) {
         return null;
     }
-    rectangle = aRect || this.fullBounds();
+    rectangle = aRect || this.cachedFullBounds || this.fullBounds();
     this.drawOn(aCanvas, rectangle);
+    if (this.cachedFullImage) {return; }
     this.children.forEach(function (child) {
         child.fullDrawOn(aCanvas, rectangle);
     });
@@ -2720,11 +3348,11 @@ Morph.prototype.toggleVisibility = function () {
 // Morph full image:
 
 Morph.prototype.fullImageClassic = function () {
-    // why doesn't this work for all Morphs?
-    var fb = this.fullBounds(),
+    // use the cache since fullDrawOn() will
+    var fb = this.cachedFullBounds || this.fullBounds(),
         img = newCanvas(fb.extent()),
         ctx = img.getContext('2d');
-    ctx.translate(-this.bounds.origin.x, -this.bounds.origin.y);
+    ctx.translate(-fb.origin.x, -fb.origin.y);
     this.fullDrawOn(img, fb);
     img.globalAlpha = this.alpha;
     return img;
@@ -2881,7 +3509,9 @@ Morph.prototype.fullChanged = function () {
     if (this.trackChanges) {
         var w = this.root();
         if (w instanceof WorldMorph) {
-            w.broken.push(this.fullBounds().spread());
+            w.broken.push(
+                (this.cachedFullBounds || this.fullBounds()).spread()
+            );
         }
     }
 };
@@ -3092,6 +3722,13 @@ Morph.prototype.rootForGrab = function () {
     return this.parent.rootForGrab();
 };
 
+Morph.prototype.isCorrectingOutsideDrag = function () {
+    // make sure I don't "trail behind" the hand when dragged
+    // override for morphs that you want to be dragged outside
+    // their full bounds
+    return true;
+};
+
 Morph.prototype.wantsDropOf = function (aMorph) {
     // default is to answer the general flag - change for my heirs
     if ((aMorph instanceof HandleMorph) ||
@@ -3128,36 +3765,93 @@ Morph.prototype.situation = function () {
     return null;
 };
 
-Morph.prototype.slideBackTo = function (situation, inSteps) {
-    var steps = inSteps || 5,
-        pos = situation.origin.position().add(situation.position),
-        xStep = -(this.left() - pos.x) / steps,
-        yStep = -(this.top() - pos.y) / steps,
-        stepCount = 0,
-        oldStep = this.step,
-        oldFps = this.fps,
+Morph.prototype.slideBackTo = function (
+    situation,
+    msecs,
+    onBeforeDrop,
+    onComplete
+) {
+    var pos = situation.origin.position().add(situation.position),
         myself = this;
-
-    this.fps = 0;
-    this.step = function () {
-        myself.moveBy(new Point(xStep, yStep));
-        stepCount += 1;
-        if (stepCount === steps) {
+    this.glideTo(
+        pos,
+        msecs,
+        null, // easing
+        function () {
             situation.origin.add(myself);
+            if (onBeforeDrop) {onBeforeDrop(); }
+            if (myself.justDropped) {myself.justDropped(); }
             if (situation.origin.reactToDropOf) {
                 situation.origin.reactToDropOf(myself);
             }
-            myself.step = oldStep;
-            myself.fps = oldFps;
+            if (onComplete) {onComplete(); }
         }
-    };
+    );
+};
+
+// Morph animating:
+
+Morph.prototype.glideTo = function (endPoint, msecs, easing, onComplete) {
+    var world = this.world(),
+        myself = this;
+    world.animations.push(new Animation(
+        function (x) {myself.setLeft(x); },
+        function () {return myself.left(); },
+        -(this.left() - endPoint.x),
+        msecs || 100,
+        easing,
+        onComplete
+    ));
+    world.animations.push(new Animation(
+        function (y) {myself.setTop(y); },
+        function () {return myself.top(); },
+        -(this.top() - endPoint.y),
+        msecs || 100,
+        easing
+    ));
+};
+
+Morph.prototype.fadeTo = function (endAlpha, msecs, easing, onComplete) {
+    // include all my children, restore all original transparencies
+    // on completion, so I can be recovered
+    var world = this.world(),
+        myself = this,
+        oldAlpha = this.alpha;
+    this.children.forEach(function (child) {
+        child.fadeTo(endAlpha, msecs, easing);
+    });
+    world.animations.push(new Animation(
+        function (n) {
+            myself.alpha = n;
+            myself.changed();
+        },
+        function () {return myself.alpha; },
+        endAlpha - this.alpha,
+        msecs || 200,
+        easing,
+        function () {
+            myself.alpha = oldAlpha;
+            if (onComplete) {onComplete(); }
+        }
+    ));
+};
+
+Morph.prototype.perish = function (msecs, onComplete) {
+    var myself = this;
+    this.fadeTo(
+        0,
+        msecs || 100,
+        null,
+        function () {
+            myself.destroy();
+            if (onComplete) {onComplete(); }
+        }
+    );
 };
 
 // Morph utilities:
 
-Morph.prototype.nop = function () {
-    nop();
-};
+Morph.prototype.nop = nop;
 
 Morph.prototype.resize = function () {
     this.world().activeHandle = new HandleMorph(this);
@@ -3171,6 +3865,17 @@ Morph.prototype.move = function () {
         null,
         null,
         'move'
+    );
+};
+
+Morph.prototype.moveCenter = function () {
+    this.world().activeHandle = new HandleMorph(
+        this,
+        null,
+        null,
+        null,
+        null,
+        'moveCenter'
     );
 };
 
@@ -3348,9 +4053,15 @@ Morph.prototype.hierarchyMenu = function () {
 
     parents.forEach(function (each) {
         if (each.developersMenu && (each !== world)) {
+            menu.addMenu(
+                each.toString().slice(0, 50),
+                each.developersMenu()
+            );
+        /*
             menu.addItem(each.toString().slice(0, 50), function () {
                 each.developersMenu().popUpAtHand(world);
             });
+        */
         }
     });
     return menu;
@@ -3364,19 +4075,14 @@ Morph.prototype.developersMenu = function () {
         menu = new MenuMorph(this, this.constructor.name ||
             this.constructor.toString().split(' ')[1].split('(')[0]);
     if (userMenu) {
-        menu.addItem(
-            'user features...',
-            function () {
-                userMenu.popUpAtHand(world);
-            }
-        );
+        menu.addMenu('user features', userMenu);
         menu.addLine();
     }
     menu.addItem(
         "color...",
         function () {
             this.pickColor(
-                menu.title + '\ncolor:',
+                menu.title + localize('\ncolor:'),
                 this.setColor,
                 this,
                 this.color
@@ -3388,7 +4094,7 @@ Morph.prototype.developersMenu = function () {
         "transparency...",
         function () {
             this.prompt(
-                menu.title + '\nalpha\nvalue:',
+                menu.title + localize('\nalpha\nvalue:'),
                 this.setAlphaScaled,
                 this,
                 (this.alpha * 100).toString(),
@@ -3417,7 +4123,7 @@ Morph.prototype.developersMenu = function () {
     menu.addItem(
         "pick up",
         'pickUp',
-        'disattach and put \ninto the hand'
+        'detach and put \ninto the hand'
     );
     menu.addItem(
         "attach...",
@@ -3641,9 +4347,13 @@ Morph.prototype.evaluateString = function (code) {
 
 Morph.prototype.isTouching = function (otherMorph) {
     var oImg = this.overlappingImage(otherMorph),
-        data = oImg.getContext('2d')
-            .getImageData(1, 1, oImg.width, oImg.height)
-            .data;
+        data;
+    if (!oImg.width || !oImg.height) {
+        return false;
+    }
+    data = oImg.getContext('2d')
+        .getImageData(1, 1, oImg.width, oImg.height)
+        .data;
     return detect(
         data,
         function (each) {
@@ -3722,7 +4432,7 @@ HandleMorph.prototype.init = function (
     this.target = target || null;
     this.minExtent = new Point(minX || 0, minY || 0);
     this.inset = new Point(insetX || 0, insetY || insetX || 0);
-    this.type =  type || 'resize'; // can also be 'move'
+    this.type =  type || 'resize'; // can also be 'move', 'moveCenter'
     HandleMorph.uber.init.call(this);
     this.color = new Color(255, 255, 255);
     this.isDraggable = false;
@@ -3747,11 +4457,15 @@ HandleMorph.prototype.drawNew = function () {
     );
     this.image = this.normalImage;
     if (this.target) {
-        this.setPosition(
-            this.target.bottomRight().subtract(
-                this.extent().add(this.inset)
-            )
-        );
+        if (this.type === 'moveCenter') {
+            this.setCenter(this.target.center());
+        } else { // 'resize', 'move'
+            this.setPosition(
+                this.target.bottomRight().subtract(
+                    this.extent().add(this.inset)
+                )
+            );
+        }
         this.target.add(this);
         this.target.changed();
     }
@@ -3763,6 +4477,7 @@ HandleMorph.prototype.drawOnCanvas = function (
     shadowColor
 ) {
     var context = aCanvas.getContext('2d'),
+        isSquare = (this.type.indexOf('move') === 0),
         p1,
         p11,
         p2,
@@ -3774,7 +4489,7 @@ HandleMorph.prototype.drawOnCanvas = function (
 
     context.strokeStyle = color.toString();
 
-    if (this.type === 'move') {
+    if (isSquare) {
 
         p1 = this.bottomLeft().subtract(this.position());
         p11 = p1.copy();
@@ -3811,7 +4526,7 @@ HandleMorph.prototype.drawOnCanvas = function (
 
     context.strokeStyle = shadowColor.toString();
 
-    if (this.type === 'move') {
+    if (isSquare) {
 
         p1 = this.bottomLeft().subtract(this.position());
         p11 = p1.copy();
@@ -3853,11 +4568,16 @@ HandleMorph.prototype.step = null;
 
 HandleMorph.prototype.mouseDownLeft = function (pos) {
     var world = this.root(),
-        offset = pos.subtract(this.bounds.origin),
+        offset,
         myself = this;
 
     if (!this.target) {
         return null;
+    }
+    if (this.type === 'moveCenter') {
+        offset = pos.subtract(this.center());
+    } else {
+        offset = pos.subtract(this.bounds.origin);
     }
     this.step = function () {
         var newPos, newExt;
@@ -3875,6 +4595,8 @@ HandleMorph.prototype.mouseDownLeft = function (pos) {
                         myself.extent().add(myself.inset)
                     )
                 );
+            } else if (this.type === 'moveCenter') {
+                myself.target.setCenter(newPos);
             } else { // type === 'move'
                 myself.target.setPosition(
                     newPos.subtract(this.target.extent())
@@ -4456,6 +5178,72 @@ CursorMorph.prototype.init = function (aStringOrTextMorph) {
         this.target.setAlignmentToLeft();
     }
     this.gotoSlot(this.slot);
+    this.initializeClipboardHandler();
+};
+
+CursorMorph.prototype.initializeClipboardHandler = function () {
+    // Add hidden text box for copying and pasting
+    var myself = this,
+        wrrld = this.target.world();
+
+    this.clipboardHandler = document.createElement('textarea');
+    this.clipboardHandler.style.position = 'absolute';
+    this.clipboardHandler.style.right = '101%'; // placed just out of view
+
+    document.body.appendChild(this.clipboardHandler);
+
+    this.clipboardHandler.value = this.target.selection();
+    this.clipboardHandler.focus();
+    this.clipboardHandler.select();
+
+    this.clipboardHandler.addEventListener(
+        'keypress',
+        function (event) {
+            myself.processKeyPress(event);
+            this.value = myself.target.selection();
+            this.select();
+        },
+        false
+    );
+
+    this.clipboardHandler.addEventListener(
+        'keydown',
+        function (event) {
+            myself.processKeyDown(event);
+            if (event.shiftKey) {
+                wrrld.currentKey = 16;
+            }
+            this.value = myself.target.selection();
+            this.select();
+
+            // Make sure tab prevents default
+            if (event.key === 'U+0009' ||
+                    event.key === 'Tab') {
+                myself.processKeyPress(event);
+                event.preventDefault();
+            }
+        },
+        false
+    );
+
+    this.clipboardHandler.addEventListener(
+        'keyup',
+        function (event) {
+            wrrld.currentKey = null;
+        },
+        false
+    );
+
+    this.clipboardHandler.addEventListener(
+        'input',
+        function (event) {
+            if (this.value === '') {
+                myself.gotoSlot(myself.target.selectionStartSlot());
+                myself.target.deleteSelection();
+            }
+        },
+        false
+    );
 };
 
 // CursorMorph event processing:
@@ -4475,7 +5263,7 @@ CursorMorph.prototype.processKeyPress = function (event) {
         return null;
     }
     if (event.keyCode) { // Opera doesn't support charCode
-        if (event.ctrlKey) {
+        if (event.ctrlKey && (!event.altKey)) {
             this.ctrl(event.keyCode, event.shiftKey);
         } else if (event.metaKey) {
             this.cmd(event.keyCode, event.shiftKey);
@@ -4486,7 +5274,7 @@ CursorMorph.prototype.processKeyPress = function (event) {
             );
         }
     } else if (event.charCode) { // all other browsers
-        if (event.ctrlKey) {
+        if (event.ctrlKey && (!event.altKey)) {
             this.ctrl(event.charCode, event.shiftKey);
         } else if (event.metaKey) {
             this.cmd(event.charCode, event.shiftKey);
@@ -4503,28 +5291,47 @@ CursorMorph.prototype.processKeyPress = function (event) {
 
 CursorMorph.prototype.processKeyDown = function (event) {
     // this.inspectKeyEvent(event);
-    var shift = event.shiftKey;
+    var shift = event.shiftKey,
+        wordNavigation = event.ctrlKey || event.altKey,
+        selecting = this.target.selection().length > 0;
+
     this.keyDownEventUsed = false;
-    if (event.ctrlKey) {
+    if (event.ctrlKey && (!event.altKey)) {
         this.ctrl(event.keyCode, event.shiftKey);
         // notify target's parent of key event
         this.target.escalateEvent('reactToKeystroke', event);
-        return;
     }
     if (event.metaKey) {
         this.cmd(event.keyCode, event.shiftKey);
         // notify target's parent of key event
         this.target.escalateEvent('reactToKeystroke', event);
-        return;
     }
 
     switch (event.keyCode) {
     case 37:
-        this.goLeft(shift);
+        if (selecting && !shift && !wordNavigation) {
+            this.gotoSlot(Math.min(this.target.startMark, this.target.endMark));
+            this.target.clearSelection();
+        } else {
+            this.goLeft(
+                    shift,
+                    wordNavigation ?
+                        this.slot - this.target.previousWordFrom(this.slot)
+                        : 1);
+        }
         this.keyDownEventUsed = true;
         break;
     case 39:
-        this.goRight(shift);
+        if (selecting && !shift && !wordNavigation) {
+            this.gotoSlot(Math.max(this.target.startMark, this.target.endMark));
+            this.target.clearSelection();
+        } else {
+            this.goRight(
+                    shift,
+                    wordNavigation ?
+                        this.target.nextWordFrom(this.slot) - this.slot
+                        : 1);
+        }
         this.keyDownEventUsed = true;
         break;
     case 38:
@@ -4552,7 +5359,7 @@ CursorMorph.prototype.processKeyDown = function (event) {
         this.keyDownEventUsed = true;
         break;
     case 13:
-        if (this.target instanceof StringMorph) {
+        if ((this.target instanceof StringMorph) || shift) {
             this.accept();
         } else {
             this.insert('\n');
@@ -4615,9 +5422,9 @@ CursorMorph.prototype.gotoSlot = function (slot) {
     }
 };
 
-CursorMorph.prototype.goLeft = function (shift) {
+CursorMorph.prototype.goLeft = function (shift, howMany) {
     this.updateSelection(shift);
-    this.gotoSlot(this.slot - 1);
+    this.gotoSlot(this.slot - (howMany || 1));
     this.updateSelection(shift);
 };
 
@@ -4660,7 +5467,7 @@ CursorMorph.prototype.gotoPos = function (aPoint) {
 
 CursorMorph.prototype.updateSelection = function (shift) {
     if (shift) {
-        if (!this.target.endMark && !this.target.startMark) {
+        if (isNil(this.target.endMark) && isNil(this.target.startMark)) {
             this.target.startMark = this.slot;
             this.target.endMark = this.slot;
         } else if (this.target.endMark !== this.slot) {
@@ -4680,7 +5487,7 @@ CursorMorph.prototype.accept = function () {
     if (world) {
         world.stopEditing();
     }
-    this.escalateEvent('accept', null);
+    this.escalateEvent('accept', this);
 };
 
 CursorMorph.prototype.cancel = function () {
@@ -4689,7 +5496,7 @@ CursorMorph.prototype.cancel = function () {
     if (world) {
         world.stopEditing();
     }
-    this.escalateEvent('cancel', null);
+    this.escalateEvent('cancel', this);
 };
 
 CursorMorph.prototype.undo = function () {
@@ -4809,7 +5616,23 @@ CursorMorph.prototype.destroy = function () {
         this.target.drawNew();
         this.target.changed();
     }
+    this.destroyClipboardHandler();
     CursorMorph.uber.destroy.call(this);
+};
+
+CursorMorph.prototype.destroyClipboardHandler = function () {
+    var nodes = document.body.children,
+        each,
+        i;
+    if (this.clipboardHandler) {
+        for (i = 0; i < nodes.length; i += 1) {
+            each = nodes[i];
+            if (each === this.clipboardHandler) {
+                document.body.removeChild(this.clipboardHandler);
+                this.clipboardHandler = null;
+            }
+        }
+    }
 };
 
 // CursorMorph utilities:
@@ -5488,9 +6311,7 @@ SliderButtonMorph.prototype.init = function (orientation) {
     SliderButtonMorph.uber.init.call(this, orientation);
 };
 
-SliderButtonMorph.prototype.autoOrientation = function () {
-    nop();
-};
+SliderButtonMorph.prototype.autoOrientation = nop;
 
 SliderButtonMorph.prototype.drawNew = function () {
     var colorBak = this.color.copy();
@@ -5726,9 +6547,7 @@ SliderMorph.prototype.init = function (
     // this.drawNew();
 };
 
-SliderMorph.prototype.autoOrientation = function () {
-    nop();
-};
+SliderMorph.prototype.autoOrientation = nop;
 
 SliderMorph.prototype.rangeSize = function () {
     return this.stop - this.start;
@@ -6652,6 +7471,9 @@ MenuMorph.prototype.init = function (target, title, environment, fontSize) {
     this.label = null;
     this.world = null;
     this.isListContents = false;
+    this.hasFocus = false;
+    this.selection = null;
+    this.submenu = null;
 
     // initialize inherited properties:
     MenuMorph.uber.init.call(this);
@@ -6671,7 +7493,8 @@ MenuMorph.prototype.addItem = function (
     color,
     bold, // bool
     italic, // bool
-    doubleClickAction // optional, when used as list contents
+    doubleClickAction, // optional, when used as list contents
+    shortcut // optional string, icon (Morph or Canvas) or tuple [icon, string]
 ) {
     /*
     labelString is normally a single-line string. But it can also be one
@@ -6688,7 +7511,16 @@ MenuMorph.prototype.addItem = function (
         color,
         bold || false,
         italic || false,
-        doubleClickAction]);
+        doubleClickAction,
+        shortcut]);
+};
+
+MenuMorph.prototype.addMenu = function (label, aMenu, indicator) {
+    this.addPair(label, aMenu, isNil(indicator) ? '\u25ba' : indicator);
+};
+
+MenuMorph.prototype.addPair = function (label, action, shortcut, hint) {
+    this.addItem(label, action, hint, null, null, null, null, shortcut);
 };
 
 MenuMorph.prototype.addLine = function (width) {
@@ -6780,7 +7612,8 @@ MenuMorph.prototype.drawNew = function () {
                 tuple[3], // color
                 tuple[4], // bold
                 tuple[5], // italic
-                tuple[6] // doubleclick action
+                tuple[6], // doubleclick action
+                tuple[7] // shortcut
             );
         }
         if (isLine) {
@@ -6809,9 +7642,12 @@ MenuMorph.prototype.maxWidth = function () {
         }
     }
     this.children.forEach(function (item) {
-
         if (item instanceof MenuItemMorph) {
-            w = Math.max(w, item.children[0].width() + 8);
+            w = Math.max(
+                w,
+                item.label.width() + 8 +
+                    (item.shortcut ? item.shortcut.width() + 4 : 0)
+            );
         } else if ((item instanceof StringFieldMorph) ||
                 (item instanceof ColorPickerMorph) ||
                 (item instanceof SliderMorph)) {
@@ -6831,6 +7667,7 @@ MenuMorph.prototype.adjustWidths = function () {
     this.children.forEach(function (item) {
         item.silentSetWidth(w);
         if (item instanceof MenuItemMorph) {
+            item.fixLayout();
             isSelected = (item.image === item.pressImage);
             item.createBackgrounds();
             if (isSelected) {
@@ -6871,6 +7708,7 @@ MenuMorph.prototype.popup = function (world, pos) {
     }
     world.add(this);
     world.activeMenu = this;
+    this.world = world; // optionally enable keyboard support
     this.fullChanged();
 };
 
@@ -6899,6 +7737,149 @@ MenuMorph.prototype.popUpCenteredInWorld = function (world) {
             this.extent().floorDivideBy(2)
         )
     );
+};
+
+// MenuMorph submenus
+
+MenuMorph.prototype.closeRootMenu = function () {
+    if (this.parent instanceof MenuMorph) {
+        this.parent.closeRootMenu();
+    } else {
+        this.destroy();
+    }
+};
+
+MenuMorph.prototype.closeSubmenu = function () {
+    if (this.submenu) {
+        this.submenu.destroy();
+        this.submenu = null;
+        this.unselectAllItems();
+    }
+};
+
+// MenuMorph keyboard accessibility
+
+MenuMorph.prototype.getFocus = function () {
+    this.world.keyboardReceiver = this;
+    this.selection = null;
+    this.selectFirst();
+    this.hasFocus = true;
+};
+
+MenuMorph.prototype.processKeyDown = function (event) {
+    // console.log(event.keyCode);
+    switch (event.keyCode) {
+    case 13: // 'enter'
+    case 32: // 'space'
+        if (this.selection) {
+            this.selection.mouseClickLeft();
+            if (this.submenu) {
+                this.submenu.getFocus();
+            }
+        }
+        return;
+    case 27: // 'esc'
+        return this.destroy();
+    case 37: // 'left arrow'
+        return this.leaveSubmenu();
+    case 38: // 'up arrow'
+        return this.selectUp();
+    case 39: // 'right arrow'
+        return this.enterSubmenu();
+    case 40: // 'down arrow'
+        return this.selectDown();
+    default:
+        nop();
+    }
+};
+
+MenuMorph.prototype.processKeyUp = function (event) {
+    nop(event);
+};
+
+MenuMorph.prototype.processKeyPress = function (event) {
+    nop(event);
+};
+
+MenuMorph.prototype.selectFirst = function () {
+    var i;
+    for (i = 0; i < this.children.length; i += 1) {
+        if (this.children[i] instanceof MenuItemMorph) {
+            this.select(this.children[i]);
+            return;
+        }
+    }
+};
+
+MenuMorph.prototype.selectUp = function () {
+    var triggers, idx;
+
+    triggers = this.children.filter(function (each) {
+        return each instanceof MenuItemMorph;
+    });
+    if (!this.selection) {
+        if (triggers.length) {
+            this.select(triggers[0]);
+        }
+        return;
+    }
+    idx = triggers.indexOf(this.selection) - 1;
+    if (idx < 0) {
+        idx = triggers.length - 1;
+    }
+    this.select(triggers[idx]);
+};
+
+MenuMorph.prototype.selectDown = function () {
+    var triggers, idx;
+
+    triggers = this.children.filter(function (each) {
+        return each instanceof MenuItemMorph;
+    });
+    if (!this.selection) {
+        if (triggers.length) {
+            this.select(triggers[0]);
+        }
+        return;
+    }
+    idx = triggers.indexOf(this.selection) + 1;
+    if (idx >= triggers.length) {
+        idx = 0;
+    }
+    this.select(triggers[idx]);
+};
+
+MenuMorph.prototype.enterSubmenu = function () {
+    if (this.selection && this.selection.action instanceof MenuMorph) {
+        this.selection.popUpSubmenu();
+        if (this.submenu) {
+            this.submenu.getFocus();
+        }
+    }
+};
+
+MenuMorph.prototype.leaveSubmenu = function () {
+    var menu = this.parent;
+    if (this.parent instanceof MenuMorph) {
+        menu.submenu = null;
+        menu.hasFocus = true;
+        this.destroy();
+        menu.world.keyboardReceiver = menu;
+    }
+};
+
+MenuMorph.prototype.select = function (aMenuItem) {
+    this.unselectAllItems();
+    aMenuItem.image = aMenuItem.highlightImage;
+    aMenuItem.changed();
+    this.selection = aMenuItem;
+};
+
+MenuMorph.prototype.destroy = function () {
+    if (this.hasFocus) {
+        this.world.keyboardReceiver = null;
+    }
+    MenuMorph.uber.destroy.call(this);
 };
 
 // StringMorph /////////////////////////////////////////////////////////
@@ -7122,7 +8103,7 @@ StringMorph.prototype.renderWithBlanks = function (context, startX, y) {
     });
 };
 
-// StringMorph mesuring:
+// StringMorph measuring:
 
 StringMorph.prototype.slotPosition = function (slot) {
     // answer the position point of the given index ("slot")
@@ -7147,8 +8128,10 @@ StringMorph.prototype.slotPosition = function (slot) {
 };
 
 StringMorph.prototype.slotAt = function (aPoint) {
-    // answer the slot (index) closest to the given point
+    // answer the slot (index) closest to the given point taking
+    // in account how far from the middle of the character it is,
     // so the cursor can be moved accordingly
+
     var txt = this.isPassword ?
                 this.password('*', this.text.length) : this.text,
         idx = 0,
@@ -7166,7 +8149,14 @@ StringMorph.prototype.slotAt = function (aPoint) {
             }
         }
     }
-    return idx - 1;
+
+    // see where our click fell with respect to the middle of the char
+    if (aPoint.x - this.left() >
+            charX - context.measureText(txt[idx - 1]).width / 2) {
+        return idx;
+    } else {
+        return idx - 1;
+    }
 };
 
 StringMorph.prototype.upFrom = function (slot) {
@@ -7187,6 +8177,41 @@ StringMorph.prototype.startOfLine = function () {
 StringMorph.prototype.endOfLine = function () {
     // answer the slot (index) indicating the EOL for the given slot
     return this.text.length;
+};
+
+StringMorph.prototype.previousWordFrom = function (aSlot) {
+    // answer the slot (index) slots indicating the position of the
+    // previous word to the left of aSlot
+    var index = aSlot - 1;
+    
+    // while the current character is non-word one, we skip it, so that
+    // if we are in the middle of a non-alphanumeric sequence, we'll get
+    // right to the beginning of the previous word
+    while (index > 0 && !isWordChar(this.text[index])) {
+        index -= 1;
+    }
+
+    // while the current character is a word one, we skip it until we
+    // find the beginning of the current word
+    while (index > 0 && isWordChar(this.text[index - 1])) {
+        index -= 1;
+    }
+
+    return index;
+};
+
+StringMorph.prototype.nextWordFrom = function (aSlot) {
+    var index = aSlot;
+    
+    while (index < this.endOfLine() && !isWordChar(this.text[index])) {
+        index += 1;
+    }
+
+    while (index < this.endOfLine() && isWordChar(this.text[index])) {
+        index += 1;
+    }
+
+    return index;
 };
 
 StringMorph.prototype.rawHeight = function () {
@@ -7354,13 +8379,13 @@ StringMorph.prototype.selectionStartSlot = function () {
 
 StringMorph.prototype.clearSelection = function () {
     if (!this.currentlySelecting &&
-            this.startMark === 0 &&
-            this.endMark === 0) {
+            isNil(this.startMark) &&
+            isNil(this.endMark)) {
         return;
     }
     this.currentlySelecting = false;
-    this.startMark = 0;
-    this.endMark = 0;
+    this.startMark = null;
+    this.endMark = null;
     this.drawNew();
     this.changed();
 };
@@ -7376,8 +8401,13 @@ StringMorph.prototype.deleteSelection = function () {
 };
 
 StringMorph.prototype.selectAll = function () {
+    var cursor;
     if (this.isEditable) {
         this.startMark = 0;
+        cursor = this.root().cursor;
+        if (cursor) {
+            cursor.gotoSlot(this.text.length);
+        }
         this.endMark = this.text.length;
         this.drawNew();
         this.changed();
@@ -7385,11 +8415,29 @@ StringMorph.prototype.selectAll = function () {
 };
 
 StringMorph.prototype.mouseDownLeft = function (pos) {
-    if (this.isEditable) {
+    if (this.world().currentKey === 16) {
+        this.shiftClick(pos);
+    } else if (this.isEditable) {
         this.clearSelection();
     } else {
         this.escalateEvent('mouseDownLeft', pos);
     }
+};
+
+StringMorph.prototype.shiftClick = function (pos) {
+    var cursor = this.root().cursor;
+
+    if (cursor) {
+        if (!this.startMark) {
+            this.startMark = cursor.slot;
+        }
+        cursor.gotoPos(pos);
+        this.endMark = cursor.slot;
+        this.drawNew();
+        this.changed();
+    }
+    this.currentlySelecting = false;
+    this.escalateEvent('mouseDownLeft', pos);
 };
 
 StringMorph.prototype.mouseClickLeft = function (pos) {
@@ -7408,18 +8456,79 @@ StringMorph.prototype.mouseClickLeft = function (pos) {
     }
 };
 
+StringMorph.prototype.mouseDoubleClick = function (pos) {
+    // selects the word at pos
+    // if there is no word, we select whatever is between
+    // the previous and next words
+    var slot = this.slotAt(pos);
+
+    if (this.isEditable) {
+        this.edit();
+
+        if (slot === this.text.length) {
+            slot -= 1;
+        }
+
+        if (isWordChar(this.text[slot])) {
+            this.selectWordAt(slot);
+        } else {
+            this.selectBetweenWordsAt(slot);
+        }
+    } else {
+        this.escalateEvent('mouseDoubleClick', pos);
+    }
+ 
+};
+
+StringMorph.prototype.selectWordAt = function (slot) {
+    var cursor = this.root().cursor;
+
+    if (slot === 0 || isWordChar(this.text[slot - 1])) {
+        cursor.gotoSlot(this.previousWordFrom(slot));
+        this.startMark = cursor.slot;
+        this.endMark = this.nextWordFrom(cursor.slot);
+    } else {
+        cursor.gotoSlot(slot);
+        this.startMark = slot;
+        this.endMark = this.nextWordFrom(slot);
+    }
+
+    this.drawNew();
+    this.changed();
+};
+
+StringMorph.prototype.selectBetweenWordsAt = function (slot) {
+    var cursor = this.root().cursor;
+
+    cursor.gotoSlot(this.nextWordFrom(this.previousWordFrom(slot)));
+    this.startMark = cursor.slot;
+    this.endMark = cursor.slot;
+
+    while (this.endMark < this.text.length
+            && !isWordChar(this.text[this.endMark])) {
+        this.endMark += 1;
+    }
+
+    this.drawNew();
+    this.changed();
+};
+
 StringMorph.prototype.enableSelecting = function () {
     this.mouseDownLeft = function (pos) {
         var crs = this.root().cursor,
             already = crs ? crs.target === this : false;
-        this.clearSelection();
-        if (this.isEditable && (!this.isDraggable)) {
-            this.edit();
-            this.root().cursor.gotoPos(pos);
-            this.startMark = this.slotAt(pos);
-            this.endMark = this.startMark;
-            this.currentlySelecting = true;
-            if (!already) {this.escalateEvent('mouseDownLeft', pos); }
+        if (this.world().currentKey === 16) {
+            this.shiftClick(pos);
+        } else {
+            this.clearSelection();
+            if (this.isEditable && (!this.isDraggable)) {
+                this.edit();
+                this.root().cursor.gotoPos(pos);
+                this.startMark = this.slotAt(pos);
+                this.endMark = this.startMark;
+                this.currentlySelecting = true;
+                if (!already) {this.escalateEvent('mouseDownLeft', pos); }
+            }
         }
     };
     this.mouseMove = function (pos) {
@@ -7739,8 +8848,10 @@ TextMorph.prototype.slotPosition = function (slot) {
 };
 
 TextMorph.prototype.slotAt = function (aPoint) {
-    // answer the slot (index) closest to the given point
+    // answer the slot (index) closest to the given point taking
+    // in account how far from the middle of the character it is,
     // so the cursor can be moved accordingly
+
     var charX = 0,
         row = 0,
         col = 0,
@@ -7752,11 +8863,19 @@ TextMorph.prototype.slotAt = function (aPoint) {
         row += 1;
     }
     row = Math.max(row, 1);
+
     while (aPoint.x - this.left() > charX) {
         charX += context.measureText(this.lines[row - 1][col]).width;
         col += 1;
     }
-    return this.lineSlots[Math.max(row - 1, 0)] + col - 1;
+
+    // see where our click fell with respect to the middle of the char
+    if (aPoint.x - this.left() >
+            charX - context.measureText(this.lines[row - 1][col]).width / 2) {
+        return this.lineSlots[Math.max(row - 1, 0)] + col;
+    } else {
+        return this.lineSlots[Math.max(row - 1, 0)] + col - 1;
+    }
 };
 
 TextMorph.prototype.upFrom = function (slot) {
@@ -7798,6 +8917,10 @@ TextMorph.prototype.endOfLine = function (slot) {
         this.lines[this.columnRow(slot).y].length - 1;
 };
 
+TextMorph.prototype.previousWordFrom = StringMorph.prototype.previousWordFrom;
+
+TextMorph.prototype.nextWordFrom = StringMorph.prototype.nextWordFrom;
+
 // TextMorph editing:
 
 TextMorph.prototype.edit = StringMorph.prototype.edit;
@@ -7815,7 +8938,16 @@ TextMorph.prototype.selectAll = StringMorph.prototype.selectAll;
 
 TextMorph.prototype.mouseDownLeft = StringMorph.prototype.mouseDownLeft;
 
+TextMorph.prototype.shiftClick = StringMorph.prototype.shiftClick;
+
 TextMorph.prototype.mouseClickLeft = StringMorph.prototype.mouseClickLeft;
+
+TextMorph.prototype.mouseDoubleClick = StringMorph.prototype.mouseDoubleClick;
+
+TextMorph.prototype.selectWordAt = StringMorph.prototype.selectWordAt;
+
+TextMorph.prototype.selectBetweenWordsAt
+    = StringMorph.prototype.selectBetweenWordsAt;
 
 TextMorph.prototype.enableSelecting = StringMorph.prototype.enableSelecting;
 
@@ -8027,6 +9159,7 @@ TriggerMorph.prototype.init = function (
     this.labelString = labelString || null;
     this.label = null;
     this.hint = hint || null; // null, String, or Function
+    this.schedule = null; // animation slot for displaying hints
     this.fontSize = fontSize || MorphicPreferences.menuFontSize;
     this.fontStyle = fontStyle || 'sans-serif';
     this.highlightColor = new Color(192, 192, 192);
@@ -8120,6 +9253,9 @@ TriggerMorph.prototype.trigger = function () {
         treat it as function property of target and execute it
         for selector-like actions
     */
+    if (this.schedule) {
+        this.schedule.isActive = false;
+    }
     if (typeof this.target === 'function') {
         if (typeof this.action === 'function') {
             this.target.call(this.environment, this.action.call(), this);
@@ -8139,6 +9275,9 @@ TriggerMorph.prototype.triggerDoubleClick = function () {
     // same as trigger() but use doubleClickAction instead of action property
     // note that specifying a doubleClickAction is optional
     if (!this.doubleClickAction) {return; }
+    if (this.schedule) {
+        this.schedule.isActive = false;
+    }
     if (typeof this.target === 'function') {
         if (typeof this.doubleClickAction === 'function') {
             this.target.call(
@@ -8172,6 +9311,9 @@ TriggerMorph.prototype.mouseEnter = function () {
 TriggerMorph.prototype.mouseLeave = function () {
     this.image = this.normalImage;
     this.changed();
+    if (this.schedule) {
+        this.schedule.isActive = false;
+    }
     if (this.hint) {
         this.world().hand.destroyTemporaries();
     }
@@ -8199,15 +9341,17 @@ TriggerMorph.prototype.rootForGrab = function () {
 // TriggerMorph bubble help:
 
 TriggerMorph.prototype.bubbleHelp = function (contents) {
-    var myself = this;
-    this.fps = 2;
-    this.step = function () {
-        if (this.bounds.containsPoint(this.world().hand.position())) {
-            myself.popUpbubbleHelp(contents);
-        }
-        myself.fps = 0;
-        delete myself.step;
-    };
+    var world = this.world(),
+        myself = this;
+    this.schedule = new Animation(
+        nop,
+        nop,
+        0,
+        500,
+        nop,
+        function () {myself.popUpbubbleHelp(contents); }
+    );
+    world.animations.push(this.schedule);
 };
 
 TriggerMorph.prototype.popUpbubbleHelp = function (contents) {
@@ -8244,8 +9388,14 @@ function MenuItemMorph(
     color,
     bold,
     italic,
-    doubleClickAction // optional when used as list morph item
+    doubleClickAction, // optional when used as list morph item
+    shortcut // optional string, Morph, Canvas or tuple: [icon, string]
 ) {
+    // additional properties:
+    this.shortcutString = shortcut || null;
+    this.shortcut = null;
+
+    // initialize inherited properties:
     this.init(
         target,
         action,
@@ -8262,31 +9412,58 @@ function MenuItemMorph(
 }
 
 MenuItemMorph.prototype.createLabel = function () {
-    var icon, lbl, np;
-    if (this.label !== null) {
+    var w, h;
+    if (this.label) {
         this.label.destroy();
     }
-    if (isString(this.labelString)) {
-        this.label = this.createLabelString(this.labelString);
-    } else if (this.labelString instanceof Array) {
+    this.label = this.createLabelPart(this.labelString);
+    this.add(this.label);
+    w = this.label.width();
+    h = this.label.height();
+    if (this.shortcut) {
+        this.shortcut.destroy();
+    }
+    if (this.shortcutString) {
+        this.shortcut = this.createLabelPart(this.shortcutString);
+        w += this.shortcut.width() + 4;
+        h = Math.max(h, this.shortcut.height());
+        this.add(this.shortcut);
+    }
+    this.silentSetExtent(new Point(w + 8, h));
+    this.fixLayout();
+};
+
+MenuItemMorph.prototype.fixLayout = function () {
+    var cntr = this.center();
+    this.label.setCenter(cntr);
+    this.label.setLeft(this.left() + 4);
+    if (this.shortcut) {
+        this.shortcut.setCenter(cntr);
+        this.shortcut.setRight(this.right() - 4);
+    }
+};
+
+MenuItemMorph.prototype.createLabelPart = function (source) {
+    var part, icon, lbl;
+    if (isString(source)) {
+        return this.createLabelString(source);
+    }
+    if (source instanceof Array) {
         // assume its pattern is: [icon, string]
-        this.label = new Morph();
-        this.label.alpha = 0; // transparent
-        icon = this.createIcon(this.labelString[0]);
-        this.label.add(icon);
-        lbl = this.createLabelString(this.labelString[1]);
-        this.label.add(lbl);
+        part = new Morph();
+        part.alpha = 0; // transparent
+        icon = this.createIcon(source[0]);
+        part.add(icon);
+        lbl = this.createLabelString(source[1]);
+        part.add(lbl);
         lbl.setCenter(icon.center());
         lbl.setLeft(icon.right() + 4);
-        this.label.bounds = (icon.bounds.merge(lbl.bounds));
-        this.label.drawNew();
-    } else { // assume it's either a Morph or a Canvas
-        this.label = this.createIcon(this.labelString);
+        part.bounds = (icon.bounds.merge(lbl.bounds));
+        part.drawNew();
+        return part;
     }
-    this.silentSetExtent(this.label.extent().add(new Point(8, 0)));
-    np = this.position().add(new Point(4, 0));
-    this.label.bounds = np.extent(this.label.extent());
-    this.add(this.label);
+    // assume it's either a Morph or a Canvas
+    return this.createIcon(source);
 };
 
 MenuItemMorph.prototype.createIcon = function (source) {
@@ -8324,19 +9501,35 @@ MenuItemMorph.prototype.createLabelString = function (string) {
 // MenuItemMorph events:
 
 MenuItemMorph.prototype.mouseEnter = function () {
+    var menu = this.parentThatIsA(MenuMorph);
+    if (this.isShowingSubmenu()) {
+        return;
+    }
+    if (menu) {
+        menu.closeSubmenu();
+    }
     if (!this.isListItem()) {
         this.image = this.highlightImage;
         this.changed();
     }
-    if (this.hint) {
+    if (this.action instanceof MenuMorph) {
+        this.delaySubmenu();
+    } else if (this.hint) {
         this.bubbleHelp(this.hint);
     }
 };
 
 MenuItemMorph.prototype.mouseLeave = function () {
     if (!this.isListItem()) {
-        this.image = this.normalImage;
+        if (this.isShowingSubmenu()) {
+            this.image = this.highlightImage;
+        } else {
+            this.image = this.normalImage;
+        }
         this.changed();
+    }
+    if (this.schedule) {
+        this.schedule.isActive = false;
     }
     if (this.hint) {
         this.world().hand.destroyTemporaries();
@@ -8359,11 +9552,15 @@ MenuItemMorph.prototype.mouseMove = function () {
 };
 
 MenuItemMorph.prototype.mouseClickLeft = function () {
-    if (!this.isListItem()) {
-        this.parent.destroy();
-        this.root().activeMenu = null;
+    if (this.action instanceof MenuMorph) {
+        this.popUpSubmenu();
+    } else {
+        if (!this.isListItem()) {
+            this.parent.closeRootMenu();
+            this.world().activeMenu = null;
+        }
+        this.trigger();
     }
-    this.trigger();
 };
 
 MenuItemMorph.prototype.isListItem = function () {
@@ -8378,6 +9575,44 @@ MenuItemMorph.prototype.isSelectedListItem = function () {
         return this.image === this.pressImage;
     }
     return false;
+};
+
+MenuItemMorph.prototype.isShowingSubmenu = function () {
+    var menu = this.parentThatIsA(MenuMorph);
+    if (menu && (this.action instanceof MenuMorph)) {
+        return menu.submenu === this.action;
+    }
+    return false;
+};
+
+// MenuItemMorph submenus:
+
+MenuItemMorph.prototype.delaySubmenu = function () {
+    var world = this.world(),
+        myself = this;
+    this.schedule = new Animation(
+        nop,
+        nop,
+        0,
+        500,
+        nop,
+        function () {myself.popUpSubmenu(); }
+    );
+    world.animations.push(this.schedule);
+};
+
+MenuItemMorph.prototype.popUpSubmenu = function () {
+    var menu = this.parentThatIsA(MenuMorph);
+    if (!(this.action instanceof MenuMorph)) {return; }
+    this.action.drawNew();
+    this.action.setPosition(this.topRight().subtract(new Point(0, 5)));
+    this.action.addShadow(new Point(2, 2), 80);
+    this.action.keepWithin(this.world());
+    if (this.action.items.length < 1 && !this.action.title) {return; }
+    menu.add(this.action);
+    menu.submenu = this.action;
+    menu.submenu.world = menu.world; // keyboard control
+    this.action.fullChanged();
 };
 
 // FrameMorph //////////////////////////////////////////////////////////
@@ -8584,7 +9819,8 @@ ScrollFrameMorph.prototype.init = function (scroller, size, sliderColor) {
     ScrollFrameMorph.uber.init.call(this);
     this.scrollBarSize = size || MorphicPreferences.scrollBarSize;
     this.autoScrollTrigger = null;
-    this.isScrollingByDragging = true;    // change if desired
+    this.enableAutoScrolling = true; // change to suppress
+    this.isScrollingByDragging = true; // change to suppress
     this.hasVelocity = true; // dto.
     this.padding = 0; // around the scrollable area
     this.growth = 0; // pixels or Point to grow right/left when near edge
@@ -8629,6 +9865,7 @@ ScrollFrameMorph.prototype.init = function (scroller, size, sliderColor) {
     };
     this.vBar.isDraggable = false;
     this.add(this.vBar);
+    this.toolBar = null; // optional slot
 };
 
 ScrollFrameMorph.prototype.adjustScrollBars = function () {
@@ -8680,6 +9917,17 @@ ScrollFrameMorph.prototype.adjustScrollBars = function () {
         this.vBar.drawNew();
     } else {
         this.vBar.hide();
+    }
+    this.adjustToolBar();
+};
+
+ScrollFrameMorph.prototype.adjustToolBar = function () {
+    var padding = 3;
+    if (this.toolBar) {
+        this.toolBar.setTop(this.top() + padding);
+        this.toolBar.setRight(
+            (this.vBar.isVisible ? this.vBar.left() : this.right()) - padding
+        );
     }
 };
 
@@ -8745,15 +9993,14 @@ ScrollFrameMorph.prototype.scrollY = function (steps) {
     }
 };
 
-ScrollFrameMorph.prototype.step = function () {
-    nop();
-};
+ScrollFrameMorph.prototype.step = nop;
 
 ScrollFrameMorph.prototype.mouseDownLeft = function (pos) {
     if (!this.isScrollingByDragging) {
         return null;
     }
     var world = this.root(),
+        hand = world.hand,
         oldPos = pos,
         myself = this,
         deltaX = 0,
@@ -8762,10 +10009,18 @@ ScrollFrameMorph.prototype.mouseDownLeft = function (pos) {
 
     this.step = function () {
         var newPos;
-        if (world.hand.mouseButton &&
-                (world.hand.children.length === 0) &&
-                (myself.bounds.containsPoint(world.hand.position()))) {
-            newPos = world.hand.bounds.origin;
+        if (hand.mouseButton &&
+                (hand.children.length === 0) &&
+                (myself.bounds.containsPoint(hand.bounds.origin))) {
+
+            if (hand.grabPosition &&
+                (hand.grabPosition.distanceTo(hand.position()) <=
+                    MorphicPreferences.grabThreshold)) {
+                // still within the grab threshold
+                return null;
+            }
+
+            newPos = hand.bounds.origin;
             deltaX = newPos.x - oldPos.x;
             if (deltaX !== 0) {
                 myself.scrollX(deltaX);
@@ -8928,7 +10183,6 @@ ScrollFrameMorph.prototype.developersMenu = function () {
     }
     return menu;
 };
-
 
 ScrollFrameMorph.prototype.toggleTextLineWrapping = function () {
     this.isTextLineWrapping = !this.isTextLineWrapping;
@@ -9286,7 +10540,7 @@ function HandMorph(aWorld) {
 // HandMorph initialization:
 
 HandMorph.prototype.init = function (aWorld) {
-    HandMorph.uber.init.call(this);
+    HandMorph.uber.init.call(this, true);
     this.bounds = new Rectangle();
 
     // additional properties:
@@ -9294,6 +10548,7 @@ HandMorph.prototype.init = function (aWorld) {
     this.mouseButton = null;
     this.mouseOverList = [];
     this.morphToGrab = null;
+    this.grabPosition = null;
     this.grabOrigin = null;
     this.temporaries = [];
     this.touchHoldTimeout = null;
@@ -9358,6 +10613,8 @@ HandMorph.prototype.grab = function (aMorph) {
         if (aMorph.prepareToBeGrabbed) {
             aMorph.prepareToBeGrabbed(this);
         }
+        aMorph.cachedFullImage = aMorph.fullImageClassic();
+        aMorph.cachedFullBounds = aMorph.fullBounds();
         this.add(aMorph);
         this.changed();
         if (oldParent && oldParent.reactToGrabOf) {
@@ -9373,6 +10630,8 @@ HandMorph.prototype.drop = function () {
         target = this.dropTargetFor(morphToDrop);
         this.changed();
         target.add(morphToDrop);
+        morphToDrop.cachedFullImage = null;
+        morphToDrop.cachedFullBounds = null;
         morphToDrop.changed();
         morphToDrop.removeShadow();
         this.children = [];
@@ -9383,7 +10642,6 @@ HandMorph.prototype.drop = function () {
         if (target.reactToDropOf) {
             target.reactToDropOf(morphToDrop, this);
         }
-        this.dragOrigin = null;
     }
 };
 
@@ -9410,6 +10668,7 @@ HandMorph.prototype.processMouseDown = function (event) {
     this.destroyTemporaries();
     this.contextMenuEnabled = true;
     this.morphToGrab = null;
+    this.grabPosition = null;
     if (this.children.length !== 0) {
         this.drop();
         this.mouseButton = null;
@@ -9437,6 +10696,7 @@ HandMorph.prototype.processMouseDown = function (event) {
         }
         if (!morph.mouseMove) {
             this.morphToGrab = morph.rootForGrab();
+            this.grabPosition = this.bounds.origin.copy();
         }
         if (event.button === 2 || event.ctrlKey) {
             this.mouseButton = 'right';
@@ -9546,8 +10806,7 @@ HandMorph.prototype.processMouseMove = function (event) {
         mouseOverNew,
         myself = this,
         morph,
-        topMorph,
-        fb;
+        topMorph;
 
     pos = new Point(
         event.pageX - posInDocument.x,
@@ -9571,7 +10830,11 @@ HandMorph.prototype.processMouseMove = function (event) {
         }
 
         // if a morph is marked for grabbing, just grab it
-        if (this.mouseButton === 'left' && this.morphToGrab) {
+        if (this.mouseButton === 'left' &&
+                this.morphToGrab &&
+                (this.grabPosition.distanceTo(this.bounds.origin) >
+                    MorphicPreferences.grabThreshold)) {
+            this.setPosition(this.grabPosition);
             if (this.morphToGrab.isDraggable) {
                 morph = this.morphToGrab;
                 this.grab(morph);
@@ -9585,33 +10848,8 @@ HandMorph.prototype.processMouseMove = function (event) {
                 this.grab(morph);
                 this.grabOrigin = this.morphToGrab.situation();
             }
-            if (morph) {
-                // if the mouse has left its fullBounds, center it
-                fb = morph.fullBounds();
-                if (!fb.containsPoint(pos)) {
-                    this.bounds.origin = fb.center();
-                    this.grab(morph);
-                    this.setPosition(pos);
-                }
-            }
+            this.setPosition(pos);
         }
-
-/*
-    original, more cautious code for grabbing Morphs,
-    retained in case of needing to fall back:
-
-        if (morph === this.morphToGrab) {
-            if (morph.isDraggable) {
-                this.grab(morph);
-            } else if (morph.isTemplate) {
-                morph = morph.fullCopy();
-                morph.isTemplate = false;
-                morph.isDraggable = true;
-                this.grab(morph);
-            }
-        }
-*/
-
     }
 
     this.mouseOverList.forEach(function (old) {
@@ -9636,7 +10874,12 @@ HandMorph.prototype.processMouseMove = function (event) {
 
         // autoScrolling support:
         if (myself.children.length > 0) {
-            if (newMorph instanceof ScrollFrameMorph) {
+            if (newMorph instanceof ScrollFrameMorph &&
+                    newMorph.enableAutoScrolling &&
+                    newMorph.contents.allChildren().some(function (any) {
+                        return any.wantsDropOf(myself.children[0]);
+                    })
+            ) {
                 if (!newMorph.bounds.insetBy(
                         MorphicPreferences.scrollBarSize * 3
                     ).containsPoint(myself.bounds.origin)) {
@@ -9696,6 +10939,7 @@ HandMorph.prototype.processDrop = function (event) {
                 event.dataTransfer.getData('URL') : null,
         txt = event.dataTransfer ?
                 event.dataTransfer.getData('Text/HTML') : null,
+        suffix,
         src,
         target = this.morphAtPointer(),
         img = new Image(),
@@ -9725,7 +10969,7 @@ HandMorph.prototype.processDrop = function (event) {
             target = target.parent;
         }
         pic.onload = function () {
-            canvas = newCanvas(new Point(pic.width, pic.height));
+            canvas = newCanvas(new Point(pic.width, pic.height), true);
             canvas.getContext('2d').drawImage(pic, 0, 0);
             target.droppedImage(canvas, aFile.name);
         };
@@ -9771,6 +11015,21 @@ HandMorph.prototype.processDrop = function (event) {
         frd.readAsArrayBuffer(aFile);
     }
 
+    function readURL(url, callback) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4) {
+                if (request.responseText) {
+                    callback(request.responseText);
+                } else {
+                    throw new Error('unable to retrieve ' + url);
+                }
+            }
+        };
+        request.send();
+    }
+
     function parseImgURL(html) {
         var iurl = '',
             idx,
@@ -9805,10 +11064,11 @@ HandMorph.prototype.processDrop = function (event) {
             }
         }
     } else if (url) {
+        suffix = url.slice(url.lastIndexOf('.') + 1).toLowerCase();
         if (
             contains(
                 ['gif', 'png', 'jpg', 'jpeg', 'bmp'],
-                url.slice(url.lastIndexOf('.') + 1).toLowerCase()
+                suffix
             )
         ) {
             while (!target.droppedImage) {
@@ -9816,11 +11076,32 @@ HandMorph.prototype.processDrop = function (event) {
             }
             img = new Image();
             img.onload = function () {
-                canvas = newCanvas(new Point(img.width, img.height));
+                canvas = newCanvas(new Point(img.width, img.height), true);
                 canvas.getContext('2d').drawImage(img, 0, 0);
                 target.droppedImage(canvas);
             };
             img.src = url;
+        } else if (suffix === 'svg' && !MorphicPreferences.rasterizeSVGs) {
+            while (!target.droppedSVG) {
+                target = target.parent;
+            }
+            readURL(
+                url,
+                function (txt) {
+                    var pic = new Image();
+                    pic.onload = function () {
+                        target.droppedSVG(
+                            pic,
+                            url.slice(
+                                url.lastIndexOf('/') + 1,
+                                url.lastIndexOf('.')
+                            )
+                        );
+                    };
+                    pic.src = 'data:image/svg+xml;utf8,' +
+                        encodeURIComponent(txt);
+                }
+            );
         }
     } else if (txt) {
         while (!target.droppedImage) {
@@ -9828,7 +11109,7 @@ HandMorph.prototype.processDrop = function (event) {
         }
         img = new Image();
         img.onload = function () {
-            canvas = newCanvas(new Point(img.width, img.height));
+            canvas = newCanvas(new Point(img.width, img.height), true);
             canvas.getContext('2d').drawImage(img, 0, 0);
             target.droppedImage(canvas);
         };
@@ -9897,10 +11178,11 @@ WorldMorph.prototype.init = function (aCanvas, fillPage) {
     }
     this.isDevMode = false;
     this.broken = [];
+    this.animations = [];
     this.hand = new HandMorph(this);
     this.keyboardReceiver = null;
-    this.lastEditedText = null;
     this.cursor = null;
+    this.lastEditedText = null;
     this.activeMenu = null;
     this.activeHandle = null;
     this.virtualKeyboard = null;
@@ -9934,6 +11216,13 @@ WorldMorph.prototype.updateBroken = function () {
     this.broken = [];
 };
 
+WorldMorph.prototype.stepAnimations = function () {
+    this.animations.forEach(function (anim) {anim.step(); });
+    this.animations = this.animations.filter(function (anim) {
+        return anim.isActive;
+    });
+};
+
 WorldMorph.prototype.condenseDamages = function () {
     // collapse clustered damaged rectangles into their unions,
     // thereby reducing the array of brokens to a manageable size
@@ -9964,26 +11253,21 @@ WorldMorph.prototype.condenseDamages = function () {
 
 WorldMorph.prototype.doOneCycle = function () {
     this.stepFrame();
+    this.stepAnimations();
     this.updateBroken();
 };
 
 WorldMorph.prototype.fillPage = function () {
-    var pos = getDocumentPositionOf(this.worldCanvas),
-        clientHeight = window.innerHeight,
+    var clientHeight = window.innerHeight,
         clientWidth = window.innerWidth,
         myself = this;
 
+    this.worldCanvas.style.position = "absolute";
+    this.worldCanvas.style.left = "0px";
+    this.worldCanvas.style.right = "0px";
+    this.worldCanvas.style.width = "100%";
+    this.worldCanvas.style.height = "100%";
 
-    if (pos.x > 0) {
-        this.worldCanvas.style.position = "absolute";
-        this.worldCanvas.style.left = "0px";
-        pos.x = 0;
-    }
-    if (pos.y > 0) {
-        this.worldCanvas.style.position = "absolute";
-        this.worldCanvas.style.top = "0px";
-        pos.y = 0;
-    }
     if (document.documentElement.scrollTop) {
         // scrolled down b/c of viewport scaling
         clientHeight = document.documentElement.clientHeight;
@@ -10078,14 +11362,12 @@ WorldMorph.prototype.initVirtualKeyboard = function () {
                 myself.keyboardReceiver.processKeyDown(event);
             }
             // supress backspace override
-            if (event.keyIdentifier === 'U+0008' ||
-                    event.keyIdentifier === 'Backspace') {
+            if (event.keyCode === 8) {
                 event.preventDefault();
             }
             // supress tab override and make sure tab gets
             // received by all browsers
-            if (event.keyIdentifier === 'U+0009' ||
-                    event.keyIdentifier === 'Tab') {
+            if (event.keyCode === 9) {
                 if (myself.keyboardReceiver) {
                     myself.keyboardReceiver.processKeyPress(event);
                 }
@@ -10210,21 +11492,19 @@ WorldMorph.prototype.initEventListeners = function () {
                 myself.keyboardReceiver.processKeyDown(event);
             }
             // supress backspace override
-            if (event.keyIdentifier === 'U+0008' ||
-                    event.keyIdentifier === 'Backspace') {
+            if (event.keyCode === 8) {
                 event.preventDefault();
             }
             // supress tab override and make sure tab gets
             // received by all browsers
-            if (event.keyIdentifier === 'U+0009' ||
-                    event.keyIdentifier === 'Tab') {
+            if (event.keyCode === 9) {
                 if (myself.keyboardReceiver) {
                     myself.keyboardReceiver.processKeyPress(event);
                 }
                 event.preventDefault();
             }
-            if ((event.ctrlKey || event.metaKey) &&
-                    (event.keyIdentifier !== 'U+0056')) { // allow pasting-in
+            if ((event.ctrlKey && (!event.altKey) || event.metaKey) &&
+                    (event.keyCode !== 86)) { // allow pasting-in
                 event.preventDefault();
             }
         },
@@ -10324,21 +11604,13 @@ WorldMorph.prototype.initEventListeners = function () {
     };
 };
 
-WorldMorph.prototype.mouseDownLeft = function () {
-    nop();
-};
+WorldMorph.prototype.mouseDownLeft = nop;
 
-WorldMorph.prototype.mouseClickLeft = function () {
-    nop();
-};
+WorldMorph.prototype.mouseClickLeft = nop;
 
-WorldMorph.prototype.mouseDownRight = function () {
-    nop();
-};
+WorldMorph.prototype.mouseDownRight = nop;
 
-WorldMorph.prototype.mouseClickRight = function () {
-    nop();
-};
+WorldMorph.prototype.mouseClickRight = nop;
 
 WorldMorph.prototype.wantsDropOf = function () {
     // allow handle drops if any drops are allowed
@@ -10399,6 +11671,13 @@ WorldMorph.prototype.contextMenu = function () {
             'inspect',
             'open a window on\nall properties'
         );
+        menu.addItem(
+            "screenshot...",
+            function () {
+                window.open(this.fullImageClassic().toDataURL());
+            },
+            'open a new window\nwith a picture of this morph'
+        );
         menu.addLine();
         menu.addItem(
             "restore display",
@@ -10408,7 +11687,7 @@ WorldMorph.prototype.contextMenu = function () {
         menu.addItem(
             "fill page...",
             'fillPage',
-            'let the World automatically\nadjust to browser resizings'
+            'let the World automatically\nadjust to browser resizing'
         );
         if (useBlurredShadows) {
             menu.addItem(
@@ -10427,7 +11706,7 @@ WorldMorph.prototype.contextMenu = function () {
             "color...",
             function () {
                 this.pickColor(
-                    menu.title + '\ncolor:',
+                    menu.title + localize('\ncolor:'),
                     this.setColor,
                     this,
                     this.color
@@ -10667,9 +11946,6 @@ WorldMorph.prototype.edit = function (aStringOrTextMorph) {
     if (this.cursor) {
         this.cursor.destroy();
     }
-    if (this.lastEditedText) {
-        this.lastEditedText.clearSelection();
-    }
     this.cursor = new CursorMorph(aStringOrTextMorph);
     aStringOrTextMorph.parent.add(this.cursor);
     this.keyboardReceiver = this.cursor;
@@ -10687,6 +11963,11 @@ WorldMorph.prototype.edit = function (aStringOrTextMorph) {
             this.slide(aStringOrTextMorph);
         }
     }
+
+    if (this.lastEditedText !== aStringOrTextMorph) {
+        aStringOrTextMorph.escalateEvent('freshTextEdit', aStringOrTextMorph);
+    }
+    this.lastEditedText = aStringOrTextMorph;
 };
 
 WorldMorph.prototype.slide = function (aStringOrTextMorph) {
@@ -10732,10 +12013,10 @@ WorldMorph.prototype.slide = function (aStringOrTextMorph) {
 
 WorldMorph.prototype.stopEditing = function () {
     if (this.cursor) {
-        this.lastEditedText = this.cursor.target;
+        this.cursor.target.escalateEvent('reactToEdit', this.cursor.target);
+        this.cursor.target.clearSelection();
         this.cursor.destroy();
         this.cursor = null;
-        this.lastEditedText.escalateEvent('reactToEdit', this.lastEditedText);
     }
     this.keyboardReceiver = null;
     if (this.virtualKeyboard) {
@@ -10743,6 +12024,7 @@ WorldMorph.prototype.stopEditing = function () {
         document.body.removeChild(this.virtualKeyboard);
         this.virtualKeyboard = null;
     }
+    this.lastEditedText = null;
     this.worldCanvas.focus();
 };
 

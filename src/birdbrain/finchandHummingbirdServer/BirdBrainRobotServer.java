@@ -477,10 +477,11 @@ public class BirdBrainRobotServer {
 		}
 		frmBirdbrainRobotServer.getContentPane().setFocusTraversalPolicy(
 				new FocusTraversalOnArray(new Component[] { btnOpenSnap }));
-		if (shouldUpdate()) {
+	 // update currently crashes server when no internet
+		/*	if (shouldUpdate()) {
 			Desktop desktop = java.awt.Desktop.getDesktop();
 			int result = JOptionPane.showConfirmDialog(frmBirdbrainRobotServer,
-					"An Update is avaliable! Would you like to download the installer for it?");
+					"An Update is available! Would you like to download the installer for it?");
 			if (result == JOptionPane.YES_OPTION) {
 				URI linkToInstaller;
 				if (SystemUtils.IS_OS_WINDOWS) {
@@ -512,7 +513,7 @@ public class BirdBrainRobotServer {
 						}
 				}
 			}
-		}
+		}*/
 	}
 
 	public class CheckConnections implements Runnable {
@@ -928,7 +929,7 @@ public class BirdBrainRobotServer {
 		}
 		return false; // return false if no devices found
 	}
-
+/*
 	public boolean shouldUpdate() {
 		BufferedReader br = null;
 		Scanner s = null;
@@ -963,5 +964,5 @@ public class BirdBrainRobotServer {
 		if (newestVersion > currentVersion)
 			return true;
 		return false;
-	}
+	}*/
 }

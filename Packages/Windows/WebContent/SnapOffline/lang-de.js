@@ -6,7 +6,7 @@
 
     written by Jens Mönig
 
-    Copyright (C) 2014 by Jens Mönig
+    Copyright (C) 2017 by Jens Mönig
 
     This file is part of Snap!.
 
@@ -185,7 +185,7 @@ SnapTranslator.dict.de = {
     'translator_e-mail':
         'jens@moenig.org', // optional
     'last_changed':
-        '2015-02-23', // this, too, will appear in the Translators tab
+        '2017-01-10', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -225,6 +225,8 @@ SnapTranslator.dict.de = {
         'Skripte',
     'Costumes':
         'Kost\u00fcme',
+    'Backgrounds':
+        'Hintergr\u00fcnde',
     'Sounds':
         'Kl\u00e4nge',
 
@@ -411,6 +413,8 @@ SnapTranslator.dict.de = {
         'setze Stiftdicke auf %n',
     'stamp':
         'stemple',
+    'fill':
+        'male aus',
 
     // control:
     'when %greenflag clicked':
@@ -429,6 +433,8 @@ SnapTranslator.dict.de = {
         'vom Mauszeiger betreten',
     'mouse-departed':
         'vom Mauszeiger verlassen',
+    'when %b':
+        'Wenn %b',
     'when I receive %msgHat':
         'Wenn ich %msgHat empfange',
     'broadcast %msg':
@@ -523,6 +529,8 @@ SnapTranslator.dict.de = {
         'Stoppuhr',
     '%att of %spr':
         '%att von %spr',
+    'my %get':
+        'Attribut %get',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
@@ -680,6 +688,33 @@ SnapTranslator.dict.de = {
         'Bl\u00f6cke exportieren...',
     'show global custom block definitions as XML\nin a new browser window':
         'zeigt globale Benutzerblockdefinitionen\nals XML im Browser an',
+    'Unused blocks...':
+          'Ungebrauchte Bl\u00f6cke...',
+    'find unused global custom blocks\nand remove their definitions':
+        'nicht verwendete Bl\u00f6cke finden\nund entfernen',
+    'Remove unused blocks':
+        'Ungebrauchte Bl\u00f6cke entfernen',
+    'there are currently no unused\nglobal custom blocks in this project':
+        'momentan keine nicht verwendeten\nBl\u00f6cke in diesem Projekt',
+    'unused block(s) removed':
+        'ungebrauchte Bl\u00f6cke entfernt',
+    'Export summary...':
+        'Zusammenfassung exportieren...',
+    'open a new browser browser window\n with a summary of this project':
+        'eine Zusammenfassung diese Projects\nin einem neuen Browserfenster'
+            + 'anzeigen',
+    'Contents':
+        'Inhalt',
+    'Kind of':
+        'Eine Art',
+    'Part of':
+        'Ein Teil von',
+    'Parts':
+        'Teile',
+    'Blocks':
+        'Bausteine',
+    'For all Sprites':
+        'Allen gemeinsam',
     'Import tools':
         'Tools laden',
     'load the official library of\npowerful blocks':
@@ -780,6 +815,18 @@ SnapTranslator.dict.de = {
         'ausschalten, um Skripte\nnormal auszuf\u00fchren',
     'check to enable\nIDE animations':
         'einschalten um IDE-\nAnimationen zu erlauben',
+    'Flat design':
+        'Helles Design',
+    'Nested auto-wrapping':
+        'Automatisches Umklammern',
+    'Keyboard Editing':
+        'Tastaturunterstützung',
+    'Table support':
+        'Tabellenunterstützung',
+    'Table lines':
+        'Tabellen mit Linien',
+    'Visible stepping':
+        'Programmausführung verfolgen',
     'Thread safe scripts':
         'Threadsicherheit',
     'uncheck to allow\nscript reentrance':
@@ -798,6 +845,8 @@ SnapTranslator.dict.de = {
         'einschalten f\u00fcr flache\nPinselstrichenden',
     'uncheck for round ends of lines':
         'auschalten f\u00fcr runde\nPinselstrichenden',
+    'Inheritance support':
+        'Prototypische Vererbung',
 
     // inputs
     'with inputs':
@@ -840,6 +889,12 @@ SnapTranslator.dict.de = {
         'Umringen',
     'unringify':
         'Entringen',
+    'transient':
+        'nicht persistent',
+    'uncheck to save contents\nin the project':
+        'ausschalten, um den Inhalt\nim Projekt zu speichern',
+    'check to prevent contents\nfrom being saved':
+        'einschalten, um das Speichern des Inhalts\nim Projekt zu verhindern',
 
     // custom blocks:
     'delete block definition...':
@@ -878,6 +933,8 @@ SnapTranslator.dict.de = {
         'R\u00fcckg\u00e4ngig',
     'undo the last\nblock drop\nin this pane':
         'Setzen des letzten Blocks\nwiderrufen',
+    'redrop':
+        'Wiederherstellen',
     'scripts pic...':
         'Bild aller Scripte...',
     'open a new window\nwith a picture of all scripts':
@@ -904,6 +961,18 @@ SnapTranslator.dict.de = {
         'Los',
     'rename sound':
         'Klang umbenennen',
+
+    // lists and tables
+    'list view...':
+        'Listenansicht...',
+    'table view...':
+        'tabellarische Ansicht...',
+    'open in dialog...':
+        'in neuem Fenster \u00f6ffnen',
+    'reset columns':
+        'Spaltenbreiten zur\u00fccksetzen',
+    'items':
+        'Elemente',
 
     // dialogs
     // buttons
@@ -999,6 +1068,15 @@ SnapTranslator.dict.de = {
         'f\u00fcr alle',
     'for this sprite only':
         'nur f\u00fcr dieses Objekt',
+
+    // variables refactoring
+    'rename only\nthis reporter':
+        'nur diesen Block\numbenennen',
+    'rename all...':
+        'alle umbenennen...',
+    'rename all blocks that\naccess this variable':
+        'alle Blöcke umbenennen,\ndie diese Variable referenzieren',
+
 
     // block dialog
     'Change block':
@@ -1139,6 +1217,18 @@ SnapTranslator.dict.de = {
         'Leer',
 
     // graphical effects
+    'color':
+        'Farbe',
+    'fisheye':
+        'Fischauge',
+    'whirl':
+        'Wirbel',
+    'pixelate':
+        'Pixel',
+    'mosaic':
+        'Mosaik',
+    'saturation':
+        'Sättigung',
     'brightness':
         'Helligeit',
     'ghost':
@@ -1161,6 +1251,8 @@ SnapTranslator.dict.de = {
         'Pfeil nach rechts',
     'left arrow':
         'Pfeil nach links',
+    'any key':
+        'beliebige Taste',
     'a':
         'a',
     'b':
@@ -1241,6 +1333,8 @@ SnapTranslator.dict.de = {
     // math functions
     'abs':
         'Betrag',
+    'ceiling':
+        'Aufgerundet',
     'floor':
         'Abgerundet',
     'sqrt':
@@ -1289,10 +1383,46 @@ SnapTranslator.dict.de = {
         'Funktionsblock',
     'predicate':
         'Pr\u00e4dikat',
+    'sprite':
+        'Objekt',
 
     // list indices
     'last':
         'letztes',
     'any':
-        'beliebiges'
+        'beliebig',
+
+    // attributes
+    'neighbors':
+        'Nachbarn',
+    'self':
+        'selbst',
+    'other sprites':
+        'andere Objekte',
+    'parts':
+        'Teile',
+    'anchor':
+        'Verankerung',
+    'parent':
+        'Vorfahr',
+    'children':
+        'Abkömmlinge',
+    'clones':
+        'Klone',
+    'other clones':
+        'andere Klone',
+    'dangling?':
+        'Baumeln?',
+    'rotation x':
+        'Drehpunkt x',
+    'rotation y':
+        'Drehpunkt y',
+    'center x':
+        'Mittelpunkt x',
+    'center y':
+        'Mittelpunkt y',
+    'name':
+        'Name',
+    'stage':
+        'B\u00fchne',
 };

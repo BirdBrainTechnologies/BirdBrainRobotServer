@@ -117,6 +117,7 @@ public class PollServlet extends HttpServlet
 			  {
 				  response.getWriter().print("voltage/" + i + " " + Math.floor(100*(double)sensors[i-1]/51)/100 + '\n' + endofline);
 				  response.getWriter().print("raw/" + i + " " + (int)((double)sensors[i-1]/2.55) + '\n' + endofline);
+				  response.getWriter().print("raw2/" + i + " " + (int)((double)sensors[i-1]/2.55) + '\n' + endofline);
 			  }
 		  }
 		  else 
