@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="BirdBrainRobotServer" default="default" basedir=".">
+  
+  <taskdef name="jarbundler"
+  classpath="lib/jarbundler-core-3.3.0.jar"
+  classname="com.ultramixer.jarbundler.JarBundler"/>
+  
+  <target name="simple" description="Build an example application">
+      
+      <jarbundler dir="." verbose="true" showPlist="true"
+      name="BirdBrainRobotServer"
+      mainclass="birdbrain.finchandHummingbirdServer.BirdBrainRobotServer"
+      icon="dist/LightBulbKnockedOut.icns"
+      jar="BirdBrainRobotServer.jar"
+      stubfile="universalJavaApplicationStub"
+      useJavaXKey="true"
+      
+      version="1.82"
+      copyright="Copyright 2017 BirdBrain Technologies LLC"/>
+</target>
+  
+  
+  <!--  <property environment="env" /> -->
+<!--
+    <taskdef name="bundleapp"
+    classname="com.oracle.appbundler.AppBundlerTask"
+    classpath="lib/appbundler-1.0.jar" />
+    <target name="bundle-server">
+        <bundleapp outputdirectory="dist"
+            name="BirdBrainRobotServer"
+            displayname="BirdBrainRobotServer"
+            identifier="birdbrain.finchandHummingbirdServer.BirdBrainRobotServer"
+            mainclassname="birdbrain.finchandHummingbirdServer.BirdBrainRobotServer"
+            icon="dist/LightBulbKnockedOut.icns">
+            executableName="universalJavaApplicationStub">
+            <runtime dir="${env.JAVA_HOME}" />
+            <classpath file ="dist/BirdBrainRobotServer.jar" />
+            <classpath file ="dist/libhidapi32.dylib" />
+            <classpath file ="dist/libhidapi64.dylib" />
+            <librarypath file ="dist/libhidapi32.dylib" />
+            <librarypath file ="dist/libhidapi64.dylib" />
+            
+        </bundleapp>
+    </target>
+    
+
+
+<target name="bundle">
+    <taskdef name="bundleapp"
+    classpath="appbundler-1.0ea.jar"
+    classname="com.oracle.appbundler.AppBundlerTask"/>
+    <bundleapp
+        jvmrequired="1.8"
+        classpathref="runclasspathref"
+        outputdirectory="dist"
+        name="BirdBrainRobotServer"
+        displayname="BirdBrainRobotServer"
+        identifier="birdbrain.finchandHummingbirdServer.BirdBrainRobotServer"
+        shortversion="1.82"
+        version="1.82"
+        icon="dist/LightBulbKnockedOut.icns"
+        mainclassname="birdbrain.finchandHummingbirdServer.BirdBrainRobotServer"
+        copyright="2017 BirdBrain Technologies"
+        executableName="dist/universalJavaApplicationStub">
+        
+        <classpath file ="dist/BirdBrainRobotServer.jar" />
+        <librarypath file ="dist/libhidapi32.dylib" />
+        <librarypath file ="dist/libhidapi64.dylib" />
+    </bundleapp>
+</target>-->
+
+</project>
