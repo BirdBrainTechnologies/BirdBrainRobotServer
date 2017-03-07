@@ -408,9 +408,8 @@ public class BirdBrainRobotServer {
 									Runtime.getRuntime().exec(scratchPath);
 								} else {
 									String[] scratchPath = { "cmd", "/c",
-											"start", "Scratch 2", "/D",
-											scratch.getParentFile().getPath(),
-											"Scratch 2" };
+											"start",
+											"ScratchStarters/NoDevice.sb2" };
 									Runtime.getRuntime().exec(scratchPath);
 								}
 
@@ -426,30 +425,50 @@ public class BirdBrainRobotServer {
 								if (finchConnected && hummingbirdConnected) {
 									path = path
 											+ "/ScratchStarters/FinchHummingbirdStart.sb2";
-									String[] scratchPath = { "/usr/bin/open",
-											"-a", "/Applications/Scratch 2.app",
-											"--args", path };
-									Runtime.getRuntime().exec(scratchPath);
+
 								} else if (finchConnected) {
 									path = path
 											+ "/ScratchStarters/FinchStart.sb2";
-									String[] scratchPath = { "/usr/bin/open",
-											"-a", "/Applications/Scratch 2.app",
-											"--args", path };
-									Runtime.getRuntime().exec(scratchPath);
+									
 								} else if (hummingbirdConnected) {
 									path = path
 											+ "/ScratchStarters/HummingbirdStart.sb2";
-									String[] scratchPath = { "/usr/bin/open",
-											"-a", "/Applications/Scratch 2.app",
-											"--args", path };
-									Runtime.getRuntime().exec(scratchPath);
+									
 								} else {
-									String[] scratchPath = { "/usr/bin/open",
-											"-a",
-											"/Applications/Scratch 2.app" };
-									Runtime.getRuntime().exec(scratchPath);
+									path = path
+											+ "/ScratchStarters/NoDevice.sb2";
 								}
+								String[] scratchPath = { "/usr/bin/open", path };
+								Runtime.getRuntime().exec(scratchPath);
+								
+								/*		if (finchConnected && hummingbirdConnected) {
+								path = path
+										+ "/ScratchStarters/FinchHummingbirdStart.sb2";
+								String[] scratchPath = { "/usr/bin/open",
+										"-a", "/Applications/Scratch 2.app",
+										"--args", path };
+								Runtime.getRuntime().exec(scratchPath);
+							} else if (finchConnected) {
+								path = path
+										+ "/ScratchStarters/FinchStart.sb2";
+								String[] scratchPath = { "/usr/bin/open",
+										"-a", "/Applications/Scratch 2.app",
+										"--args", path };
+								Runtime.getRuntime().exec(scratchPath);
+							} else if (hummingbirdConnected) {
+								path = path
+										+ "/ScratchStarters/HummingbirdStart.sb2";
+								String[] scratchPath = { "/usr/bin/open",
+										"-a", "/Applications/Scratch 2.app",
+										"--args", path };
+								Runtime.getRuntime().exec(scratchPath);
+							} else {
+								String[] scratchPath = { "/usr/bin/open",
+										"-a",
+										"/Applications/Scratch 2.app" };
+								Runtime.getRuntime().exec(scratchPath);
+							}*/
+								
 
 							} else {
 								// Error message if Scratch not found

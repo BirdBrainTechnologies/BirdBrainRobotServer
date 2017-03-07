@@ -64,7 +64,7 @@ public class TextToSpeechServlet extends HttpServlet
   protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException
   {
 	  String urlPath = req.getPathInfo(); // get the path, which in this case is what the user wants to have spoken
-	  
-	  speak(urlPath.substring(1)); // say the path minus the leading slash
+	  int lastSlash = urlPath.lastIndexOf('/');
+	  speak(urlPath.substring(lastSlash+1)); // say the path minus the stuff before the last slash
   }
 }

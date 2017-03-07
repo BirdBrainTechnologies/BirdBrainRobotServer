@@ -72,6 +72,7 @@
     <ROW File="HummingbirdStart.sb2" Component_="FinchHummingbirdStart.sb2" FileName="HUMMIN~1.SB2|HummingbirdStart.sb2" Attributes="0" SourcePath="Windows\ScratchStarters\HummingbirdStart.sb2" SelfReg="false" NextFile="VERSION.txt"/>
     <ROW File="HummingbirdV2.hex" Component_="avrdude.conf" FileName="HUMMIN~1.HEX|HummingbirdV2.hex" Attributes="0" SourcePath="Windows\HummingbirdV2.hex" SelfReg="false" NextFile="javax.usb.properties"/>
     <ROW File="MANIFEST.MF" Component_="MANIFEST.MF" FileName="MANIFEST.MF" Attributes="0" SourcePath="Windows\WebContent\META-INF\MANIFEST.MF" SelfReg="false" NextFile="SayThisBlock.xml"/>
+    <ROW File="NoDevice.sb2" Component_="FinchHummingbirdStart.sb2" FileName="NoDevice.sb2" Attributes="0" SourcePath="Windows\ScratchStarters\NoDevice.sb2" SelfReg="false"/>
     <ROW File="README.md" Component_="agpl.txt" FileName="README.md" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\README.md" SelfReg="false" NextFile="readme.txt"/>
     <ROW File="SayThisBlock.xml" Component_="FinchHummingbirdSnapBlocks.xml" FileName="SAYTHI~1.XML|SayThisBlock.xml" Attributes="0" SourcePath="Windows\WebContent\SayThisBlock.xml" SelfReg="false" NextFile="web.xml"/>
     <ROW File="SnapConnectivityStrategy.pdf" Component_="agpl.txt" FileName="SNAP!C~1.PDF|Snap! Connectivity Strategy.pdf" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\Snap! Connectivity Strategy.pdf" SelfReg="false" NextFile="snap.html"/>
@@ -331,7 +332,7 @@
     <ROW File="xPosition.png" Component_="addCustomBlock.png" FileName="XPOSIT~1.PNG|xPosition.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\xPosition.png" SelfReg="false" NextFile="yPosition.png"/>
     <ROW File="xml.js" Component_="agpl.txt" FileName="xml.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\xml.js" SelfReg="false" NextFile="ypr.js"/>
     <ROW File="yPosition.png" Component_="addCustomBlock.png" FileName="YPOSIT~1.PNG|yPosition.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\yPosition.png" SelfReg="false" NextFile="history.txt"/>
-    <ROW File="ypr.js" Component_="agpl.txt" FileName="ypr.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\ypr.js" SelfReg="false"/>
+    <ROW File="ypr.js" Component_="agpl.txt" FileName="ypr.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\ypr.js" SelfReg="false" NextFile="NoDevice.sb2"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
     <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="." PackageFileName="BirdBrainRobotServerInstaller" Languages="en" InstallationType="4" UseLargeSchema="true"/>
