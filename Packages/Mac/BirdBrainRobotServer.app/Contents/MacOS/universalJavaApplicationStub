@@ -473,7 +473,7 @@ if [ -z ${JVMMainClass} ]; then
 elif [ -f "$JAVACMD" ] && [ -x "$JAVACMD" ] ; then
 
 	# enable drag&drop to the dock icon
-	export CFProcessPath="$0"
+	#export CFProcessPath="$0"
 	
 	# remove Apples ProcessSerialNumber from passthru arguments (#39)
 	if [[ $@ == -psn* ]] ; then
