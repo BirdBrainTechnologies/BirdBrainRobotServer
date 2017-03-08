@@ -6,11 +6,27 @@
 	<dict>
 		<key>Resources/Java/BirdBrainRobotServer.jar</key>
 		<data>
-		Kr53HfNUdGV3fs/sDAWu+A+Zq2c=
+		1KVOFsu+A/GmlRoyiNzPaRFGEX4=
 		</data>
 		<key>Resources/Java/HummingbirdV2.hex</key>
 		<data>
 		v5EXQ0Kfw33xyrOlfkHXRt1VchA=
+		</data>
+		<key>Resources/Java/LaunchBlankStart</key>
+		<data>
+		cP8jpwPAphmrrHFQ+a9MibiWqf8=
+		</data>
+		<key>Resources/Java/LaunchFinchHummingbirdStart</key>
+		<data>
+		wiXSRFk8OUkXPPl9uo2PXAqVTng=
+		</data>
+		<key>Resources/Java/LaunchFinchStart</key>
+		<data>
+		6soTWkI1kCACNGrZRkzuKt/jbso=
+		</data>
+		<key>Resources/Java/LaunchHummingbirdStart</key>
+		<data>
+		ps7jdAuf7RnzPvO1/fSipdYkYUM=
 		</data>
 		<key>Resources/Java/ScratchStarters/FinchHummingbirdStart.sb2</key>
 		<data>
@@ -24,13 +40,13 @@
 		<data>
 		Iu3vNlSV0yI59PzKn20esLcD9OE=
 		</data>
+		<key>Resources/Java/ScratchStarters/NoDevice.sb2</key>
+		<data>
+		54Y+othipXTOY9Pq3UjXQYymOkI=
+		</data>
 		<key>Resources/Java/VERSION.txt</key>
 		<data>
 		+hhDVKsEBoY26UM7XgdeNrsJqqY=
-		</data>
-		<key>Resources/Java/WebContent/.DS_Store</key>
-		<data>
-		3y++sUAKzaCQmjLBz2v0kvESHgc=
 		</data>
 		<key>Resources/Java/WebContent/FinchHummingbirdSnapBlocks.xml</key>
 		<data>
@@ -1111,11 +1127,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Kr53HfNUdGV3fs/sDAWu+A+Zq2c=
+			1KVOFsu+A/GmlRoyiNzPaRFGEX4=
 			</data>
 			<key>hash2</key>
 			<data>
-			rvhZJd9i6dSpr4IEIa/VA03Xj0vvKBBgm2MLdH+dq8A=
+			UhrnCMlBc7KDyP702BN+CPPBdI9Yvtp4ATi0APXj1Zs=
 			</data>
 		</dict>
 		<key>Resources/Java/HummingbirdV2.hex</key>
@@ -1127,6 +1143,50 @@
 			<key>hash2</key>
 			<data>
 			jEifUF+drCkVYAWgvhwDVlZIWibpmpGTqcQOv4A5WEs=
+			</data>
+		</dict>
+		<key>Resources/Java/LaunchBlankStart</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			cP8jpwPAphmrrHFQ+a9MibiWqf8=
+			</data>
+			<key>hash2</key>
+			<data>
+			gfvI+DCrE9PkQED0pTYhp4f7wDKT1knxhUXrszKOZ3c=
+			</data>
+		</dict>
+		<key>Resources/Java/LaunchFinchHummingbirdStart</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			wiXSRFk8OUkXPPl9uo2PXAqVTng=
+			</data>
+			<key>hash2</key>
+			<data>
+			SbKjy3oFm6uBa4djjl0dbxEGD+ErZkJC6f5a+DAzGVM=
+			</data>
+		</dict>
+		<key>Resources/Java/LaunchFinchStart</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			6soTWkI1kCACNGrZRkzuKt/jbso=
+			</data>
+			<key>hash2</key>
+			<data>
+			6d2aYPdNXyHwM04wmg4FncYwUbWBlKiV4aFnF9ohMyo=
+			</data>
+		</dict>
+		<key>Resources/Java/LaunchHummingbirdStart</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			ps7jdAuf7RnzPvO1/fSipdYkYUM=
+			</data>
+			<key>hash2</key>
+			<data>
+			ywbwz762DVz1hrPsDjXUQAl2uH3CzFM0K5hqX237J3E=
 			</data>
 		</dict>
 		<key>Resources/Java/ScratchStarters/FinchHummingbirdStart.sb2</key>
@@ -1160,6 +1220,17 @@
 			<key>hash2</key>
 			<data>
 			hDN2VRNWykaVKmgPIU5YdWs+uWcdYCEjjpnEUzsudA0=
+			</data>
+		</dict>
+		<key>Resources/Java/ScratchStarters/NoDevice.sb2</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			54Y+othipXTOY9Pq3UjXQYymOkI=
+			</data>
+			<key>hash2</key>
+			<data>
+			5QBzTM2nK0Ci1R1a13hEUDcp9FMp21sH5eCrTGaebCQ=
 			</data>
 		</dict>
 		<key>Resources/Java/VERSION.txt</key>
