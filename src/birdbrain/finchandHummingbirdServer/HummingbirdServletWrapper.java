@@ -335,7 +335,7 @@ public class HummingbirdServletWrapper {
 				int intensity = 0;
 				int lastSlash = setter.lastIndexOf('/');
 				try {
-					port = (int)(Double.parseDouble(setter.substring(4,lastSlash)));
+					port = (int)(Double.parseDouble(setter.substring(lastSlash-1,lastSlash)));
 					String tempIntense = setter.substring(lastSlash+1);
 					if (tempIntense.charAt(0) == '+'){
 						tempIntense = tempIntense.substring(1);
@@ -372,7 +372,7 @@ public class HummingbirdServletWrapper {
 				int lastSlash = setter.lastIndexOf('/');
 				try {
 					// in case someone sends "1.0" to port
-					port = (int)(Double.parseDouble(setter.substring(6,lastSlash)));
+					port = (int)(Double.parseDouble(setter.substring(lastSlash-1,lastSlash)));
 					
 					String tempSpeed = setter.substring(lastSlash+1);
 					if (tempSpeed.charAt(0) == '+'){
@@ -410,7 +410,7 @@ public class HummingbirdServletWrapper {
 				int position = 0;
 				int lastSlash = setter.lastIndexOf('/');
 				try {
-					port = (int)(Double.parseDouble(setter.substring(6,lastSlash)));	
+					port = (int)(Double.parseDouble(setter.substring(lastSlash-1,lastSlash)));	
 					
 					String tempPosition = setter.substring(lastSlash+1);
 					if (tempPosition.charAt(0) == '+'){
@@ -450,12 +450,15 @@ public class HummingbirdServletWrapper {
 				int greenLED = 0;
 				int blueLED = 0;
 				int [] slashes = new int[3];
-				slashes[0] = setter.indexOf('/', 7);
-				slashes[1] = setter.indexOf('/', slashes[0]+1);
 				slashes[2] = setter.lastIndexOf('/');
+				slashes[1] = setter.lastIndexOf('/', slashes[2]-1);
+				slashes[0] = setter.lastIndexOf('/', slashes[1]-1);
+				/*slashes[0] = setter.indexOf('/', 7);
+				slashes[1] = setter.indexOf('/', slashes[0]+1);
+				slashes[2] = setter.lastIndexOf('/');*/
 				
 				try {
-					port = (int)(Double.parseDouble(setter.substring(7,slashes[0])));
+					port = (int)(Double.parseDouble(setter.substring(slashes[0]-1,slashes[0])));
 					
 					String tempRed = setter.substring(slashes[0]+1, slashes[1]);
 					String tempGreen = setter.substring(slashes[1]+1, slashes[2]);
@@ -528,7 +531,7 @@ public class HummingbirdServletWrapper {
 				int lastSlash = setter.lastIndexOf('/');
 				
 				try {
-					port = (int)(Double.parseDouble(setter.substring(10,lastSlash)));
+					port = (int)(Double.parseDouble(setter.substring(lastSlash-1,lastSlash)));
 					
 					String tempIntense = setter.substring(lastSlash+1);
 					if (tempIntense.charAt(0) == '+'){
@@ -587,7 +590,7 @@ public class HummingbirdServletWrapper {
 				int intensity = 0;
 				int lastSlash = setter.lastIndexOf('/');
 				try {
-					port = (int)(Double.parseDouble(setter.substring(4,lastSlash)));
+					port = (int)(Double.parseDouble(setter.substring(lastSlash-1,lastSlash)));
 					intensity = leds[port-1] + (int)(Double.parseDouble(setter.substring(lastSlash+1)));
 				}
 				// You've just sent a non-number, so the "set" did not work 
@@ -615,7 +618,7 @@ public class HummingbirdServletWrapper {
 				int lastSlash = setter.lastIndexOf('/');
 				try {
 					// in case someone sends "1.0" to port
-					port = (int)(Double.parseDouble(setter.substring(6,lastSlash)));
+					port = (int)(Double.parseDouble(setter.substring(lastSlash-1,lastSlash)));
 					speed = motors[port-1] + (int)(Double.parseDouble(setter.substring(lastSlash+1)));
 				}
 				// You've just sent a non-number, so the "set" did not work 
@@ -642,7 +645,7 @@ public class HummingbirdServletWrapper {
 				int position = 0;
 				int lastSlash = setter.lastIndexOf('/');
 				try {
-					port = (int)(Double.parseDouble(setter.substring(6,lastSlash)));	
+					port = (int)(Double.parseDouble(setter.substring(lastSlash-1,lastSlash)));	
 					position = servos[port-1] + (int)(Double.parseDouble(setter.substring(lastSlash+1)));
 				}
 				// You've just sent a non-number, so the "set" did not work 
@@ -670,12 +673,16 @@ public class HummingbirdServletWrapper {
 				int greenLED = 0;
 				int blueLED = 0;
 				int [] slashes = new int[3];
+				slashes[2] = setter.lastIndexOf('/');
+				slashes[1] = setter.lastIndexOf('/', slashes[2]-1);
+				slashes[0] = setter.lastIndexOf('/', slashes[1]-1);
+				/*
 				slashes[0] = setter.indexOf('/', 7);
 				slashes[1] = setter.indexOf('/', slashes[0]+1);
-				slashes[2] = setter.lastIndexOf('/');
+				slashes[2] = setter.lastIndexOf('/');*/
 				
 				try {
-					port = (int)(Double.parseDouble(setter.substring(7,slashes[0])));
+					port = (int)(Double.parseDouble(setter.substring(slashes[0]-1,slashes[0])));
 					redLED = trileds[port-1][0] + (int)(Double.parseDouble(setter.substring(slashes[0]+1, slashes[1])));
 					greenLED = trileds[port-1][1] + (int)(Double.parseDouble(setter.substring(slashes[1]+1, slashes[2])));
 					blueLED = trileds[port-1][2] + (int)(Double.parseDouble(setter.substring(slashes[2]+1)));
@@ -718,7 +725,7 @@ public class HummingbirdServletWrapper {
 				int lastSlash = setter.lastIndexOf('/');
 				
 				try {
-					port = (int)(Double.parseDouble(setter.substring(10,lastSlash)));
+					port = (int)(Double.parseDouble(setter.substring(lastSlash-1,lastSlash)));
 					intensity = vibrations[port-1] + (int)(Double.parseDouble(setter.substring(lastSlash+1)));
 				}
 				// You've just sent a non-number, so the "set" did not work 

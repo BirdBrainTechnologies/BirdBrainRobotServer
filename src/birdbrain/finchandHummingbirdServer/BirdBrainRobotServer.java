@@ -408,9 +408,8 @@ public class BirdBrainRobotServer {
 									Runtime.getRuntime().exec(scratchPath);
 								} else {
 									String[] scratchPath = { "cmd", "/c",
-											"start", "Scratch 2", "/D",
-											scratch.getParentFile().getPath(),
-											"Scratch 2" };
+											"start",
+											"ScratchStarters/NoDevice.sb2" };
 									Runtime.getRuntime().exec(scratchPath);
 								}
 
@@ -426,30 +425,50 @@ public class BirdBrainRobotServer {
 								if (finchConnected && hummingbirdConnected) {
 									path = path
 											+ "/ScratchStarters/FinchHummingbirdStart.sb2";
-									String[] scratchPath = { "/usr/bin/open",
-											"-a", "/Applications/Scratch 2.app",
-											"--args", path };
-									Runtime.getRuntime().exec(scratchPath);
+
 								} else if (finchConnected) {
 									path = path
 											+ "/ScratchStarters/FinchStart.sb2";
-									String[] scratchPath = { "/usr/bin/open",
-											"-a", "/Applications/Scratch 2.app",
-											"--args", path };
-									Runtime.getRuntime().exec(scratchPath);
+									
 								} else if (hummingbirdConnected) {
 									path = path
 											+ "/ScratchStarters/HummingbirdStart.sb2";
-									String[] scratchPath = { "/usr/bin/open",
-											"-a", "/Applications/Scratch 2.app",
-											"--args", path };
-									Runtime.getRuntime().exec(scratchPath);
+									
 								} else {
-									String[] scratchPath = { "/usr/bin/open",
-											"-a",
-											"/Applications/Scratch 2.app" };
-									Runtime.getRuntime().exec(scratchPath);
+									path = path
+											+ "/ScratchStarters/NoDevice.sb2";
 								}
+								String[] scratchPath = { "/usr/bin/open", path };
+								Runtime.getRuntime().exec(scratchPath);
+								
+								/*		if (finchConnected && hummingbirdConnected) {
+								path = path
+										+ "/ScratchStarters/FinchHummingbirdStart.sb2";
+								String[] scratchPath = { "/usr/bin/open",
+										"-a", "/Applications/Scratch 2.app",
+										"--args", path };
+								Runtime.getRuntime().exec(scratchPath);
+							} else if (finchConnected) {
+								path = path
+										+ "/ScratchStarters/FinchStart.sb2";
+								String[] scratchPath = { "/usr/bin/open",
+										"-a", "/Applications/Scratch 2.app",
+										"--args", path };
+								Runtime.getRuntime().exec(scratchPath);
+							} else if (hummingbirdConnected) {
+								path = path
+										+ "/ScratchStarters/HummingbirdStart.sb2";
+								String[] scratchPath = { "/usr/bin/open",
+										"-a", "/Applications/Scratch 2.app",
+										"--args", path };
+								Runtime.getRuntime().exec(scratchPath);
+							} else {
+								String[] scratchPath = { "/usr/bin/open",
+										"-a",
+										"/Applications/Scratch 2.app" };
+								Runtime.getRuntime().exec(scratchPath);
+							}*/
+								
 
 							} else {
 								// Error message if Scratch not found
@@ -477,10 +496,11 @@ public class BirdBrainRobotServer {
 		}
 		frmBirdbrainRobotServer.getContentPane().setFocusTraversalPolicy(
 				new FocusTraversalOnArray(new Component[] { btnOpenSnap }));
-		if (shouldUpdate()) {
+	 // update currently crashes server when no internet
+		/*	if (shouldUpdate()) {
 			Desktop desktop = java.awt.Desktop.getDesktop();
 			int result = JOptionPane.showConfirmDialog(frmBirdbrainRobotServer,
-					"An Update is avaliable! Would you like to download the installer for it?");
+					"An Update is available! Would you like to download the installer for it?");
 			if (result == JOptionPane.YES_OPTION) {
 				URI linkToInstaller;
 				if (SystemUtils.IS_OS_WINDOWS) {
@@ -512,7 +532,7 @@ public class BirdBrainRobotServer {
 						}
 				}
 			}
-		}
+		}*/
 	}
 
 	public class CheckConnections implements Runnable {
@@ -928,7 +948,7 @@ public class BirdBrainRobotServer {
 		}
 		return false; // return false if no devices found
 	}
-
+/*
 	public boolean shouldUpdate() {
 		BufferedReader br = null;
 		Scanner s = null;
@@ -963,5 +983,5 @@ public class BirdBrainRobotServer {
 		if (newestVersion > currentVersion)
 			return true;
 		return false;
-	}
+	}*/
 }

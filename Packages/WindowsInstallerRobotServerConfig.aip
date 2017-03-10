@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="10.0" version="10.8" Modules="simple" RootPath="." Language="en" Id="{B3D0805E-551F-41C3-A8F3-ECD9CAE3E389}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="10.0" version="13.1" Modules="simple" RootPath="." Language="en" Id="{B3D0805E-551F-41C3-A8F3-ECD9CAE3E389}">
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
     <ROW Property="ALLUSERS" Value="1" MultiBuildValue="DefaultBuild:2"/>
@@ -7,21 +7,25 @@
     <ROW Property="ARPCONTACT" Value="Tom Lauwers"/>
     <ROW Property="ARPHELPLINK" Value="www.hummingbirdkit.com/learning/software/snap"/>
     <ROW Property="ARPHELPTELEPHONE" Value="888-371-6161"/>
-    <ROW Property="ARPPRODUCTICON" Value="LightBulbKnockedOut.exe" Type="8"/>
+    <ROW Property="ARPPRODUCTICON" Value="LightBulbKnockedOut_1.exe" Type="8"/>
     <ROW Property="ARPURLINFOABOUT" Value="www.hummingbirdkit.com/learning/software/snap"/>
     <ROW Property="ARPURLUPDATEINFO" Value="www.hummingbirdkit.com/learning/software/snap"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:4"/>
     <ROW Property="Manufacturer" Value="BirdBrain Technologies LLC"/>
-    <ROW Property="ProductCode" Value="1033:{AC6E1DD1-30B4-40B9-930A-69114B9235EB} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{21BAEC60-7F2E-42C8-81AD-5A8E14543D56} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="BirdBrain Robot Server"/>
-    <ROW Property="ProductVersion" Value="1.8.1" Type="32"/>
+    <ROW Property="ProductVersion" Value="1.8.2" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{8BDC4AC2-8872-4D1B-9C99-608A686ECD4A}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
     <ROW Property="WindowsType9XDisplay" MultiBuildValue="DefaultBuild:Windows 9x/ME" ValueLocId="-"/>
     <ROW Property="WindowsTypeNT40" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
     <ROW Property="WindowsTypeNT40Display" MultiBuildValue="DefaultBuild:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50Display" MultiBuildValue="DefaultBuild:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5X" MultiBuildValue="DefaultBuild:Windows XP/2003 RTM, Windows XP/2003 SP1, Windows XP SP2 x86" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="DefaultBuild:Windows XP/2003 RTM, Windows XP/2003 SP1, Windows XP SP2 x86" ValueLocId="-"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
@@ -41,8 +45,8 @@
     <ROW Component="FinchHummingbirdStart.sb2" ComponentId="{C6A3A48E-EDFA-42B9-BC39-0C97D5335B6F}" Directory_="ScratchStarters_Dir" Attributes="0" KeyPath="FinchHummingbirdStart.sb2" Type="0"/>
     <ROW Component="MANIFEST.MF" ComponentId="{BF087C89-DC96-408B-8E77-2DD9150290F6}" Directory_="METAINF_Dir" Attributes="0" KeyPath="MANIFEST.MF" Type="0"/>
     <ROW Component="ProductInformation" ComponentId="{10EB577F-69C6-4435-92DD-9AF02EFE52CE}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
-    <ROW Component="addCustomBlock.png" ComponentId="{9895119F-92C0-4E63-9340-F8BB3891E259}" Directory_="help_Dir" Attributes="0" KeyPath="addCustomBlock.png" Type="0"/>
-    <ROW Component="agpl.txt" ComponentId="{97B4EAB5-EBB6-450D-AB6F-D60B8577983D}" Directory_="SnapOffline_Dir" Attributes="0" KeyPath="agpl.txt" Type="0"/>
+    <ROW Component="addCustomBlock.png" ComponentId="{E515514F-8805-4BB1-8232-C64EE883232F}" Directory_="help_Dir" Attributes="0" KeyPath="addCustomBlock.png" Type="0"/>
+    <ROW Component="agpl.txt" ComponentId="{707803D3-401E-482D-8005-9AF9120021CD}" Directory_="SnapOffline_Dir" Attributes="0" KeyPath="agpl.txt" Type="0"/>
     <ROW Component="avrdude.conf" ComponentId="{088E0340-8C6E-4CC0-986A-393BB9FB3386}" Directory_="APPDIR" Attributes="0" KeyPath="avrdude.conf" Type="0"/>
     <ROW Component="avrdude.exe" ComponentId="{E76D3B42-78F9-40C2-99EA-100220023D78}" Directory_="APPDIR" Attributes="0" KeyPath="avrdude.exe"/>
     <ROW Component="libusb0.dll" ComponentId="{A1B9FE5E-7406-4556-84AE-9F5ED61CFDFD}" Directory_="APPDIR" Attributes="0" KeyPath="libusb0.dll"/>
@@ -56,6 +60,7 @@
     <ROW File="BLANK.png" Component_="addCustomBlock.png" FileName="BLANK.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\BLANK.png" SelfReg="false" NextFile="BLANKWIDE.png"/>
     <ROW File="BLANKWIDE.png" Component_="addCustomBlock.png" FileName="BLANKW~1.PNG|BLANKWIDE.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\BLANKWIDE.png" SelfReg="false" NextFile="bounceOffEdge.png"/>
     <ROW File="BirdBrainRobotServer.exe" Component_="BirdBrainRobotServer.exe" FileName="BIRDBR~1.EXE|BirdBrainRobotServer.exe" Attributes="0" SourcePath="Windows\BirdBrainRobotServer.exe" SelfReg="false" NextFile="avrdude.conf" DigSign="true"/>
+    <ROW File="FileSaver.min.js" Component_="agpl.txt" FileName="FILESA~1.JS|FileSaver.min.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\FileSaver.min.js" SelfReg="false" NextFile="gui.js"/>
     <ROW File="FinchHummingbirdSnapBlocks.xml" Component_="FinchHummingbirdSnapBlocks.xml" FileName="FINCHH~1.XML|FinchHummingbirdSnapBlocks.xml" Attributes="0" SourcePath="Windows\WebContent\FinchHummingbirdSnapBlocks.xml" SelfReg="false" NextFile="FinchLevel1.xml"/>
     <ROW File="FinchHummingbirdStart.sb2" Component_="FinchHummingbirdStart.sb2" FileName="FINCHH~1.SB2|FinchHummingbirdStart.sb2" Attributes="0" SourcePath="Windows\ScratchStarters\FinchHummingbirdStart.sb2" SelfReg="false" NextFile="FinchStart.sb2"/>
     <ROW File="FinchLevel1.xml" Component_="FinchHummingbirdSnapBlocks.xml" FileName="FINCHL~1.XML|FinchLevel1.xml" Attributes="0" SourcePath="Windows\WebContent\FinchLevel1.xml" SelfReg="false" NextFile="FinchLevel2.xml"/>
@@ -67,10 +72,12 @@
     <ROW File="HummingbirdStart.sb2" Component_="FinchHummingbirdStart.sb2" FileName="HUMMIN~1.SB2|HummingbirdStart.sb2" Attributes="0" SourcePath="Windows\ScratchStarters\HummingbirdStart.sb2" SelfReg="false" NextFile="VERSION.txt"/>
     <ROW File="HummingbirdV2.hex" Component_="avrdude.conf" FileName="HUMMIN~1.HEX|HummingbirdV2.hex" Attributes="0" SourcePath="Windows\HummingbirdV2.hex" SelfReg="false" NextFile="javax.usb.properties"/>
     <ROW File="MANIFEST.MF" Component_="MANIFEST.MF" FileName="MANIFEST.MF" Attributes="0" SourcePath="Windows\WebContent\META-INF\MANIFEST.MF" SelfReg="false" NextFile="SayThisBlock.xml"/>
+    <ROW File="NoDevice.sb2" Component_="FinchHummingbirdStart.sb2" FileName="NoDevice.sb2" Attributes="0" SourcePath="Windows\ScratchStarters\NoDevice.sb2" SelfReg="false"/>
     <ROW File="README.md" Component_="agpl.txt" FileName="README.md" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\README.md" SelfReg="false" NextFile="readme.txt"/>
     <ROW File="SayThisBlock.xml" Component_="FinchHummingbirdSnapBlocks.xml" FileName="SAYTHI~1.XML|SayThisBlock.xml" Attributes="0" SourcePath="Windows\WebContent\SayThisBlock.xml" SelfReg="false" NextFile="web.xml"/>
     <ROW File="SnapConnectivityStrategy.pdf" Component_="agpl.txt" FileName="SNAP!C~1.PDF|Snap! Connectivity Strategy.pdf" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\Snap! Connectivity Strategy.pdf" SelfReg="false" NextFile="snap.html"/>
     <ROW File="SnapManual.pdf" Component_="addCustomBlock.png" FileName="SNAPMA~1.PDF|SnapManual.pdf" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\SnapManual.pdf" SelfReg="false" NextFile="throw.png"/>
+    <ROW File="Thumbs.db" Component_="addCustomBlock.png" FileName="Thumbs.db" Attributes="6" SourcePath="Windows\WebContent\SnapOffline\help\Thumbs.db" SelfReg="false" NextFile="turn.png"/>
     <ROW File="VERSION.txt" Component_="avrdude.conf" FileName="VERSION.txt" Attributes="0" SourcePath="Windows\VERSION.txt" SelfReg="false" NextFile="agpl.txt"/>
     <ROW File="addCustomBlock.png" Component_="addCustomBlock.png" FileName="ADDCUS~1.PNG|addCustomBlock.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\addCustomBlock.png" SelfReg="false" NextFile="addVariable.png"/>
     <ROW File="addVariable.png" Component_="addCustomBlock.png" FileName="ADDVAR~1.PNG|addVariable.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\addVariable.png" SelfReg="false" NextFile="BLANK.png"/>
@@ -96,14 +103,16 @@
     <ROW File="cloud.js" Component_="agpl.txt" FileName="cloud.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\cloud.js" SelfReg="false" NextFile="contributingtoBYOB4.txt"/>
     <ROW File="combinewithitemsof.png" Component_="addCustomBlock.png" FileName="COMBIN~1.PNG|combinewithitemsof.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\combinewithitemsof.png" SelfReg="false" NextFile="comeToFront.png"/>
     <ROW File="comeToFront.png" Component_="addCustomBlock.png" FileName="COMETO~1.PNG|comeToFront.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\comeToFront.png" SelfReg="false" NextFile="contributinghelpscreenstoSNAP.txt"/>
-    <ROW File="contributinghelpscreenstoSNAP.txt" Component_="addCustomBlock.png" FileName="CONTRI~1.TXT|contributing help screens to SNAP!.txt" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\contributing help screens to SNAP!.txt" SelfReg="false" NextFile="deleteVariable.png"/>
+    <ROW File="contributinghelpscreenstoSNAP.txt" Component_="addCustomBlock.png" FileName="CONTRI~1.TXT|contributing help screens to SNAP!.txt" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\contributing help screens to SNAP!.txt" SelfReg="false" NextFile="createClone.png"/>
     <ROW File="contributingtoBYOB4.txt" Component_="agpl.txt" FileName="CONTRI~1.TXT|contributing to BYOB4.txt" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\contributing to BYOB4.txt" SelfReg="false" NextFile="favicon.ico"/>
+    <ROW File="createClone.png" Component_="addCustomBlock.png" FileName="CREATE~1.PNG|createClone.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\createClone.png" SelfReg="false" NextFile="deleteVariable.png"/>
     <ROW File="deleteVariable.png" Component_="addCustomBlock.png" FileName="DELETE~1.PNG|deleteVariable.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\deleteVariable.png" SelfReg="false" NextFile="direction.png"/>
     <ROW File="direction.png" Component_="addCustomBlock.png" FileName="DIRECT~1.PNG|direction.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\direction.png" SelfReg="false" NextFile="doAddToList.png"/>
     <ROW File="doAddToList.png" Component_="addCustomBlock.png" FileName="DOADDT~1.PNG|doAddToList.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doAddToList.png" SelfReg="false" NextFile="doAsk.png"/>
     <ROW File="doAsk.png" Component_="addCustomBlock.png" FileName="doAsk.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doAsk.png" SelfReg="false" NextFile="doBroadcast.png"/>
     <ROW File="doBroadcast.png" Component_="addCustomBlock.png" FileName="DOBROA~1.PNG|doBroadcast.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doBroadcast.png" SelfReg="false" NextFile="doBroadcastAndWait.png"/>
-    <ROW File="doBroadcastAndWait.png" Component_="addCustomBlock.png" FileName="DOBROA~2.PNG|doBroadcastAndWait.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doBroadcastAndWait.png" SelfReg="false" NextFile="doChangeTempo.png"/>
+    <ROW File="doBroadcastAndWait.png" Component_="addCustomBlock.png" FileName="DOBROA~2.PNG|doBroadcastAndWait.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doBroadcastAndWait.png" SelfReg="false" NextFile="doCallCC.png"/>
+    <ROW File="doCallCC.png" Component_="addCustomBlock.png" FileName="doCallCC.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doCallCC.png" SelfReg="false" NextFile="doChangeTempo.png"/>
     <ROW File="doChangeTempo.png" Component_="addCustomBlock.png" FileName="DOCHAN~1.PNG|doChangeTempo.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doChangeTempo.png" SelfReg="false" NextFile="doChangeVar.png"/>
     <ROW File="doChangeVar.png" Component_="addCustomBlock.png" FileName="DOCHAN~2.PNG|doChangeVar.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doChangeVar.png" SelfReg="false" NextFile="doDeclareVariables.png"/>
     <ROW File="doDeclareVariables.png" Component_="addCustomBlock.png" FileName="DODECL~1.PNG|doDeclareVariables.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doDeclareVariables.png" SelfReg="false" NextFile="doDeleteFromList.png"/>
@@ -116,7 +125,8 @@
     <ROW File="doHideVar.png" Component_="addCustomBlock.png" FileName="DOHIDE~1.PNG|doHideVar.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doHideVar.png" SelfReg="false" NextFile="doIf.png"/>
     <ROW File="doIf.png" Component_="addCustomBlock.png" FileName="doIf.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doIf.png" SelfReg="false" NextFile="doIfElse.png"/>
     <ROW File="doIfElse.png" Component_="addCustomBlock.png" FileName="doIfElse.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doIfElse.png" SelfReg="false" NextFile="doInsertInList.png"/>
-    <ROW File="doInsertInList.png" Component_="addCustomBlock.png" FileName="DOINSE~1.PNG|doInsertInList.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doInsertInList.png" SelfReg="false" NextFile="doPlayNote.png"/>
+    <ROW File="doInsertInList.png" Component_="addCustomBlock.png" FileName="DOINSE~1.PNG|doInsertInList.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doInsertInList.png" SelfReg="false" NextFile="doPauseAll.png"/>
+    <ROW File="doPauseAll.png" Component_="addCustomBlock.png" FileName="DOPAUS~1.PNG|doPauseAll.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doPauseAll.png" SelfReg="false" NextFile="doPlayNote.png"/>
     <ROW File="doPlayNote.png" Component_="addCustomBlock.png" FileName="DOPLAY~1.PNG|doPlayNote.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doPlayNote.png" SelfReg="false" NextFile="doPlaySoundUntilDone.png"/>
     <ROW File="doPlaySoundUntilDone.png" Component_="addCustomBlock.png" FileName="DOPLAY~2.PNG|doPlaySoundUntilDone.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doPlaySoundUntilDone.png" SelfReg="false" NextFile="doRepeat.png"/>
     <ROW File="doRepeat.png" Component_="addCustomBlock.png" FileName="doRepeat.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doRepeat.png" SelfReg="false" NextFile="doReplaceInList.png"/>
@@ -125,7 +135,8 @@
     <ROW File="doResetTimer.png" Component_="addCustomBlock.png" FileName="DORESE~1.PNG|doResetTimer.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doResetTimer.png" SelfReg="false" NextFile="doRest.png"/>
     <ROW File="doRest.png" Component_="addCustomBlock.png" FileName="doRest.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doRest.png" SelfReg="false" NextFile="doRun.png"/>
     <ROW File="doRun.png" Component_="addCustomBlock.png" FileName="doRun.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doRun.png" SelfReg="false" NextFile="doSayFor.png"/>
-    <ROW File="doSayFor.png" Component_="addCustomBlock.png" FileName="doSayFor.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doSayFor.png" SelfReg="false" NextFile="doSetTempo.png"/>
+    <ROW File="doSayFor.png" Component_="addCustomBlock.png" FileName="doSayFor.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doSayFor.png" SelfReg="false" NextFile="doSetFastTracking.png"/>
+    <ROW File="doSetFastTracking.png" Component_="addCustomBlock.png" FileName="DOSETF~1.PNG|doSetFastTracking.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doSetFastTracking.png" SelfReg="false" NextFile="doSetTempo.png"/>
     <ROW File="doSetTempo.png" Component_="addCustomBlock.png" FileName="DOSETT~1.PNG|doSetTempo.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doSetTempo.png" SelfReg="false" NextFile="doSetVar.png"/>
     <ROW File="doSetVar.png" Component_="addCustomBlock.png" FileName="doSetVar.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doSetVar.png" SelfReg="false" NextFile="doShowVar.png"/>
     <ROW File="doShowVar.png" Component_="addCustomBlock.png" FileName="DOSHOW~1.PNG|doShowVar.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doShowVar.png" SelfReg="false" NextFile="doStamp.png"/>
@@ -133,7 +144,9 @@
     <ROW File="doStop.png" Component_="addCustomBlock.png" FileName="doStop.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doStop.png" SelfReg="false" NextFile="doStopAll.png"/>
     <ROW File="doStopAll.png" Component_="addCustomBlock.png" FileName="DOSTOP~1.PNG|doStopAll.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doStopAll.png" SelfReg="false" NextFile="doStopAllSounds.png"/>
     <ROW File="doStopAllSounds.png" Component_="addCustomBlock.png" FileName="DOSTOP~2.PNG|doStopAllSounds.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doStopAllSounds.png" SelfReg="false" NextFile="doStopBlock.png"/>
-    <ROW File="doStopBlock.png" Component_="addCustomBlock.png" FileName="DOSTOP~3.PNG|doStopBlock.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doStopBlock.png" SelfReg="false" NextFile="doSwitchToCostume.png"/>
+    <ROW File="doStopBlock.png" Component_="addCustomBlock.png" FileName="DOSTOP~3.PNG|doStopBlock.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doStopBlock.png" SelfReg="false" NextFile="doStopOthers.png"/>
+    <ROW File="doStopOthers.png" Component_="addCustomBlock.png" FileName="DOSTOP~4.PNG|doStopOthers.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doStopOthers.png" SelfReg="false" NextFile="doStopThis.png"/>
+    <ROW File="doStopThis.png" Component_="addCustomBlock.png" FileName="DOSTOP~5.PNG|doStopThis.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doStopThis.png" SelfReg="false" NextFile="doSwitchToCostume.png"/>
     <ROW File="doSwitchToCostume.png" Component_="addCustomBlock.png" FileName="DOSWIT~1.PNG|doSwitchToCostume.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doSwitchToCostume.png" SelfReg="false" NextFile="doThink.png"/>
     <ROW File="doThink.png" Component_="addCustomBlock.png" FileName="doThink.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doThink.png" SelfReg="false" NextFile="doThinkFor.png"/>
     <ROW File="doThinkFor.png" Component_="addCustomBlock.png" FileName="DOTHIN~1.PNG|doThinkFor.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\doThinkFor.png" SelfReg="false" NextFile="doUntil.png"/>
@@ -146,16 +159,19 @@
     <ROW File="empty.png" Component_="addCustomBlock.png" FileName="empty.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\empty.png" SelfReg="false" NextFile="evaluate.png"/>
     <ROW File="evaluate.png" Component_="addCustomBlock.png" FileName="evaluate.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\evaluate.png" SelfReg="false" NextFile="evaluateCustomBlock.png"/>
     <ROW File="evaluateCustomBlock.png" Component_="addCustomBlock.png" FileName="EVALUA~1.PNG|evaluateCustomBlock.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\evaluateCustomBlock.png" SelfReg="false" NextFile="forto.png"/>
-    <ROW File="favicon.ico" Component_="agpl.txt" FileName="favicon.ico" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\favicon.ico" SelfReg="false" NextFile="gui.js"/>
+    <ROW File="favicon.ico" Component_="agpl.txt" FileName="favicon.ico" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\favicon.ico" SelfReg="false" NextFile="FileSaver.min.js"/>
     <ROW File="foreachitem.psd" Component_="addCustomBlock.png" FileName="FOREAC~1.PSD|foreachitem.psd" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\foreachitem.psd" SelfReg="false" NextFile="foreachof.png"/>
     <ROW File="foreachof.png" Component_="addCustomBlock.png" FileName="FOREAC~1.PNG|foreachof.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\foreachof.png" SelfReg="false" NextFile="fork.png"/>
     <ROW File="fork.png" Component_="addCustomBlock.png" FileName="fork.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\fork.png" SelfReg="false" NextFile="forward1.png"/>
     <ROW File="forto.png" Component_="addCustomBlock.png" FileName="FOR_TO~1.PNG|for=to.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\for=to.png" SelfReg="false" NextFile="foreachitem.psd"/>
     <ROW File="forward.png" Component_="addCustomBlock.png" FileName="forward.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\forward.png" SelfReg="false" NextFile="getCostumeIdx.png"/>
     <ROW File="forward1.png" Component_="addCustomBlock.png" FileName="FORWAR~1.PNG|forward (1).png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\forward (1).png" SelfReg="false" NextFile="forward.png"/>
-    <ROW File="getCostumeIdx.png" Component_="addCustomBlock.png" FileName="GETCOS~1.PNG|getCostumeIdx.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\getCostumeIdx.png" SelfReg="false" NextFile="getScale.png"/>
+    <ROW File="getCostumeIdx.png" Component_="addCustomBlock.png" FileName="GETCOS~1.PNG|getCostumeIdx.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\getCostumeIdx.png" SelfReg="false" NextFile="getLastAnswer.png"/>
+    <ROW File="getLastAnswer.png" Component_="addCustomBlock.png" FileName="GETLAS~1.PNG|getLastAnswer.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\getLastAnswer.png" SelfReg="false" NextFile="getLastMessage.png"/>
+    <ROW File="getLastMessage.png" Component_="addCustomBlock.png" FileName="GETLAS~2.PNG|getLastMessage.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\getLastMessage.png" SelfReg="false" NextFile="getScale.png"/>
     <ROW File="getScale.png" Component_="addCustomBlock.png" FileName="getScale.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\getScale.png" SelfReg="false" NextFile="getTempo.png"/>
-    <ROW File="getTempo.png" Component_="addCustomBlock.png" FileName="getTempo.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\getTempo.png" SelfReg="false" NextFile="goBack.png"/>
+    <ROW File="getTempo.png" Component_="addCustomBlock.png" FileName="getTempo.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\getTempo.png" SelfReg="false" NextFile="getTimer.png"/>
+    <ROW File="getTimer.png" Component_="addCustomBlock.png" FileName="getTimer.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\getTimer.png" SelfReg="false" NextFile="goBack.png"/>
     <ROW File="goBack.png" Component_="addCustomBlock.png" FileName="goBack.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\goBack.png" SelfReg="false" NextFile="gotoXY.png"/>
     <ROW File="gotoXY.png" Component_="addCustomBlock.png" FileName="gotoXY.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\gotoXY.png" SelfReg="false" NextFile="hide.png"/>
     <ROW File="gui.js" Component_="agpl.txt" FileName="gui.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\gui.js" SelfReg="false" NextFile="addCustomBlock.png"/>
@@ -163,10 +179,12 @@
     <ROW File="history.txt" Component_="agpl.txt" FileName="history.txt" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\history.txt" SelfReg="false" NextFile="index.html_1"/>
     <ROW File="ifthenelse.png" Component_="addCustomBlock.png" FileName="IFTHEN~1.PNG|ifthenelse.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\ifthenelse.png" SelfReg="false" NextFile="joinwords.png"/>
     <ROW File="index.html" Component_="FinchHummingbirdSnapBlocks.xml" FileName="INDEX~1.HTM|index.html" Attributes="0" SourcePath="Windows\WebContent\index.html" SelfReg="false" NextFile="MANIFEST.MF"/>
-    <ROW File="index.html_1" Component_="agpl.txt" FileName="INDEX~1.HTM|index.html" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\index.html" SelfReg="false" NextFile="langbn.js"/>
+    <ROW File="index.html_1" Component_="agpl.txt" FileName="INDEX~1.HTM|index.html" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\index.html" SelfReg="false" NextFile="langar.js"/>
     <ROW File="javax.usb.properties" Component_="avrdude.conf" FileName="JAVAXU~1.PRO|javax.usb.properties" Attributes="0" SourcePath="Windows\javax.usb.properties" SelfReg="false" NextFile="libusb0.dll"/>
     <ROW File="joinwords.png" Component_="addCustomBlock.png" FileName="JOINWO~1.PNG|joinwords.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\joinwords.png" SelfReg="false" NextFile="keepitemssuchthatfrom.png"/>
-    <ROW File="keepitemssuchthatfrom.png" Component_="addCustomBlock.png" FileName="KEEPIT~1.PNG|keepitemssuchthatfrom.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\keepitemssuchthatfrom.png" SelfReg="false" NextFile="listsentence.png"/>
+    <ROW File="keepitemssuchthatfrom.png" Component_="addCustomBlock.png" FileName="KEEPIT~1.PNG|keepitemssuchthatfrom.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\keepitemssuchthatfrom.png" SelfReg="false" NextFile="listarrowRightsentence.png"/>
+    <ROW File="langar.js" Component_="agpl.txt" FileName="lang-ar.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ar.js" SelfReg="false" NextFile="langbg.js"/>
+    <ROW File="langbg.js" Component_="agpl.txt" FileName="lang-bg.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-bg.js" SelfReg="false" NextFile="langbn.js"/>
     <ROW File="langbn.js" Component_="agpl.txt" FileName="lang-bn.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-bn.js" SelfReg="false" NextFile="langca.js"/>
     <ROW File="langca.js" Component_="agpl.txt" FileName="lang-ca.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ca.js" SelfReg="false" NextFile="langcs.js"/>
     <ROW File="langcs.js" Component_="agpl.txt" FileName="lang-cs.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-cs.js" SelfReg="false" NextFile="langde.js"/>
@@ -174,9 +192,15 @@
     <ROW File="langdk.js" Component_="agpl.txt" FileName="lang-dk.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-dk.js" SelfReg="false" NextFile="langel.js"/>
     <ROW File="langel.js" Component_="agpl.txt" FileName="lang-el.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-el.js" SelfReg="false" NextFile="langeo.js"/>
     <ROW File="langeo.js" Component_="agpl.txt" FileName="lang-eo.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-eo.js" SelfReg="false" NextFile="langes.js"/>
-    <ROW File="langes.js" Component_="agpl.txt" FileName="lang-es.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-es.js" SelfReg="false" NextFile="langfi.js"/>
+    <ROW File="langes.js" Component_="agpl.txt" FileName="lang-es.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-es.js" SelfReg="false" NextFile="langet.js"/>
+    <ROW File="langet.js" Component_="agpl.txt" FileName="lang-et.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-et.js" SelfReg="false" NextFile="langfi.js"/>
     <ROW File="langfi.js" Component_="agpl.txt" FileName="lang-fi.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-fi.js" SelfReg="false" NextFile="langfr.js"/>
-    <ROW File="langfr.js" Component_="agpl.txt" FileName="lang-fr.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-fr.js" SelfReg="false" NextFile="langit.js"/>
+    <ROW File="langfr.js" Component_="agpl.txt" FileName="lang-fr.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-fr.js" SelfReg="false" NextFile="langgl.js"/>
+    <ROW File="langgl.js" Component_="agpl.txt" FileName="lang-gl.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-gl.js" SelfReg="false" NextFile="langhr.js"/>
+    <ROW File="langhr.js" Component_="agpl.txt" FileName="lang-hr.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-hr.js" SelfReg="false" NextFile="langhu.js"/>
+    <ROW File="langhu.js" Component_="agpl.txt" FileName="lang-hu.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-hu.js" SelfReg="false" NextFile="langia.js"/>
+    <ROW File="langia.js" Component_="agpl.txt" FileName="lang-ia.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ia.js" SelfReg="false" NextFile="langid.js"/>
+    <ROW File="langid.js" Component_="agpl.txt" FileName="lang-id.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-id.js" SelfReg="false" NextFile="langit.js"/>
     <ROW File="langit.js" Component_="agpl.txt" FileName="lang-it.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-it.js" SelfReg="false" NextFile="langja.js"/>
     <ROW File="langja.js" Component_="agpl.txt" FileName="lang-ja.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ja.js" SelfReg="false" NextFile="langja_HIRA.js"/>
     <ROW File="langja_HIRA.js" Component_="agpl.txt" FileName="LANG-J~1.JS|lang-ja_HIRA.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ja_HIRA.js" SelfReg="false" NextFile="langkn.js"/>
@@ -187,84 +211,99 @@
     <ROW File="langno.js" Component_="agpl.txt" FileName="lang-no.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-no.js" SelfReg="false" NextFile="langpl.js"/>
     <ROW File="langpl.js" Component_="agpl.txt" FileName="lang-pl.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-pl.js" SelfReg="false" NextFile="langpt.js"/>
     <ROW File="langpt.js" Component_="agpl.txt" FileName="lang-pt.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-pt.js" SelfReg="false" NextFile="langpt_BR.js"/>
-    <ROW File="langpt_BR.js" Component_="agpl.txt" FileName="LANG-P~1.JS|lang-pt_BR.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-pt_BR.js" SelfReg="false" NextFile="langru.js"/>
+    <ROW File="langpt_BR.js" Component_="agpl.txt" FileName="LANG-P~1.JS|lang-pt_BR.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-pt_BR.js" SelfReg="false" NextFile="langro.js"/>
+    <ROW File="langro.js" Component_="agpl.txt" FileName="lang-ro.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ro.js" SelfReg="false" NextFile="langru.js"/>
     <ROW File="langru.js" Component_="agpl.txt" FileName="lang-ru.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ru.js" SelfReg="false" NextFile="langsi.js"/>
     <ROW File="langsi.js" Component_="agpl.txt" FileName="lang-si.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-si.js" SelfReg="false" NextFile="langsv.js"/>
     <ROW File="langsv.js" Component_="agpl.txt" FileName="lang-sv.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-sv.js" SelfReg="false" NextFile="langta.js"/>
     <ROW File="langta.js" Component_="agpl.txt" FileName="lang-ta.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-ta.js" SelfReg="false" NextFile="langte.js"/>
-    <ROW File="langte.js" Component_="agpl.txt" FileName="lang-te.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-te.js" SelfReg="false" NextFile="langtw.js"/>
-    <ROW File="langtw.js" Component_="agpl.txt" FileName="lang-tw.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-tw.js" SelfReg="false" NextFile="langzh.js"/>
-    <ROW File="langzh.js" Component_="agpl.txt" FileName="lang-zh.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-zh.js" SelfReg="false" NextFile="lists.js"/>
+    <ROW File="langte.js" Component_="agpl.txt" FileName="lang-te.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-te.js" SelfReg="false" NextFile="langtr.js"/>
+    <ROW File="langtr.js" Component_="agpl.txt" FileName="lang-tr.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-tr.js" SelfReg="false" NextFile="langzh_CN.js"/>
+    <ROW File="langzh_CN.js" Component_="agpl.txt" FileName="LANG-Z~1.JS|lang-zh_CN.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-zh_CN.js" SelfReg="false" NextFile="langzh_TW.js"/>
+    <ROW File="langzh_TW.js" Component_="agpl.txt" FileName="LANG-Z~2.JS|lang-zh_TW.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lang-zh_TW.js" SelfReg="false" NextFile="lists.js"/>
     <ROW File="libusb0.dll" Component_="libusb0.dll" FileName="libusb0.dll" Attributes="0" SourcePath="Windows\libusb0.dll" SelfReg="false" NextFile="libusb0.sys"/>
     <ROW File="libusb0.sys" Component_="avrdude.conf" FileName="libusb0.sys" Attributes="0" SourcePath="Windows\libusb0.sys" SelfReg="false" NextFile="FinchHummingbirdSnapBlocks.xml"/>
+    <ROW File="list_sentence.png" Component_="addCustomBlock.png" FileName="LIST-_~1.PNG|list-_sentence.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\list-_sentence.png" SelfReg="false" NextFile="lookLike_.png"/>
+    <ROW File="listarrowRightsentence.png" Component_="addCustomBlock.png" FileName="LIST$A~1.PNG|list$arrowRightsentence.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\list$arrowRightsentence.png" SelfReg="false" NextFile="listsentence.png"/>
     <ROW File="lists.js" Component_="agpl.txt" FileName="lists.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\lists.js" SelfReg="false" NextFile="locale.js"/>
-    <ROW File="listsentence.png" Component_="addCustomBlock.png" FileName="LIST--~1.PNG|list--sentence.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\list--sentence.png" SelfReg="false" NextFile="lookLike_.png"/>
-    <ROW File="locale.js" Component_="agpl.txt" FileName="locale.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\locale.js" SelfReg="false" NextFile="manifest.mf_1"/>
+    <ROW File="listsentence.png" Component_="addCustomBlock.png" FileName="LIST--~1.PNG|list--sentence.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\list--sentence.png" SelfReg="false" NextFile="list_sentence.png"/>
+    <ROW File="locale.js" Component_="agpl.txt" FileName="locale.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\locale.js" SelfReg="false" NextFile="minimal.html"/>
     <ROW File="lookLike_.png" Component_="addCustomBlock.png" FileName="LOOKLI~1.PNG|lookLike_.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\lookLike_.png" SelfReg="false" NextFile="mapover.png"/>
-    <ROW File="manifest.mf_1" Component_="agpl.txt" FileName="manifest.mf" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\manifest.mf" SelfReg="false" NextFile="minimal.html"/>
     <ROW File="mapover.png" Component_="addCustomBlock.png" FileName="mapover.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\mapover.png" SelfReg="false" NextFile="playSound.png"/>
     <ROW File="minimal.html" Component_="agpl.txt" FileName="MINIMA~1.HTM|minimal.html" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\minimal.html" SelfReg="false" NextFile="morphic.html"/>
     <ROW File="morphic.html" Component_="agpl.txt" FileName="MORPHI~1.HTM|morphic.html" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\morphic.html" SelfReg="false" NextFile="morphic.js"/>
     <ROW File="morphic.js" Component_="agpl.txt" FileName="morphic.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\morphic.js" SelfReg="false" NextFile="morphic.txt"/>
     <ROW File="morphic.txt" Component_="agpl.txt" FileName="morphic.txt" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\morphic.txt" SelfReg="false" NextFile="multiple.html"/>
     <ROW File="multiple.html" Component_="agpl.txt" FileName="MULTIP~1.HTM|multiple.html" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\multiple.html" SelfReg="false" NextFile="objects.js"/>
-    <ROW File="objects.js" Component_="agpl.txt" FileName="objects.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\objects.js" SelfReg="false" NextFile="paint.js"/>
+    <ROW File="objects.js" Component_="agpl.txt" FileName="objects.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\objects.js" SelfReg="false" NextFile="optimizations.txt"/>
+    <ROW File="optimizations.txt" Component_="agpl.txt" FileName="OPTIMI~1.TXT|optimizations.txt" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\optimizations.txt" SelfReg="false" NextFile="paint.js"/>
     <ROW File="paint.js" Component_="agpl.txt" FileName="paint.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\paint.js" SelfReg="false" NextFile="README.md"/>
     <ROW File="playSound.png" Component_="addCustomBlock.png" FileName="PLAYSO~1.PNG|playSound.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\playSound.png" SelfReg="false" NextFile="playSound_.png"/>
     <ROW File="playSound_.png" Component_="addCustomBlock.png" FileName="PLAYSO~2.PNG|playSound_.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\playSound_.png" SelfReg="false" NextFile="receiveClick.png"/>
-    <ROW File="readme.txt" Component_="agpl.txt" FileName="readme.txt" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\readme.txt" SelfReg="false" NextFile="scriptsPaneTexture.gif"/>
+    <ROW File="readme.txt" Component_="agpl.txt" FileName="readme.txt" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\readme.txt" SelfReg="false" NextFile="sha512.js"/>
     <ROW File="receiveClick.png" Component_="addCustomBlock.png" FileName="RECEIV~1.PNG|receiveClick.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\receiveClick.png" SelfReg="false" NextFile="receiveGo.png"/>
-    <ROW File="receiveGo.png" Component_="addCustomBlock.png" FileName="RECEIV~2.PNG|receiveGo.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\receiveGo.png" SelfReg="false" NextFile="receiveKey.png"/>
-    <ROW File="receiveKey.png" Component_="addCustomBlock.png" FileName="RECEIV~3.PNG|receiveKey.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\receiveKey.png" SelfReg="false" NextFile="receiveMessage.png"/>
-    <ROW File="receiveMessage.png" Component_="addCustomBlock.png" FileName="RECEIV~4.PNG|receiveMessage.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\receiveMessage.png" SelfReg="false" NextFile="reifyPredicate.png"/>
+    <ROW File="receiveGo.png" Component_="addCustomBlock.png" FileName="RECEIV~2.PNG|receiveGo.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\receiveGo.png" SelfReg="false" NextFile="receiveInteraction.png"/>
+    <ROW File="receiveInteraction.png" Component_="addCustomBlock.png" FileName="RECEIV~3.PNG|receiveInteraction.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\receiveInteraction.png" SelfReg="false" NextFile="receiveKey.png"/>
+    <ROW File="receiveKey.png" Component_="addCustomBlock.png" FileName="RECEIV~4.PNG|receiveKey.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\receiveKey.png" SelfReg="false" NextFile="receiveMessage.png"/>
+    <ROW File="receiveMessage.png" Component_="addCustomBlock.png" FileName="RECEIV~5.PNG|receiveMessage.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\receiveMessage.png" SelfReg="false" NextFile="receiveOnClone.png"/>
+    <ROW File="receiveOnClone.png" Component_="addCustomBlock.png" FileName="RECEIV~6.PNG|receiveOnClone.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\receiveOnClone.png" SelfReg="false" NextFile="reifyPredicate.png"/>
     <ROW File="reifyPredicate.png" Component_="addCustomBlock.png" FileName="REIFYP~1.PNG|reifyPredicate.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reifyPredicate.png" SelfReg="false" NextFile="reifyReporter.png"/>
     <ROW File="reifyReporter.png" Component_="addCustomBlock.png" FileName="REIFYR~1.PNG|reifyReporter.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reifyReporter.png" SelfReg="false" NextFile="reifyScript.png"/>
-    <ROW File="reifyScript.png" Component_="addCustomBlock.png" FileName="REIFYS~1.PNG|reifyScript.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reifyScript.png" SelfReg="false" NextFile="reportAnd.png"/>
-    <ROW File="reportAnd.png" Component_="addCustomBlock.png" FileName="REPORT~1.PNG|reportAnd.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportAnd.png" SelfReg="false" NextFile="reportCDR.png"/>
-    <ROW File="reportCDR.png" Component_="addCustomBlock.png" FileName="REPORT~2.PNG|reportCDR.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportCDR.png" SelfReg="false" NextFile="reportColorIsTouchingColor.png"/>
-    <ROW File="reportCONS.png" Component_="addCustomBlock.png" FileName="REPORT~4.PNG|reportCONS.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportCONS.png" SelfReg="false" NextFile="reportDifference.png"/>
-    <ROW File="reportColorIsTouchingColor.png" Component_="addCustomBlock.png" FileName="REPORT~3.PNG|reportColorIsTouchingColor.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportColorIsTouchingColor.png" SelfReg="false" NextFile="reportCONS.png"/>
-    <ROW File="reportDifference.png" Component_="addCustomBlock.png" FileName="REPORT~5.PNG|reportDifference.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportDifference.png" SelfReg="false" NextFile="reportDistanceTo.png"/>
-    <ROW File="reportDistanceTo.png" Component_="addCustomBlock.png" FileName="REPORT~6.PNG|reportDistanceTo.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportDistanceTo.png" SelfReg="false" NextFile="reportEquals.png"/>
-    <ROW File="reportEquals.png" Component_="addCustomBlock.png" FileName="REPORT~7.PNG|reportEquals.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportEquals.png" SelfReg="false" NextFile="reportercatch.png"/>
-    <ROW File="reportFalse.png" Component_="addCustomBlock.png" FileName="REPOR~11.PNG|reportFalse.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportFalse.png" SelfReg="false" NextFile="reportGetVar.png"/>
-    <ROW File="reportGetVar.png" Component_="addCustomBlock.png" FileName="REPOR~12.PNG|reportGetVar.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportGetVar.png" SelfReg="false" NextFile="reportGreaterThan.png"/>
-    <ROW File="reportGreaterThan.png" Component_="addCustomBlock.png" FileName="REPOR~13.PNG|reportGreaterThan.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportGreaterThan.png" SelfReg="false" NextFile="reportIsA.png"/>
-    <ROW File="reportIsA.png" Component_="addCustomBlock.png" FileName="REPOR~14.PNG|reportIsA.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportIsA.png" SelfReg="false" NextFile="reportIsIdentical.png"/>
-    <ROW File="reportIsIdentical.png" Component_="addCustomBlock.png" FileName="REPOR~15.PNG|reportIsIdentical.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportIsIdentical.png" SelfReg="false" NextFile="reportJoinWords.png"/>
-    <ROW File="reportJoinWords.png" Component_="addCustomBlock.png" FileName="REPOR~16.PNG|reportJoinWords.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportJoinWords.png" SelfReg="false" NextFile="reportKeyPressed.png"/>
-    <ROW File="reportKeyPressed.png" Component_="addCustomBlock.png" FileName="REPOR~17.PNG|reportKeyPressed.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportKeyPressed.png" SelfReg="false" NextFile="reportLastAnswer.png"/>
-    <ROW File="reportLastAnswer.png" Component_="addCustomBlock.png" FileName="REPOR~18.PNG|reportLastAnswer.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportLastAnswer.png" SelfReg="false" NextFile="reportLessThan.png"/>
-    <ROW File="reportLessThan.png" Component_="addCustomBlock.png" FileName="REPOR~19.PNG|reportLessThan.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportLessThan.png" SelfReg="false" NextFile="reportLetter.png"/>
-    <ROW File="reportLetter.png" Component_="addCustomBlock.png" FileName="REPOR~20.PNG|reportLetter.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportLetter.png" SelfReg="false" NextFile="reportListContainsItem.png"/>
-    <ROW File="reportListContainsItem.png" Component_="addCustomBlock.png" FileName="REPOR~21.PNG|reportListContainsItem.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportListContainsItem.png" SelfReg="false" NextFile="reportListItem.png"/>
-    <ROW File="reportListItem.png" Component_="addCustomBlock.png" FileName="REPOR~22.PNG|reportListItem.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportListItem.png" SelfReg="false" NextFile="reportListLength.png"/>
-    <ROW File="reportListLength.png" Component_="addCustomBlock.png" FileName="REPOR~23.PNG|reportListLength.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportListLength.png" SelfReg="false" NextFile="reportModulus.png"/>
-    <ROW File="reportModulus.png" Component_="addCustomBlock.png" FileName="REPOR~24.PNG|reportModulus.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportModulus.png" SelfReg="false" NextFile="reportMonadic.png"/>
-    <ROW File="reportMonadic.png" Component_="addCustomBlock.png" FileName="REPOR~25.PNG|reportMonadic.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportMonadic.png" SelfReg="false" NextFile="reportMouseDown.png"/>
-    <ROW File="reportMouseDown.png" Component_="addCustomBlock.png" FileName="REPOR~26.PNG|reportMouseDown.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportMouseDown.png" SelfReg="false" NextFile="reportMouseX.png"/>
-    <ROW File="reportMouseX.png" Component_="addCustomBlock.png" FileName="REPOR~27.PNG|reportMouseX.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportMouseX.png" SelfReg="false" NextFile="reportMouseY.png"/>
-    <ROW File="reportMouseY.png" Component_="addCustomBlock.png" FileName="REPOR~28.PNG|reportMouseY.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportMouseY.png" SelfReg="false" NextFile="reportNewList.png"/>
-    <ROW File="reportNewList.png" Component_="addCustomBlock.png" FileName="REPOR~29.PNG|reportNewList.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportNewList.png" SelfReg="false" NextFile="reportNot.png"/>
-    <ROW File="reportNot.png" Component_="addCustomBlock.png" FileName="REPOR~30.PNG|reportNot.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportNot.png" SelfReg="false" NextFile="reportOr.png"/>
+    <ROW File="reifyScript.png" Component_="addCustomBlock.png" FileName="REIFYS~1.PNG|reifyScript.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reifyScript.png" SelfReg="false" NextFile="removeClone.png"/>
+    <ROW File="removeClone.png" Component_="addCustomBlock.png" FileName="REMOVE~1.PNG|removeClone.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\removeClone.png" SelfReg="false" NextFile="reportAnd.png"/>
+    <ROW File="reportAnd.png" Component_="addCustomBlock.png" FileName="REPORT~1.PNG|reportAnd.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportAnd.png" SelfReg="false" NextFile="reportAttributeOf.png"/>
+    <ROW File="reportAttributeOf.png" Component_="addCustomBlock.png" FileName="REPORT~2.PNG|reportAttributeOf.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportAttributeOf.png" SelfReg="false" NextFile="reportCallCC.png"/>
+    <ROW File="reportCDR.png" Component_="addCustomBlock.png" FileName="REPORT~4.PNG|reportCDR.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportCDR.png" SelfReg="false" NextFile="reportColorIsTouchingColor.png"/>
+    <ROW File="reportCONS.png" Component_="addCustomBlock.png" FileName="REPORT~6.PNG|reportCONS.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportCONS.png" SelfReg="false" NextFile="reportDate.png"/>
+    <ROW File="reportCallCC.png" Component_="addCustomBlock.png" FileName="REPORT~3.PNG|reportCallCC.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportCallCC.png" SelfReg="false" NextFile="reportCDR.png"/>
+    <ROW File="reportColorIsTouchingColor.png" Component_="addCustomBlock.png" FileName="REPORT~5.PNG|reportColorIsTouchingColor.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportColorIsTouchingColor.png" SelfReg="false" NextFile="reportCONS.png"/>
+    <ROW File="reportDate.png" Component_="addCustomBlock.png" FileName="REPORT~7.PNG|reportDate.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportDate.png" SelfReg="false" NextFile="reportDifference.png"/>
+    <ROW File="reportDifference.png" Component_="addCustomBlock.png" FileName="REPORT~8.PNG|reportDifference.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportDifference.png" SelfReg="false" NextFile="reportDistanceTo.png"/>
+    <ROW File="reportDistanceTo.png" Component_="addCustomBlock.png" FileName="REPORT~9.PNG|reportDistanceTo.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportDistanceTo.png" SelfReg="false" NextFile="reportEquals.png"/>
+    <ROW File="reportEquals.png" Component_="addCustomBlock.png" FileName="REPOR~10.PNG|reportEquals.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportEquals.png" SelfReg="false" NextFile="reportercatch.png"/>
+    <ROW File="reportFalse.png" Component_="addCustomBlock.png" FileName="REPOR~14.PNG|reportFalse.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportFalse.png" SelfReg="false" NextFile="reportGetVar.png"/>
+    <ROW File="reportGetVar.png" Component_="addCustomBlock.png" FileName="REPOR~15.PNG|reportGetVar.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportGetVar.png" SelfReg="false" NextFile="reportGreaterThan.png"/>
+    <ROW File="reportGreaterThan.png" Component_="addCustomBlock.png" FileName="REPOR~16.PNG|reportGreaterThan.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportGreaterThan.png" SelfReg="false" NextFile="reportIsA.png"/>
+    <ROW File="reportIsA.png" Component_="addCustomBlock.png" FileName="REPOR~17.PNG|reportIsA.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportIsA.png" SelfReg="false" NextFile="reportIsFastTracking.png"/>
+    <ROW File="reportIsFastTracking.png" Component_="addCustomBlock.png" FileName="REPOR~18.PNG|reportIsFastTracking.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportIsFastTracking.png" SelfReg="false" NextFile="reportIsIdentical.png"/>
+    <ROW File="reportIsIdentical.png" Component_="addCustomBlock.png" FileName="REPOR~19.PNG|reportIsIdentical.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportIsIdentical.png" SelfReg="false" NextFile="reportJoinWords.png"/>
+    <ROW File="reportJSFunction.png" Component_="addCustomBlock.png" FileName="REPOR~21.PNG|reportJSFunction.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportJSFunction.png" SelfReg="false" NextFile="reportKeyPressed.png"/>
+    <ROW File="reportJoinWords.png" Component_="addCustomBlock.png" FileName="REPOR~20.PNG|reportJoinWords.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportJoinWords.png" SelfReg="false" NextFile="reportJSFunction.png"/>
+    <ROW File="reportKeyPressed.png" Component_="addCustomBlock.png" FileName="REPOR~22.PNG|reportKeyPressed.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportKeyPressed.png" SelfReg="false" NextFile="reportLastAnswer.png"/>
+    <ROW File="reportLastAnswer.png" Component_="addCustomBlock.png" FileName="REPOR~23.PNG|reportLastAnswer.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportLastAnswer.png" SelfReg="false" NextFile="reportLessThan.png"/>
+    <ROW File="reportLessThan.png" Component_="addCustomBlock.png" FileName="REPOR~24.PNG|reportLessThan.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportLessThan.png" SelfReg="false" NextFile="reportLetter.png"/>
+    <ROW File="reportLetter.png" Component_="addCustomBlock.png" FileName="REPOR~25.PNG|reportLetter.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportLetter.png" SelfReg="false" NextFile="reportListContainsItem.png"/>
+    <ROW File="reportListContainsItem.png" Component_="addCustomBlock.png" FileName="REPOR~26.PNG|reportListContainsItem.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportListContainsItem.png" SelfReg="false" NextFile="reportListItem.png"/>
+    <ROW File="reportListItem.png" Component_="addCustomBlock.png" FileName="REPOR~27.PNG|reportListItem.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportListItem.png" SelfReg="false" NextFile="reportListLength.png"/>
+    <ROW File="reportListLength.png" Component_="addCustomBlock.png" FileName="REPOR~28.PNG|reportListLength.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportListLength.png" SelfReg="false" NextFile="reportModulus.png"/>
+    <ROW File="reportModulus.png" Component_="addCustomBlock.png" FileName="REPOR~29.PNG|reportModulus.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportModulus.png" SelfReg="false" NextFile="reportMonadic.png"/>
+    <ROW File="reportMonadic.png" Component_="addCustomBlock.png" FileName="REPOR~30.PNG|reportMonadic.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportMonadic.png" SelfReg="false" NextFile="reportMouseDown.png"/>
+    <ROW File="reportMouseDown.png" Component_="addCustomBlock.png" FileName="REPOR~31.PNG|reportMouseDown.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportMouseDown.png" SelfReg="false" NextFile="reportMouseX.png"/>
+    <ROW File="reportMouseX.png" Component_="addCustomBlock.png" FileName="REPOR~32.PNG|reportMouseX.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportMouseX.png" SelfReg="false" NextFile="reportMouseY.png"/>
+    <ROW File="reportMouseY.png" Component_="addCustomBlock.png" FileName="REPOR~33.PNG|reportMouseY.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportMouseY.png" SelfReg="false" NextFile="reportNewList.png"/>
+    <ROW File="reportNewList.png" Component_="addCustomBlock.png" FileName="REPOR~34.PNG|reportNewList.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportNewList.png" SelfReg="false" NextFile="reportNot.png"/>
+    <ROW File="reportNot.png" Component_="addCustomBlock.png" FileName="REPOR~35.PNG|reportNot.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportNot.png" SelfReg="false" NextFile="reportOr.png"/>
     <ROW File="reportOr.png" Component_="addCustomBlock.png" FileName="reportOr.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportOr.png" SelfReg="false" NextFile="reportProduct.png"/>
-    <ROW File="reportProduct.png" Component_="addCustomBlock.png" FileName="REPOR~31.PNG|reportProduct.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportProduct.png" SelfReg="false" NextFile="reportQuotient.png"/>
-    <ROW File="reportQuotient.png" Component_="addCustomBlock.png" FileName="REPOR~32.PNG|reportQuotient.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportQuotient.png" SelfReg="false" NextFile="reportRandom.png"/>
-    <ROW File="reportRandom.png" Component_="addCustomBlock.png" FileName="REPOR~33.PNG|reportRandom.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportRandom.png" SelfReg="false" NextFile="reportRound.png"/>
-    <ROW File="reportRound.png" Component_="addCustomBlock.png" FileName="REPOR~34.PNG|reportRound.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportRound.png" SelfReg="false" NextFile="reportStringSize.png"/>
-    <ROW File="reportStringSize.png" Component_="addCustomBlock.png" FileName="REPOR~35.PNG|reportStringSize.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportStringSize.png" SelfReg="false" NextFile="reportSum.png"/>
-    <ROW File="reportSum.png" Component_="addCustomBlock.png" FileName="REPOR~36.PNG|reportSum.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportSum.png" SelfReg="false" NextFile="reportTimer.png"/>
-    <ROW File="reportTimer.png" Component_="addCustomBlock.png" FileName="REPOR~37.PNG|reportTimer.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportTimer.png" SelfReg="false" NextFile="reportTouchingColor.png"/>
-    <ROW File="reportTouchingColor.png" Component_="addCustomBlock.png" FileName="REPOR~38.PNG|reportTouchingColor.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportTouchingColor.png" SelfReg="false" NextFile="reportTouchingObject.png"/>
-    <ROW File="reportTouchingObject.png" Component_="addCustomBlock.png" FileName="REPOR~39.PNG|reportTouchingObject.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportTouchingObject.png" SelfReg="false" NextFile="reportTrue.png"/>
-    <ROW File="reportTrue.png" Component_="addCustomBlock.png" FileName="REPOR~40.PNG|reportTrue.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportTrue.png" SelfReg="false" NextFile="reportUnicode.png"/>
-    <ROW File="reportUnicode.png" Component_="addCustomBlock.png" FileName="REPOR~41.PNG|reportUnicode.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportUnicode.png" SelfReg="false" NextFile="reportUnicodeAsLetter.png"/>
-    <ROW File="reportUnicodeAsLetter.png" Component_="addCustomBlock.png" FileName="REPOR~42.PNG|reportUnicodeAsLetter.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportUnicodeAsLetter.png" SelfReg="false" NextFile="sentencelist.png"/>
-    <ROW File="reporterIf.png" Component_="addCustomBlock.png" FileName="REPOR~10.PNG|reporterIf.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reporterIf.png" SelfReg="false" NextFile="reportFalse.png"/>
-    <ROW File="reportercatch.png" Component_="addCustomBlock.png" FileName="REPORT~8.PNG|reporter-catch.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reporter-catch.png" SelfReg="false" NextFile="reporterthrow.png"/>
-    <ROW File="reporterthrow.png" Component_="addCustomBlock.png" FileName="REPORT~9.PNG|reporter-throw.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reporter-throw.png" SelfReg="false" NextFile="reporterIf.png"/>
-    <ROW File="scriptsPaneTexture.gif" Component_="agpl.txt" FileName="SCRIPT~1.GIF|scriptsPaneTexture.gif" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\scriptsPaneTexture.gif" SelfReg="false" NextFile="sha512.js"/>
-    <ROW File="sentencelist.png" Component_="addCustomBlock.png" FileName="SENTEN~1.PNG|sentence--list.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\sentence--list.png" SelfReg="false" NextFile="setBrightness.png"/>
+    <ROW File="reportProduct.png" Component_="addCustomBlock.png" FileName="REPOR~36.PNG|reportProduct.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportProduct.png" SelfReg="false" NextFile="reportQuotient.png"/>
+    <ROW File="reportQuotient.png" Component_="addCustomBlock.png" FileName="REPOR~37.PNG|reportQuotient.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportQuotient.png" SelfReg="false" NextFile="reportRandom.png"/>
+    <ROW File="reportRandom.png" Component_="addCustomBlock.png" FileName="REPOR~38.PNG|reportRandom.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportRandom.png" SelfReg="false" NextFile="reportRound.png"/>
+    <ROW File="reportRound.png" Component_="addCustomBlock.png" FileName="REPOR~39.PNG|reportRound.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportRound.png" SelfReg="false" NextFile="reportStringSize.png"/>
+    <ROW File="reportStringSize.png" Component_="addCustomBlock.png" FileName="REPOR~40.PNG|reportStringSize.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportStringSize.png" SelfReg="false" NextFile="reportSum.png"/>
+    <ROW File="reportSum.png" Component_="addCustomBlock.png" FileName="REPOR~41.PNG|reportSum.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportSum.png" SelfReg="false" NextFile="reportTextSplit.png"/>
+    <ROW File="reportTextSplit.png" Component_="addCustomBlock.png" FileName="REPOR~42.PNG|reportTextSplit.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportTextSplit.png" SelfReg="false" NextFile="reportTimer.png"/>
+    <ROW File="reportTimer.png" Component_="addCustomBlock.png" FileName="REPOR~43.PNG|reportTimer.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportTimer.png" SelfReg="false" NextFile="reportTouchingColor.png"/>
+    <ROW File="reportTouchingColor.png" Component_="addCustomBlock.png" FileName="REPOR~44.PNG|reportTouchingColor.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportTouchingColor.png" SelfReg="false" NextFile="reportTouchingObject.png"/>
+    <ROW File="reportTouchingObject.png" Component_="addCustomBlock.png" FileName="REPOR~45.PNG|reportTouchingObject.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportTouchingObject.png" SelfReg="false" NextFile="reportTrue.png"/>
+    <ROW File="reportTrue.png" Component_="addCustomBlock.png" FileName="REPOR~46.PNG|reportTrue.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportTrue.png" SelfReg="false" NextFile="reportUnicode.png"/>
+    <ROW File="reportURL.png" Component_="addCustomBlock.png" FileName="REPOR~49.PNG|reportURL.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportURL.png" SelfReg="false" NextFile="sentencearrowRightlist.png"/>
+    <ROW File="reportUnicode.png" Component_="addCustomBlock.png" FileName="REPOR~47.PNG|reportUnicode.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportUnicode.png" SelfReg="false" NextFile="reportUnicodeAsLetter.png"/>
+    <ROW File="reportUnicodeAsLetter.png" Component_="addCustomBlock.png" FileName="REPOR~48.PNG|reportUnicodeAsLetter.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reportUnicodeAsLetter.png" SelfReg="false" NextFile="reportURL.png"/>
+    <ROW File="reporterIf.png" Component_="addCustomBlock.png" FileName="REPOR~13.PNG|reporterIf.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reporterIf.png" SelfReg="false" NextFile="reportFalse.png"/>
+    <ROW File="reportercatch.png" Component_="addCustomBlock.png" FileName="REPOR~11.PNG|reporter-catch.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reporter-catch.png" SelfReg="false" NextFile="reporterthrow.png"/>
+    <ROW File="reporterthrow.png" Component_="addCustomBlock.png" FileName="REPOR~12.PNG|reporter-throw.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\reporter-throw.png" SelfReg="false" NextFile="reporterIf.png"/>
+    <ROW File="sentence_list.png" Component_="addCustomBlock.png" FileName="SENTEN~3.PNG|sentence-_list.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\sentence-_list.png" SelfReg="false" NextFile="setBrightness.png"/>
+    <ROW File="sentencearrowRightlist.png" Component_="addCustomBlock.png" FileName="SENTEN~1.PNG|sentence$arrowRightlist.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\sentence$arrowRightlist.png" SelfReg="false" NextFile="sentencelist.png"/>
+    <ROW File="sentencelist.png" Component_="addCustomBlock.png" FileName="SENTEN~2.PNG|sentence--list.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\sentence--list.png" SelfReg="false" NextFile="sentence_list.png"/>
     <ROW File="setBrightness.png" Component_="addCustomBlock.png" FileName="SETBRI~1.PNG|setBrightness.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\setBrightness.png" SelfReg="false" NextFile="setColor.png"/>
     <ROW File="setColor.png" Component_="addCustomBlock.png" FileName="setColor.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\setColor.png" SelfReg="false" NextFile="setEffect.png"/>
     <ROW File="setEffect.png" Component_="addCustomBlock.png" FileName="SETEFF~1.PNG|setEffect.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\setEffect.png" SelfReg="false" NextFile="setHeading.png"/>
@@ -276,11 +315,13 @@
     <ROW File="setYPosition.png" Component_="addCustomBlock.png" FileName="SETYPO~1.PNG|setYPosition.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\setYPosition.png" SelfReg="false" NextFile="show.png"/>
     <ROW File="sha512.js" Component_="agpl.txt" FileName="sha512.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\sha512.js" SelfReg="false" NextFile="SnapConnectivityStrategy.pdf"/>
     <ROW File="show.png" Component_="addCustomBlock.png" FileName="show.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\show.png" SelfReg="false" NextFile="SnapManual.pdf"/>
-    <ROW File="snap.html" Component_="agpl.txt" FileName="SNAP~1.HTM|snap.html" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\snap.html" SelfReg="false" NextFile="snap_logo_sm.png"/>
+    <ROW File="snap.html" Component_="agpl.txt" FileName="SNAP~1.HTM|snap.html" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\snap.html" SelfReg="false" NextFile="snap_fast.html"/>
+    <ROW File="snap_fast.html" Component_="agpl.txt" FileName="SNAP_F~1.HTM|snap_fast.html" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\snap_fast.html" SelfReg="false" NextFile="snap_logo_sm.png"/>
     <ROW File="snap_logo_sm.png" Component_="agpl.txt" FileName="SNAP_L~1.PNG|snap_logo_sm.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\snap_logo_sm.png" SelfReg="false" NextFile="store.js"/>
-    <ROW File="store.js" Component_="agpl.txt" FileName="store.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\store.js" SelfReg="false" NextFile="threads.js"/>
+    <ROW File="store.js" Component_="agpl.txt" FileName="store.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\store.js" SelfReg="false" NextFile="tables.js"/>
+    <ROW File="tables.js" Component_="agpl.txt" FileName="tables.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\tables.js" SelfReg="false" NextFile="threads.js"/>
     <ROW File="threads.js" Component_="agpl.txt" FileName="threads.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\threads.js" SelfReg="false" NextFile="tools.xml"/>
-    <ROW File="throw.png" Component_="addCustomBlock.png" FileName="throw.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\throw.png" SelfReg="false" NextFile="turn.png"/>
+    <ROW File="throw.png" Component_="addCustomBlock.png" FileName="throw.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\throw.png" SelfReg="false" NextFile="Thumbs.db"/>
     <ROW File="tools.xml" Component_="agpl.txt" FileName="tools.xml" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\tools.xml" SelfReg="false" NextFile="translatingSnap.txt"/>
     <ROW File="translatingSnap.txt" Component_="agpl.txt" FileName="TRANSL~1.TXT|translating Snap.txt" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\translating Snap.txt" SelfReg="false" NextFile="widgets.js"/>
     <ROW File="turn.png" Component_="addCustomBlock.png" FileName="turn.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\turn.png" SelfReg="false" NextFile="turnLeft.png"/>
@@ -291,11 +332,10 @@
     <ROW File="xPosition.png" Component_="addCustomBlock.png" FileName="XPOSIT~1.PNG|xPosition.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\xPosition.png" SelfReg="false" NextFile="yPosition.png"/>
     <ROW File="xml.js" Component_="agpl.txt" FileName="xml.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\xml.js" SelfReg="false" NextFile="ypr.js"/>
     <ROW File="yPosition.png" Component_="addCustomBlock.png" FileName="YPOSIT~1.PNG|yPosition.png" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\help\yPosition.png" SelfReg="false" NextFile="history.txt"/>
-    <ROW File="ypr.js" Component_="agpl.txt" FileName="ypr.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\ypr.js" SelfReg="false"/>
+    <ROW File="ypr.js" Component_="agpl.txt" FileName="ypr.js" Attributes="0" SourcePath="Windows\WebContent\SnapOffline\ypr.js" SelfReg="false" NextFile="NoDevice.sb2"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
     <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="." PackageFileName="BirdBrainRobotServerInstaller" Languages="en" InstallationType="4" UseLargeSchema="true"/>
-    <ATTRIBUTE name="CurrentBuild" value="DefaultBuild"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
     <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
@@ -345,11 +385,11 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
     <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
     <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
+    <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
     <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
     <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
     <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
     <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
-    <ROW Action="AI_ResolveLocalizedCredentials" Type="1" Source="aicustact.dll" Target="GetLocalizedCredentials"/>
     <ROW Action="AI_SETMIXINSTLOCATION" Type="1" Source="aicustact.dll" Target="MixedAllUsersInstallLocation"/>
     <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
     <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
@@ -358,7 +398,7 @@
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
-    <ROW Name="LightBulbKnockedOut.exe" SourcePath="..\..\..\..\Dropbox\LogoFiles\LightBulbKnockedOut.ico" Index="0"/>
+    <ROW Name="LightBulbKnockedOut_1.exe" SourcePath="..\..\..\..\Dropbox\LogoFiles\BirdBrain\LightBulbKnockedOut.ico" Index="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
@@ -366,18 +406,20 @@
     <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1501"/>
     <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1399"/>
     <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
-    <ROW Action="AI_ResolveLocalizedCredentials" Sequence="51"/>
     <ROW Action="AI_SETMIXINSTLOCATION" Sequence="748"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
     <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
     <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>
-    <ROW Action="AI_ResolveLocalizedCredentials" Sequence="52"/>
     <ROW Action="AI_SETMIXINSTLOCATION" Sequence="748"/>
-    <ROW Action="AI_DpiContentScale" Sequence="51"/>
+    <ROW Action="AI_DpiContentScale" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
     <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on the following Windows versions: [WindowsTypeNT40Display]" DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="DefaultBuild"/>
+    <ROW Condition="(VersionNT64 OR ((VersionNT &lt;&gt; 501) OR (ServicePackLevel = 3))) AND ((VersionNT &lt;&gt; 502) OR (ServicePackLevel = 2))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="DefaultBuild"/>
     <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]" DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="DefaultBuild"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">

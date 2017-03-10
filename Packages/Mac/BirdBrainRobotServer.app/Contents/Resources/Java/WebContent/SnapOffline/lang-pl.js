@@ -186,11 +186,11 @@ SnapTranslator.dict.pl = {
     'language_name':
         'Polski', // the name as it should appear in the language menu
     'language_translator':
-        'Witek Kranas', // your name for the Translators tab
+        'Witek Kranas & deKrain', // your name for the Translators tab
     'translator_e-mail':
         'witek@oeiizk.waw.pl', // optional
     'last_changed':
-        '2013-08-05', // this, too, will appear in the Translators tab
+        '2016-11-14', // this, too, will appear in the Translators tab
 
     // GUI
     // control bar:
@@ -248,8 +248,8 @@ SnapTranslator.dict.pl = {
         'tylko lewo/prawo',
 
     // new sprite button:
-    'add a new sprite':
-        'dodaj nowego duszka',
+    'add a new Turtle sprite':
+        'dodaj nowego duszka-żółwia',
 
     // tab help
     'costumes tab help':
@@ -331,7 +331,7 @@ SnapTranslator.dict.pl = {
     'switch to costume %cst':
         'zmie\u0144 kostium na %cst',
     'next costume':
-        'nast\u0118pny kostium',
+        'następny kostium',
     'costume #':
         'kostium nr ',
     'say %s for %n secs':
@@ -343,7 +343,7 @@ SnapTranslator.dict.pl = {
     'think %s':
         'pomy\u015Bl %s',
     'Hello!':
-        'Hallo!',
+        'Cześć!',
     'Hmm...':
         'Hmm...',
     'change %eff effect by %n':
@@ -415,14 +415,28 @@ SnapTranslator.dict.pl = {
         'ustaw rozmiar pisaka na %n',
     'stamp':
         'stempluj',
+    'fill':
+        'wype\u0142nij',
 
     // control:
     'when %greenflag clicked':
         'kiedy klikni\u0119to %greenflag',
     'when %keyHat key pressed':
         'kiedy klawisz %keyHat naci\u015Bni\u0119ty',
-    'when I am clicked':
-        'kiedy duszek klikni\u0119ty',
+    'when I am %interaction':
+        'kiedy zostanę %interaction',
+    'clicked':
+        'kliknięty',
+    'pressed':
+        'naciśnięty',
+    'dropped':
+        'upuszczony',
+    'mouse-entered':
+        'najechany przez kursor myszy',
+    'mouse-departed':
+        'opuszczony przez kursor myszy',
+    'when %b':
+        'kiedy %b',
     'when I receive %msgHat':
         'kiedy otrzymam %msgHat',
     'broadcast %msg':
@@ -435,6 +449,8 @@ SnapTranslator.dict.pl = {
         'wiadomo\u015B\u0107',
     'any message':
         'dowolna wiadomo\u015B\u0107',
+    'warp %c':
+        'wykonaj b\u0142yskawicznie %c',
     'wait %n secs':
         'czekaj %n s',
     'wait until %b':
@@ -451,12 +467,20 @@ SnapTranslator.dict.pl = {
         'je\u017Celi %b to %c w przeciwnym razie %c',
     'report %s':
         'zwr\u00F3\u0107 %s',
-    'stop block':
-        'zatrzymaj ten blok',
-    'stop script':
-        'zatrzymaj ten skrypt',
-    'stop all %stop':
-        'zatrzymaj wszystko %stop',
+    'stop %stopChoices':
+        'zatrzymaj %stopChoices',
+    'all':
+        'wszystko',
+    'this script':
+        'ten skrypt',
+    'this block':
+        'ten blok',
+    'stop %stopOthersChoices':
+        'zatrzymaj %stopOthersChoices',
+    'all but this script':
+        'wszystko oprócz tego skryptu',
+    'other scripts in sprite':
+        'inne skrypty tego duszka',
     'pause all %pause':
         'pauzuj wszystko %pause',
     'run %cmdRing %inputs':
@@ -469,8 +493,6 @@ SnapTranslator.dict.pl = {
         'uruchom %cmdRing z kontynuacj\u0105',
     'call %cmdRing w/continuation':
         'wywo\u0142aj %cmdRing z kontynuacj\u0105',
-    'warp %c':
-        'warp %c',
     'when I start as a clone':
         'kiedy zaczynam jako klon',
     'create a clone of %cln':
@@ -498,7 +520,7 @@ SnapTranslator.dict.pl = {
     'mouse y':
         'y myszy',
     'mouse down?':
-        'przycisk myszy naci\u015Bni\u0119ty',
+        'przycisk myszy naci\u015Bni\u0119ty?',
     'key %key pressed?':
         'klawisz %key naci\u015Bni\u0119ty?',
     'distance to %dst':
@@ -509,6 +531,8 @@ SnapTranslator.dict.pl = {
         'czasomierz',
     '%att of %spr':
         '%att z %spr',
+    'my %get':
+        'atrybut %get',
     'http:// %s':
         'http:// %s',
     'turbo mode?':
@@ -545,9 +569,9 @@ SnapTranslator.dict.pl = {
     'join %words':
         'po\u0142\u0105cz %words',
     'hello':
-        'Hallo',
+        'witaj',
     'world':
-        's\u0142owo',
+        'świecie',
     'letter %n of %s':
         'litera %n z %s',
     'length of %s':
@@ -673,6 +697,8 @@ SnapTranslator.dict.pl = {
         'Logowanie...',
     'Signup...':
         'Rejestracja...',
+    'Reset Password...':
+        'Zresetuj hasło...',
 
     // settings menu
     'Language...':
@@ -737,6 +763,28 @@ SnapTranslator.dict.pl = {
         'odznacz, aby wykona\u0107 skrypt\nz normaln\u0105 szybko\u015Bci\u0105',
     'check to enable\nIDE animations':
         'zaznacz, aby pozwoli\u0107\nna animacje IDE',
+    'Flat design':
+        'Prosty wygl\u0105d',
+    'check for alternative\nGUI design':
+        'zaznacz, aby prze\u0142\u0105czy\u0107\nna alternatywny wygl\u0105d GUI',
+    'uncheck for default\nGUI design':
+        'odznacz, aby przywr\u00F3ci\u0107\nnormalny wygląd GUI',
+    'Nested auto-wrapping':
+        'Przyleganie do kompletnych skrypt\u00F3w',
+    'check to enable auto-wrapping\ninside nested block stacks':
+        'zaznacz, aby umo\u017Cliwi\u0107 przyleganie\nC-blok\u00F3w do skrypt\u00F3w z czapkami',
+    'uncheck to confine auto-wrapping\nto top-level block stacks':
+        'odznacz, aby uniemo\u017Cliwi\u0107 przyleganie\nC-blok\u00F3w do skrypt\u00F3w z czapkami',
+    'Keyboard Editing':
+        'Edytowanie Klawiatur\u0105',
+    'Table support':
+        'Tablice 2D',
+    'Visible stepping':
+        'Debugowanie krokowe',
+    'check to turn on\n visible stepping (slow)':
+        'zaznacz, aby widzie\u0107 poszczeg\u00F3lne\nkroki skrypt\u00F3w (wolne)',
+    'uncheck to turn off\nvisible stepping':
+        'odznacz, aby wy\u0142\u0105czy\u0107\nkrokowanie',
     'Thread safe scripts':
         'Omijaj bezpieczne skrypty',
     'uncheck to allow\nscript reentrance':
@@ -857,7 +905,7 @@ SnapTranslator.dict.pl = {
     'Ok':
         'Ok',
     'Cancel':
-        'Poniechaj',
+        'Anuluj',
     'Yes':
         'Tak',
     'No':
@@ -903,9 +951,53 @@ SnapTranslator.dict.pl = {
     'Delete Project':
         'Usu\u0144 projekt',
     'Are you sure you want to delete':
-        'Czy napewno chcesz usun\u0105\u0107?',
+        'Czy napewno chcesz usun\u0105\u0107',
     'rename...':
         'przemianuj',
+    'Cloud':
+        'Chmura',
+    'Browser':
+        'Przeglądarka',
+    'Examples':
+        'Przykłady',
+    'You are not logged in':
+        'Nie jesteś zalogowany',
+    'Updating\nproject list...':
+        'Aktualizowanie\nlisty projektów...',
+    'last changed':
+        'ostatnio zmieniony',
+    'Open':
+        'Otwórz',
+    'Share':
+        'Udostępnij',
+    'Unshare':
+        'Wyłącz udostępnianie',
+    'Share Project':
+        'Udostępnij projekt',
+    'Unshare Project':
+        'Wyłącz udostępnianie projektu',
+    'Are you sure you want to publish':
+        'Czy na pewno chcesz opublikować projekt',
+    'Are you sure you want to unpublish':
+        'Czy na pewno chcesz wyłączyć publikowanie projektu',
+    'sharing\nproject...':
+        'Udostępnianie\nprojektu...',
+    'shared.':
+        'Projekt udostępniony.',
+    'unsharing\nproject...':
+        'Wyłączanie\nudostępniania projektu...',
+    'unshared.':
+        'Udostępnianie wyłączone.',
+    'Fetching project\nfrom the cloud...':
+        'Wczytywanie projektu\nz chmury...',
+    'Opening project...':
+        'Otwieranie projektu...',
+    'Save Project':
+        'Zapisz projekt',
+    'Saving project\nto the cloud...':
+        'Zapisywanie projektu\ndo chmury...',
+    'saved.':
+        'Projekt zapisany.',
 
     // costume editor
     'Costume Editor':
@@ -1081,7 +1173,7 @@ SnapTranslator.dict.pl = {
 
     // costumes
     'Turtle':
-        'Duszek',
+        'Żółw',
     'Empty':
         'Pusty',
 
@@ -1221,5 +1313,61 @@ SnapTranslator.dict.pl = {
     'last':
         'ostatni',
     'any':
-        'dowolny'
+        'dowolny',
+
+    // Sign up dialog
+    'Sign up':
+        'Rejestracja',
+    'User name:':
+        'Nazwa użytkownika:',
+    'Birth date:':
+        'Data urodzenia:',
+    'year:':
+        'rok:',
+    'E-mail address:':
+        'Adres e-mail:',
+    'E-mail address of parent or guardian:':
+        'Adres e-mail rodzica lub opiekuna:',
+    'Terms of Service...':
+        'Regulamin...',
+    'Privacy...':
+        'Polityka prywatności...',
+    'I have read and agree\nto the Terms of Service':
+        'Przeczytałem i zgadzam się\nz Regulaminem',
+    'January':
+        'styczeń',
+    'February':
+        'luty',
+    'March':
+        'marzec',
+    'April':
+        'kwiecień',
+    'May':
+        'maj',
+    'June':
+        'czerwiec',
+    'July':
+        'lipiec',
+    'August':
+        'sierpień',
+    'September':
+        'wrzesień',
+    'October':
+        'październik',
+    'November':
+        'listopad',
+    'December':
+        'grudzień',
+    'please fill out\nthis field':
+        'Proszę wypełnić\nto pole',
+    'please agree to\nthe TOS':
+        'Proszę zaakceptować\nRegulamin',
+    'Sign in':
+        'Zaloguj się',
+    'Password:':
+        'Hasło:',
+    'stay signed in on this computer\nuntil logging out':
+        'Zapamiętaj mnie na tym komputerze\naż do wylogowania',
+    'Reset password':
+        'Zresetuj hasło'
 };

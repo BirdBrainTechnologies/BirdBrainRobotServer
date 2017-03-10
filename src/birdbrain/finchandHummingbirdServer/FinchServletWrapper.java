@@ -156,13 +156,14 @@ public class FinchServletWrapper {
 		{
 			// Sets motor, arguments are -100 to 100
 			if(setter.substring(0,5).equals("motor")) {
-				int secondIndexofSlash = setter.lastIndexOf('/');
+				int lastSlash = setter.lastIndexOf('/');
+				int secondToLastSlash = setter.lastIndexOf('/', lastSlash-1);
 				int leftSpeed;
 				int rightSpeed;
 				
 				try {
-					leftSpeed = (int)(Double.parseDouble(setter.substring(6,secondIndexofSlash))*2.55);
-					rightSpeed = (int)(Double.parseDouble(setter.substring(secondIndexofSlash+1))*2.55);
+					leftSpeed = (int)(Double.parseDouble(setter.substring(secondToLastSlash+1,lastSlash))*2.55);
+					rightSpeed = (int)(Double.parseDouble(setter.substring(lastSlash+1))*2.55);
 				}
 				// You've just sent a non-number, so the "set" did not work 
 				catch(NumberFormatException e) {
@@ -184,14 +185,15 @@ public class FinchServletWrapper {
 			}
 			// Sets buzzer
 			else if(setter.substring(0,6).equals("buzzer")) {
-				int secondIndexofSlash = setter.lastIndexOf('/');
+				int lastSlash = setter.lastIndexOf('/');
+				int secondToLastSlash = setter.lastIndexOf('/', lastSlash-1);
 				
 				int frequency;
 				int duration;
 				
 				try {
-					frequency = (int)(Double.parseDouble(setter.substring(7,secondIndexofSlash)));
-					duration = (int)(Double.parseDouble(setter.substring(secondIndexofSlash+1)))-10; // to prevent collisions 
+					frequency = (int)(Double.parseDouble(setter.substring(secondToLastSlash+1,lastSlash)));
+					duration = (int)(Double.parseDouble(setter.substring(lastSlash+1)))-10; // to prevent collisions 
 				}
 				// You've just sent a non-number, so the "set" did not work 
 				catch(NumberFormatException e) {
@@ -211,16 +213,18 @@ public class FinchServletWrapper {
 			}
 			// Sets LED, color intensity is 0 to 100 for R, G, and B
 			else if(setter.substring(0,3).equals("led")) {
-				int secondIndexofSlash = setter.indexOf('/', 4);
-				int thirdIndexofSlash = setter.lastIndexOf('/');
+				int [] slashes = new int[3];
+				slashes[2] = setter.lastIndexOf('/');
+				slashes[1] = setter.lastIndexOf('/', slashes[2]-1);
+				slashes[0] = setter.lastIndexOf('/', slashes[1]-1);
 				int redLED = 0;
 				int greenLED = 0;
 				int blueLED = 0;
 				
 				try {
-					redLED = (int)(Double.parseDouble(setter.substring(4,secondIndexofSlash))*2.55);
-					greenLED = (int)(Double.parseDouble(setter.substring(secondIndexofSlash+1,thirdIndexofSlash))*2.55);
-					blueLED = (int)(Double.parseDouble(setter.substring(thirdIndexofSlash+1))*2.55);
+					redLED = (int)(Double.parseDouble(setter.substring(slashes[0]+1,slashes[1]))*2.55);
+					greenLED = (int)(Double.parseDouble(setter.substring(slashes[1]+1,slashes[2]))*2.55);
+					blueLED = (int)(Double.parseDouble(setter.substring(slashes[2]+1))*2.55);
 				}
 				// You've just sent a non-number, so the "set" did not work 
 				catch(NumberFormatException e) {
