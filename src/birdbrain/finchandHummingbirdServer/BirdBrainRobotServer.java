@@ -422,6 +422,19 @@ public class BirdBrainRobotServer {
 									"/Applications/Scratch 2.app");
 							String path = new File("").getAbsolutePath();
 							if (scratch.exists()) {
+								/*if (finchConnected && hummingbirdConnected) {
+									Runtime.getRuntime().exec("./LaunchFinchHummingbirdStart");
+
+								} else if (finchConnected) {
+									Runtime.getRuntime().exec("./LaunchFinchStart");
+									
+								} else if (hummingbirdConnected) {
+									Runtime.getRuntime().exec("./LaunchHummingbirdStart");
+									
+								} else {
+									Runtime.getRuntime().exec("./LaunchBlankStart");
+								}*/
+								
 								if (finchConnected && hummingbirdConnected) {
 									path = path
 											+ "/ScratchStarters/FinchHummingbirdStart.sb2";
@@ -438,8 +451,8 @@ public class BirdBrainRobotServer {
 									path = path
 											+ "/ScratchStarters/NoDevice.sb2";
 								}
-								String[] scratchPath = { "/usr/bin/open", path };
-								Runtime.getRuntime().exec(scratchPath);
+								String[] scratchPath = { "/usr/bin/open", "-a", "/Applications/Scratch 2.app", "--args", path };
+								Runtime.getRuntime().exec(scratchPath); 
 								
 								/*		if (finchConnected && hummingbirdConnected) {
 								path = path
