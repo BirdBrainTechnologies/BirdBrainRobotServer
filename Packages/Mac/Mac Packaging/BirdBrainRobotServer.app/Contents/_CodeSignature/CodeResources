@@ -6,27 +6,11 @@
 	<dict>
 		<key>Resources/Java/BirdBrainRobotServer.jar</key>
 		<data>
-		1KVOFsu+A/GmlRoyiNzPaRFGEX4=
+		sXgiK7lumYIeZIu7k/8ucJYCYtk=
 		</data>
 		<key>Resources/Java/HummingbirdV2.hex</key>
 		<data>
 		v5EXQ0Kfw33xyrOlfkHXRt1VchA=
-		</data>
-		<key>Resources/Java/LaunchBlankStart</key>
-		<data>
-		cP8jpwPAphmrrHFQ+a9MibiWqf8=
-		</data>
-		<key>Resources/Java/LaunchFinchHummingbirdStart</key>
-		<data>
-		wiXSRFk8OUkXPPl9uo2PXAqVTng=
-		</data>
-		<key>Resources/Java/LaunchFinchStart</key>
-		<data>
-		6soTWkI1kCACNGrZRkzuKt/jbso=
-		</data>
-		<key>Resources/Java/LaunchHummingbirdStart</key>
-		<data>
-		ps7jdAuf7RnzPvO1/fSipdYkYUM=
 		</data>
 		<key>Resources/Java/ScratchStarters/FinchHummingbirdStart.sb2</key>
 		<data>
@@ -1127,11 +1111,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			1KVOFsu+A/GmlRoyiNzPaRFGEX4=
+			sXgiK7lumYIeZIu7k/8ucJYCYtk=
 			</data>
 			<key>hash2</key>
 			<data>
-			UhrnCMlBc7KDyP702BN+CPPBdI9Yvtp4ATi0APXj1Zs=
+			CTkHQL4gMMWSRR1l5SCMMIfAeOCulGuQ+uI9EqX2MgQ=
 			</data>
 		</dict>
 		<key>Resources/Java/HummingbirdV2.hex</key>
@@ -1143,50 +1127,6 @@
 			<key>hash2</key>
 			<data>
 			jEifUF+drCkVYAWgvhwDVlZIWibpmpGTqcQOv4A5WEs=
-			</data>
-		</dict>
-		<key>Resources/Java/LaunchBlankStart</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			cP8jpwPAphmrrHFQ+a9MibiWqf8=
-			</data>
-			<key>hash2</key>
-			<data>
-			gfvI+DCrE9PkQED0pTYhp4f7wDKT1knxhUXrszKOZ3c=
-			</data>
-		</dict>
-		<key>Resources/Java/LaunchFinchHummingbirdStart</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			wiXSRFk8OUkXPPl9uo2PXAqVTng=
-			</data>
-			<key>hash2</key>
-			<data>
-			SbKjy3oFm6uBa4djjl0dbxEGD+ErZkJC6f5a+DAzGVM=
-			</data>
-		</dict>
-		<key>Resources/Java/LaunchFinchStart</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			6soTWkI1kCACNGrZRkzuKt/jbso=
-			</data>
-			<key>hash2</key>
-			<data>
-			6d2aYPdNXyHwM04wmg4FncYwUbWBlKiV4aFnF9ohMyo=
-			</data>
-		</dict>
-		<key>Resources/Java/LaunchHummingbirdStart</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			ps7jdAuf7RnzPvO1/fSipdYkYUM=
-			</data>
-			<key>hash2</key>
-			<data>
-			ywbwz762DVz1hrPsDjXUQAl2uH3CzFM0K5hqX237J3E=
 			</data>
 		</dict>
 		<key>Resources/Java/ScratchStarters/FinchHummingbirdStart.sb2</key>
