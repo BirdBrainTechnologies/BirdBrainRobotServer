@@ -39,7 +39,7 @@ import java.util.Scanner;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.SystemUtils;
+import org.apache.commons.lang3.SystemUtils;
 
 import java.awt.Component;
 import java.awt.event.WindowAdapter;
