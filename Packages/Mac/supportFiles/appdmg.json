@@ -1,0 +1,9 @@
+{
+  "title": "BirdBrainRobotServer",
+  "icon": "LightBulbKnockedOut.icns",
+  "background": "BBTBackground.png",
+  "contents": [
+    { "x": 460, "y": 260, "type": "link", "path": "/Applications" },
+    { "x": 177, "y": 260, "type": "file", "path": "BirdBrainRobotServer.app" }
+  ]
+}

@@ -218,3 +218,11 @@ pip-log.txt
 # Linux
 .directory
 
+
+##########################################
+# Mac distribution files and intermediates
+##########################################
+Packages/BirdBrainRobotServer.jar
+Packages/Mac/supportFiles/BirdBrainRobotServer.app
+Packages/Mac/BirdBrainRobotServer.dmg
+Packages/Mac/BirdBrainRobotServer.pkg
