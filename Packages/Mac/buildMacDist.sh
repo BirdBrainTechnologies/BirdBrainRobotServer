@@ -20,6 +20,7 @@ javapackager -deploy -native image -name BirdBrainRobotServer -Bicon=supportFile
 
 # Copy extra files needed (that cannot be included automatically because of a bug in javapackager
 /bin/cp  -R  appFiles/*  supportFiles/BirdBrainRobotServer.app/Contents/Java/.
+/bin/cp  -R  ../sharedResources/*  supportFiles/BirdBrainRobotServer.app/Contents/Java/.
 
 echo
 echo "**** Making the .dmg ****"
