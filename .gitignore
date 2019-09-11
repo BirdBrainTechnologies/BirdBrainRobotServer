@@ -226,3 +226,10 @@ Packages/BirdBrainRobotServer.jar
 Packages/Mac/supportFiles/BirdBrainRobotServer.app
 Packages/Mac/BirdBrainRobotServer.dmg
 Packages/Mac/BirdBrainRobotServer.pkg
+
+##########
+# Windows
+##########
+Packages/Win/out
+Packages/Win/pkgFiles
+
