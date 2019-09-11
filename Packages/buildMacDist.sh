@@ -36,8 +36,9 @@ echo
 echo "**** Making the .pkg ****"
 
 # Make a .pkg for app store distribution (using the 'Application Loader' developer tool in Xcode)
+# Requires a 'Developer ID Installer' for signing. Then you can use productsign or the --sign
+# flag in productbuild
 productbuild --component Mac/supportFiles/BirdBrainRobotServer.app /Applications Mac/BirdBrainRobotServer.pkg
-codesign -f -s "Developer ID Application: Tom Lauwers" Mac/BirdBrainRobotServer.pkg
 
 echo
 echo "**** Checking signatures..."
