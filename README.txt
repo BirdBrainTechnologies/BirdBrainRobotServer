@@ -10,11 +10,12 @@ Instructions for building distribution files:
 	b. If you do not know the keystore alias you can find it using keytool (eg. 'keytool -v -list -storetype PKCS12 -keystore yourKeystoreFile.pfx')
 	c. Sign using jarsigner (eg. 'jarsigner -keystore yourKeystoreFile.pfx -storetype PKCS12 -storepass yourPassword -digestalg SHA1 BirdBrainRobotServer.jar alias')
 	d. Verify using 'jarsigner -verify BirdBrainRobotServer.jar'
-3. To make the Mac distribution files (On a Mac):
-	a. In Terminal, cd into Packages/Mac.
+3. To make the Mac distribution files (On a Mac with valid Developer ID certificate):
+	a. In Terminal, cd into Packages.
 	b. Open buildMacDist.sh and update the version number if necessary.
 	c. ./buildMacDist.sh
-	d. You should now find both a .dmg file (for manual distribution) and a .pkg (for distribution through the Mac App Store.
+	d. Check the bottom of the output to make sure everything was signed properly.
+	e. You should now find both a .dmg file (for manual distribution) and a .pkg (for distribution through the Mac App Store) inside the Mac folder.
 4. To make the Windows distribution files (On a Windows machine with WIX installed):
 	a. Open buildWinDist.bat and update version number if necessary.
 	b. In a command prompt, go into Packages
