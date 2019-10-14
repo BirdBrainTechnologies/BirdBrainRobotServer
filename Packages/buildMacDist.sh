@@ -16,7 +16,7 @@ echo
 echo "**** Making the .app ****"
 
 # Make the .app
-javapackager -deploy -native image -name BirdBrainRobotServer -Bicon=Mac/supportFiles/LightBulbKnockedOut.icns -BappVersion=$VER -Bidentifier=com.birdbraintechnologies.robotserver -srcdir . -srcfiles BirdBrainRobotServer.jar -outfile BirdBrainRobotServer -outdir Mac/supportFiles -v -appclass birdbrain.finchandHummingbirdServer.BirdBrainRobotServer
+javapackager -deploy -native image -name BirdBrainRobotServer -Bicon=Mac/supportFiles/HummingbirdRoundPurple.icns -BappVersion=$VER -Bidentifier=com.birdbraintechnologies.robotserver -srcdir . -srcfiles BirdBrainRobotServer.jar -outfile BirdBrainRobotServer -outdir Mac/supportFiles -v -appclass birdbrain.finchandHummingbirdServer.BirdBrainRobotServer
 
 # Copy extra files needed (that cannot be included automatically because of a bug in javapackager
 /bin/cp  -R  Mac/appFiles/*  Mac/supportFiles/BirdBrainRobotServer.app/Contents/Java/.

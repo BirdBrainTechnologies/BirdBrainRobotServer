@@ -14,7 +14,9 @@ copy BirdBrainRobotServer.jar Win\pkgFiles
 xcopy sharedResources Win\pkgFiles /s /e
 xcopy Win\winResources Win\pkgFiles /s /e
 
-javapackager -deploy -native msi -name BirdBrainRobotServer -Bicon=Win\LightBulbKnockedOut.ico -BappVersion=%ver% -Bidentifier=com.birdbraintechnologies.robotserver -Bvendor="BirdBrain Technologies" -srcdir Win\pkgFiles -outfile BirdBrainRobotServer -outdir Win\out -v -appclass birdbrain.finchandHummingbirdServer.BirdBrainRobotServer
+:: Create an msi installer with the java jre packaged.
+:: Set BshortcutHint to true to make a desktop shortcut.
+javapackager -deploy -native msi -name BirdBrainRobotServer -Bicon=Win\HummingbirdRoundPurple.ico -BappVersion=%ver% -Bidentifier=com.birdbraintechnologies.robotserver -Bvendor="BirdBrain Technologies" -BshortcutHint=true -srcdir Win\pkgFiles -outfile BirdBrainRobotServer -outdir Win\out -v -appclass birdbrain.finchandHummingbirdServer.BirdBrainRobotServer
 
 signtool sign /f %cert% /p %pwd% Win\out\bundles\BirdBrainRobotServer-%ver%.msi
 
