@@ -1,13 +1,11 @@
 package birdbrain.finchandHummingbirdServer;
 
-import edu.cmu.ri.createlab.hummingbird.Hummingbird;
-import edu.cmu.ri.createlab.hummingbird.HummingbirdFactory;
-import edu.cmu.ri.createlab.hummingbird.HummingbirdHardwareType;
+import com.birdbraintechnologies.*;
 
 /** Hummingbird servlet wrapper class, for use with Hummingbird servers */
 public class HummingbirdServletWrapper {
 
-	private Hummingbird hummingbird = null;
+	private HummingbirdRobot hummingbird = null;
 	private boolean isConnected; // Flag that is true if a hummingbird is discovered
 
 	private int[] sensors;
@@ -29,7 +27,7 @@ public class HummingbirdServletWrapper {
 					{
 						// The hummingbird call takes 8 ms, then sleep to allow other stuff to happen
 						try {
-							sensors = hummingbird.getState().getAnalogInputValues();
+							sensors = hummingbird.getSensorValues();
 							Thread.sleep(32);
 						}
 						catch (NullPointerException ex) { 
@@ -59,14 +57,14 @@ public class HummingbirdServletWrapper {
 	
 	public boolean connect()
 	{
-        if(!isConnected) {
-			hummingbird =  HummingbirdFactory.createHidHummingbird(); // Try to connect to Hummingbird without blocking
+        if(hummingbird == null || !hummingbird.isConnected()) {
+			hummingbird =  new HummingbirdRobot(); // Try to connect to Hummingbird without blocking
             try {
                 Thread.sleep(250);
             } catch (InterruptedException ex) {
             }
             
-            if(hummingbird != null) {
+            if(hummingbird.isConnected()) {
             	hummingbird.emergencyStop();
                 isConnected = true;
                 sensorLoop = new Thread(new SensorLoop()); // Start reading sensors
@@ -110,14 +108,7 @@ public class HummingbirdServletWrapper {
 		}
 		else
 		{
-			if(hummingbird.getHummingbirdProperties().getHardwareType().equals(HummingbirdHardwareType.DUO)) 
-            {
-            	return true;
-            }
-            else
-            {
-            	return false;
-            }
+			return hummingbird.isDuo();
 		}
 	}
 	
@@ -267,7 +258,7 @@ public class HummingbirdServletWrapper {
 			if(isDuo()) {
 				if(port > 0 && port < 5) {
 					reading = (double)sensors[port-1]*4;
-					// Cap the maximum sensor value to 80 cm
+					// Cap the maximum sensor value to 100 cm
 				  if(reading < 130)
 				    distance = 100.0;
 				  else {
@@ -358,7 +349,7 @@ public class HummingbirdServletWrapper {
 					if(intensity < 0)
 						intensity = 0;
 					if(leds[port-1] != intensity){
-						hummingbird.setLED(port-1, (int)(intensity*2.55));
+						hummingbird.setLED(port, (int)(intensity*2.55));
 						leds[port-1] = intensity;
 					}
 					return true;
@@ -397,7 +388,7 @@ public class HummingbirdServletWrapper {
 					if(speed < -100)
 						speed = -100;
 					if(motors[port-1] != speed){
-						hummingbird.setMotorVelocity(port-1, (int)(speed*2.55));
+						hummingbird.setMotorVelocity(port, (int)(speed*2.55));
 						motors[port-1] = speed;
 					}
 					return true;
@@ -436,7 +427,7 @@ public class HummingbirdServletWrapper {
 					if(position < 0)
 						position = 0;
 					if(servos[port-1] != position){
-						hummingbird.setServoPosition(port-1, (int)(position*215/180));
+						hummingbird.setServoPosition(port, (int)(position*215/180));
 						servos[port-1] = position;
 					}
 					return true;
@@ -515,7 +506,7 @@ public class HummingbirdServletWrapper {
 					if(blueLED < 0)
 						blueLED = 0;
 					if(trileds[port-1][0] != redLED || trileds[port-1][1] != greenLED || trileds[port-1][2] != blueLED){
-						hummingbird.setFullColorLED(port-1, (int)(redLED*2.55), (int)(greenLED*2.55), (int)(blueLED*2.55));
+						hummingbird.setFullColorLED(port, (int)(redLED*2.55), (int)(greenLED*2.55), (int)(blueLED*2.55));
 						trileds[port-1][0] = redLED;
 						trileds[port-1][1] = greenLED;
 						trileds[port-1][2] = blueLED;
@@ -557,7 +548,7 @@ public class HummingbirdServletWrapper {
 						intensity = 0;
 					
 					if(vibrations[port-1] != intensity){
-						hummingbird.setVibrationMotorSpeed(port-1, (int)(intensity*2.55));
+						hummingbird.setVibrationMotorSpeed(port, (int)(intensity*2.55));
 						vibrations[port-1] = intensity;
 					}
 					return true;

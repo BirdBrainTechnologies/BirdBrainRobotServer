@@ -1,8 +1,6 @@
 package birdbrain.finchandHummingbirdServer;
 
-import edu.cmu.ri.createlab.terk.robot.finch.DefaultFinchController;
-import edu.cmu.ri.createlab.terk.robot.finch.Finch;
-import edu.cmu.ri.createlab.terk.robot.finch.FinchController;
+import com.birdbraintechnologies.Finch;
 
 /** Finch servlet wrapper class, for use with Finch servers */
 public class FinchServletWrapper {
@@ -67,24 +65,24 @@ public class FinchServletWrapper {
 	
 	public boolean connect()
 	{
-		FinchController finchChecker; // Checks if a Finch is present
-		if(!isConnected) {
-            finchChecker = DefaultFinchController.create(); // Try to connect to Finch without blocking
+		//FinchController finchChecker; // Checks if a Finch is present
+		if(finch == null || !finch.isConnected()) {
+            finch = new Finch(); // Try to connect to Finch without blocking
             try {
                 Thread.sleep(250);
             } catch (InterruptedException ex) {
             }
             
-            if(finchChecker != null) {
-                finchChecker.disconnect(); // If you connected, there's a Finch; now disconnect
+            if(finch.isConnected()) {
+            	finch.stopWheels();
+            	finch.setLED(0,0,0);
                 isConnected = true;
-                finch = new Finch(); // Now connect again with a real Finch object
                 sensorLoop = new Thread(new SensorLoop()); // Start reading sensors
                 sensorLoop.start();
                 return true;
             }
 		}
-		else if(isConnected) {
+		else if(finch.isConnected()) {
 			return true;
 		}
 		return false;
