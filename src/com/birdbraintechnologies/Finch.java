@@ -372,10 +372,10 @@ public class Finch {
         double accel;
 
         if(val < 0x20) {
-            accel = (double) (val) * 1.5 / 32;
+            accel = (double) (val & 0xFF) * 1.5 / 32;
         }
         else {
-            accel = (31 - (double)(val)) * 1.5 / 32;
+            accel = ((double)(val & 0xFF) - 64) * 1.5 / 32;
         }
             return accel;
         }
@@ -501,7 +501,7 @@ public class Finch {
         byte[] rawAccelerometers = readFinch(command);
         if (rawAccelerometers != null)
         {
-            if((rawAccelerometers[4] & 0x80) > 0)
+            if((rawAccelerometers[4] & 0x80) > 0) // Bit 7 on byte 5 indicates tapped
                 return true;
             else
                 return false;
@@ -522,7 +522,7 @@ public class Finch {
         byte[] rawAccelerometers = readFinch(command);
         if (rawAccelerometers != null)
         {
-            if((rawAccelerometers[4] & 0x20) > 0)
+            if((rawAccelerometers[4] & 0x20) > 0)  // Bit 5 on byte 5 indicates tapped
                 return true;
             else
                 return false;
@@ -621,20 +621,25 @@ public class Finch {
      * @param     sayThis The string of text that will be spoken by the computer
      * @param     duration The time in milliseconds to halt further program execution
      */
-  /*  //  
+   
     public void saySomething(final String sayThis, final int duration)
     {
         if (sayThis != null && sayThis.length() > 0)
         {
-            finchController.speak(sayThis);
-            sleep(duration);
+            final Mouth mouth = Mouth.getInstance();
+
+            if (mouth != null)
+            {
+               mouth.getSpeech(sayThis);
+               sleep(duration);
+            }
         }
         else
         {
             System.out.println("Given text to speak was null or empty");
         }
     }
-*/
+
     /**
      * Plays a tone at the specified frequency for the specified duration on the Finch's internal buzzer.
      * Middle C is about 262Hz.
@@ -734,6 +739,7 @@ public class Finch {
             return null;
         }
         else {
+        	// the & 0xFF hack is make sure the integer is unsigned - without it the returned values range from -128 to 127
             int[] lightSensors = new int[2];
             lightSensors[0] = (int) (data[0] & 0xFF);
             lightSensors[1] = (int) (data[1] & 0xFF);

@@ -632,7 +632,7 @@ public class BirdBrainRobotServer {
 																	// set of
 																	// serial
 																	// ports
-							ports = SerialPortList.getPortNames();
+							//ports = SerialPortList.getPortNames();
 							lblHummingbirdpic.setIcon(new ImageIcon(
 									BirdBrainRobotServer.class.getResource(
 											"/HummingbirdNotConnectedDuo.png")));
@@ -705,6 +705,7 @@ public class BirdBrainRobotServer {
 											System.out.println("Old port " + i
 													+ " " + ports[i]);
 										}
+										System.out.println(Arrays.asList(ports));
 										if (!Arrays.asList(ports)
 												.contains(newPort)) { // find
 																		// changed
@@ -715,12 +716,15 @@ public class BirdBrainRobotServer {
 											comport = newPort; // bootloader
 																// serial port
 																// found
+											System.out.println("Comport: " + comport);
 											break;
 										}
 									}
 								}
-								String firmwareFile = "";
-								try {
+								String firmwareFile = "hummingbirdforble_v_2_3.hex";
+								
+								// Commented out because the link it fetches from is broken and we are pretty sure we won't push another firmware update for Duo
+								/*try {
 									URL url = new URL(
 											"http://www.hummingbirdkit.com/sites/default/files/HummingbirdV2.hex");
 									File file = new File("HummingbirdV2.hex");
@@ -731,7 +735,7 @@ public class BirdBrainRobotServer {
 									System.err.println(
 											"Error downloading Hummingbird firmware. Trying offline version.");
 									firmwareFile = "HummingbirdV2.hex";
-								}
+								}*/
 								System.out.println("Comport is " + comport
 										+ " And firmware is " + firmwareFile);
 								if (!comport.equals("")
