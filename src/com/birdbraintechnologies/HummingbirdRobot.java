@@ -302,7 +302,7 @@ public class HummingbirdRobot {
 	
 	        if (mouth != null)
 	        {
-	           mouth.getSpeech(whatToSay);
+	        	AudioHelper.playClip(mouth.getSpeech(whatToSay));
 	        }
 	    }
 	    else

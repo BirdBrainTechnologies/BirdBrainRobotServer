@@ -601,7 +601,7 @@ public class Finch {
 
             if (mouth != null)
             {
-               mouth.getSpeech(sayThis);
+            	AudioHelper.playClip(mouth.getSpeech(sayThis));
             }
         }
         else
