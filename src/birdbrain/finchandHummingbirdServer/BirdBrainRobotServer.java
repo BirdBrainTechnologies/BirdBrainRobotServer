@@ -32,6 +32,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import org.apache.commons.io.FileUtils;
@@ -121,6 +122,11 @@ public class BirdBrainRobotServer {
 	 * Create the application.
 	 */
 	public BirdBrainRobotServer() {
+	/*	String property = System.getProperty("java.library.path");
+		StringTokenizer parser = new StringTokenizer(property, ";");
+		while (parser.hasMoreTokens()) {
+		    System.err.println(parser.nextToken());
+		    }*/
 		initialize(); // Initialize GUI
 		startServer(); // Start Jetty Server
 	}

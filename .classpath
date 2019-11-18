@@ -54,7 +54,7 @@
 	<classpathentry kind="lib" path="libs/create-lab-commons-xml.jar"/>
 	<classpathentry kind="lib" path="libs/en_us.jar"/>
 	<classpathentry kind="lib" path="libs/freetts.jar"/>
-	<classpathentry kind="lib" path="libs/jna.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Tom/Documents/GitHub/BirdBrainRobotServer/libs/jna-5.5.0.jar"/>
 	<classpathentry kind="lib" path="libs/log4j-1.2.16.jar"/>
 	<classpathentry kind="lib" path="libs/terk-core.jar"/>
 	<classpathentry kind="lib" path="libs/terk-services.jar"/>
