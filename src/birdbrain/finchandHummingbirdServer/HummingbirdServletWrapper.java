@@ -8,31 +8,55 @@ public class HummingbirdServletWrapper {
 	private HummingbirdRobot hummingbird = null;
 	private boolean isConnected; // Flag that is true if a hummingbird is discovered
 
+	//private boolean writeBusy = false;
+	
 	private int[] sensors;
 	private Integer[] vibrations = {0,0};
 	private Integer[] leds = {0,0,0,0};
 	private int[][] trileds = {{0,0,0},{0,0,0}};
 	private Integer[] motors = {0,0};
 	private Integer[] servos = {0,0,0,0};
+	private Integer[] pastVibrations = {0,0};
+	private Integer[] pastLeds = {0,0,0,0};
+	private int[][] pastTrileds = {{0,0,0},{0,0,0}};
+	private Integer[] pastMotors = {0,0};
+	private Integer[] pastServos = {0,0,0,0};
 	private Thread sensorLoop;
 	public boolean getConnected() {
 		return isConnected;
 	}
-	/* Get sensor data in a loop that runs at ~25 Hz */
+	/* Get sensor data and set outputs in a loop that runs at ~25 Hz and ~200 Hz respectively */
 	private class SensorLoop implements Runnable {
 		public void run() {
+			//long startTime = System.currentTimeMillis();
+			int count = 0;
 			while(isConnected) {
 				try {
 					if(hummingbird != null) 
 					{
-						// The hummingbird call takes 8 ms, then sleep to allow other stuff to happen
 						try {
-							sensors = hummingbird.getSensorValues();
-							Thread.sleep(32);
+							// poll roughly every 32 ms 
+							if(count % 8 == 0)
+							{
+							//	System.out.println(System.currentTimeMillis()-startTime);
+								sensors = hummingbird.getSensorValues();
+							}
+							// Set outputs every 4 ms (if anything has changed)
+							Thread.sleep(4);
+							setOutputs();
+							// Reset counter about once per second
+							if(count > 100)
+							{
+								// Set the first LED as a keep alive
+								hummingbird.setLED(1, (int)(leds[0]*2.55));
+								count = 0;
+							}
+							count++;
 						}
 						catch (NullPointerException ex) { 
 							sensors = null;
 							isConnected = false;
+							System.out.println("Exiting HB loop due to sensor null pointer");
 						}
 						if (sensors == null) {
 							isConnected = false;
@@ -319,6 +343,16 @@ public class HummingbirdServletWrapper {
 		}
 		else
 		{
+			/*int busyCount = 0;
+			while(writeBusy)
+			{
+				busyCount++;
+				System.out.println("Busy counter " + busyCount);
+				try {
+		            Thread.sleep(1);
+		        } catch (InterruptedException ex) {
+		        }
+			}*/
 			// Sets LED, arguments are 0 to 100
 			// out/led/port/intensity
 			if(setter.substring(0,3).equals("led")) {
@@ -349,7 +383,7 @@ public class HummingbirdServletWrapper {
 					if(intensity < 0)
 						intensity = 0;
 					if(leds[port-1] != intensity){
-						hummingbird.setLED(port, (int)(intensity*2.55));
+						//hummingbird.setLED(port, (int)(intensity*2.55));
 						leds[port-1] = intensity;
 					}
 					return true;
@@ -388,7 +422,7 @@ public class HummingbirdServletWrapper {
 					if(speed < -100)
 						speed = -100;
 					if(motors[port-1] != speed){
-						hummingbird.setMotorVelocity(port, (int)(speed*2.55));
+						//hummingbird.setMotorVelocity(port, (int)(speed*2.55));
 						motors[port-1] = speed;
 					}
 					return true;
@@ -427,7 +461,7 @@ public class HummingbirdServletWrapper {
 					if(position < 0)
 						position = 0;
 					if(servos[port-1] != position){
-						hummingbird.setServoPosition(port, (int)(position*215/180));
+						//hummingbird.setServoPosition(port, (int)(position*215/180));
 						servos[port-1] = position;
 					}
 					return true;
@@ -506,7 +540,7 @@ public class HummingbirdServletWrapper {
 					if(blueLED < 0)
 						blueLED = 0;
 					if(trileds[port-1][0] != redLED || trileds[port-1][1] != greenLED || trileds[port-1][2] != blueLED){
-						hummingbird.setFullColorLED(port, (int)(redLED*2.55), (int)(greenLED*2.55), (int)(blueLED*2.55));
+						//hummingbird.setFullColorLED(port, (int)(redLED*2.55), (int)(greenLED*2.55), (int)(blueLED*2.55));
 						trileds[port-1][0] = redLED;
 						trileds[port-1][1] = greenLED;
 						trileds[port-1][2] = blueLED;
@@ -548,7 +582,7 @@ public class HummingbirdServletWrapper {
 						intensity = 0;
 					
 					if(vibrations[port-1] != intensity){
-						hummingbird.setVibrationMotorSpeed(port, (int)(intensity*2.55));
+						//hummingbird.setVibrationMotorSpeed(port, (int)(intensity*2.55));
 						vibrations[port-1] = intensity;
 					}
 					return true;
@@ -595,7 +629,7 @@ public class HummingbirdServletWrapper {
 					if(intensity < 0)
 						intensity = 0;
 					if(leds[port-1] != intensity){
-						hummingbird.setLED(port-1, (int)(intensity*2.55));
+						//hummingbird.setLED(port-1, (int)(intensity*2.55));
 						leds[port-1] = intensity;
 					}
 					return true;
@@ -623,7 +657,7 @@ public class HummingbirdServletWrapper {
 					if(speed < -100)
 						speed = -100;
 					if(motors[port-1] != speed){
-						hummingbird.setMotorVelocity(port-1, (int)(speed*2.55));
+						//hummingbird.setMotorVelocity(port-1, (int)(speed*2.55));
 						motors[port-1] = speed;
 					}
 					return true;
@@ -650,7 +684,7 @@ public class HummingbirdServletWrapper {
 					if(position < 0)
 						position = 0;
 					if(servos[port-1] != position){
-						hummingbird.setServoPosition(port-1, (int)(position*215/180));
+						//hummingbird.setServoPosition(port-1, (int)(position*215/180));
 						servos[port-1] = position;
 					}
 					return true;
@@ -700,7 +734,7 @@ public class HummingbirdServletWrapper {
 					if(blueLED < 0)
 						blueLED = 0;
 					if(trileds[port-1][0] != redLED || trileds[port-1][1] != greenLED || trileds[port-1][2] != blueLED){
-						hummingbird.setFullColorLED(port-1, (int)(redLED*2.55), (int)(greenLED*2.55), (int)(blueLED*2.55));
+						//hummingbird.setFullColorLED(port-1, (int)(redLED*2.55), (int)(greenLED*2.55), (int)(blueLED*2.55));
 						trileds[port-1][0] = redLED;
 						trileds[port-1][1] = greenLED;
 						trileds[port-1][2] = blueLED;
@@ -732,7 +766,7 @@ public class HummingbirdServletWrapper {
 						intensity = 0;
 					
 					if(vibrations[port-1] != intensity){
-						hummingbird.setVibrationMotorSpeed(port-1, (int)(intensity*2.55));
+					//	hummingbird.setVibrationMotorSpeed(port-1, (int)(intensity*2.55));
 						vibrations[port-1] = intensity;
 					}
 					return true;
@@ -741,6 +775,61 @@ public class HummingbirdServletWrapper {
 			
 			return false;
 		}
+		
+	}
+	
+	private void setOutputs()
+	{
+		// Set any changed LEDs
+		for(int i = 0; i < leds.length; i++)
+		{
+			if(leds[i] != pastLeds[i])
+			{
+				//System.out.println("Past: " + pastLeds[i] + " Current: " + leds[i]);
+				hummingbird.setLED(i+1, (int)(leds[i]*2.55));
+				pastLeds[i] = leds[i];
+			}
+		}
+		// Set any changed TriLEDs
+		for(int i = 0; i < 2; i++)
+		{
+			if(trileds[i][0] != pastTrileds[i][0] || trileds[i][1] != pastTrileds[i][1] || trileds[i][2] != pastTrileds[i][2])
+			{
+				hummingbird.setFullColorLED(i+1, (int)(trileds[i][0]*2.55), (int)(trileds[i][1]*2.55), (int)(trileds[i][2]*2.55));
+				pastTrileds[i][0] = trileds[i][0];
+				pastTrileds[i][1] = trileds[i][1];
+				pastTrileds[i][2] = trileds[i][2];
+			}
+		}
+		// Set any changed Servos
+		for(int i = 0; i < servos.length; i++)
+		{
+			if(servos[i] != pastServos[i])
+			{
+				hummingbird.setServoPosition(i+1, (int)(servos[i]*215/180));
+				pastServos[i] = servos[i];
+			}
+		}
+		// Set any changed Motors
+		for(int i = 0; i < motors.length; i++)
+		{
+			if(motors[i] != pastMotors[i])
+			{
+				hummingbird.setMotorVelocity(i+1, (int)(motors[i]*2.55));
+				pastMotors[i] = motors[i];
+			}
+		}	
+		// Set any changed Vibration motors
+		for(int i = 0; i < vibrations.length; i++)
+		{
+			if(vibrations[i] != pastVibrations[i])
+			{
+				hummingbird.setVibrationMotorSpeed(i+1, (int)(vibrations[i]*2.55));
+				pastVibrations[i] = vibrations[i];
+			}
+		}
+				
+		
 		
 	}
 	

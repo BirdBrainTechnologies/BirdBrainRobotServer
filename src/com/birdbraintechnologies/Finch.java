@@ -39,9 +39,9 @@ public class Finch {
         
         // The following four settings work, but it's not clear we need them
         hidServicesSpecification.setAutoShutdown(true);
-        hidServicesSpecification.setScanInterval(500);   
-        hidServicesSpecification.setPauseInterval(5000);
-        hidServicesSpecification.setScanMode(ScanMode.SCAN_AT_FIXED_INTERVAL_WITH_PAUSE_AFTER_WRITE);
+       // hidServicesSpecification.setScanInterval(500);   
+       // hidServicesSpecification.setPauseInterval(5000);
+        hidServicesSpecification.setScanMode(ScanMode.NO_SCAN);//SCAN_AT_FIXED_INTERVAL_WITH_PAUSE_AFTER_WRITE);
 
         // Get HID services using custom specification
         hidServices = HidManager.getHidServices(hidServicesSpecification);
@@ -910,12 +910,13 @@ public class Finch {
         else {
             // This is a hack to ensure that each return report is different from the one before. If the sensors haven't changed, the return report won't either, causing problems.
             command[7] = (byte)reportCounter;
-            int val = HIDFinch.write(command, PACKET_LENGTH, (byte) 0x00);
+            byte data[] = new byte[PACKET_LENGTH];
+            // This method reads the returned report, or returns null if it has timed out after 10 ms
+            int val = HIDFinch.read(data,10); // throw away the first read
+            val = HIDFinch.write(command, PACKET_LENGTH, (byte) 0x00);
             if (val < 0) {
                 System.err.println(HIDFinch.getLastErrorMessage());
             }
-            
-            byte data[] = new byte[PACKET_LENGTH];
             // This method reads the returned report, or returns null if it has timed out after 10 ms
             val = HIDFinch.read(data,10);
             

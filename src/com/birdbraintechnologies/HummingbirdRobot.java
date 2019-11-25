@@ -33,9 +33,9 @@ public class HummingbirdRobot {
         HidServicesSpecification hidServicesSpecification = new HidServicesSpecification();
         // These are settings included in the HID example, they may not be necessary
         hidServicesSpecification.setAutoShutdown(true);
-        hidServicesSpecification.setScanInterval(500);
-        hidServicesSpecification.setPauseInterval(5000);
-        hidServicesSpecification.setScanMode(ScanMode.SCAN_AT_FIXED_INTERVAL_WITH_PAUSE_AFTER_WRITE);
+        //hidServicesSpecification.setScanInterval(500);
+        //hidServicesSpecification.setPauseInterval(5000);
+        hidServicesSpecification.setScanMode(ScanMode.NO_SCAN);//SCAN_AT_FIXED_INTERVAL_WITH_PAUSE_AFTER_WRITE);
 
         // Get HID services using custom specification
         hidServices = HidManager.getHidServices(hidServicesSpecification);
@@ -584,6 +584,7 @@ public class HummingbirdRobot {
                 HIDHummingbird = null;
                 return false;
             }
+            
             return true;
         }
         return false;
@@ -599,32 +600,43 @@ public class HummingbirdRobot {
         else {
             // This is a hack to ensure that each return report is different from the one before. If the sensors haven't changed, the return report won't either, causing problems.
             command[7] = (byte)reportCounter;
+
+            byte data[] = new byte[PACKET_LENGTH];
+            int val = HIDHummingbird.read(data,10); // Throw away the first read
+            val = HIDHummingbird.write(command, PACKET_LENGTH, (byte) 0x00);
             
-            int val = HIDHummingbird.write(command, PACKET_LENGTH, (byte) 0x00);
             if (val < 0) {
+            	System.out.println("Write val was negative: " +val);
                 System.err.println(HIDHummingbird.getLastErrorMessage());
             }
             
-            byte data[] = new byte[PACKET_LENGTH];
             // This method reads the returned report, or returns null if it has timed out after 10 ms
             val = HIDHummingbird.read(data,10);
-            
+            if (val <= 0)
+            	System.out.println("Read val was negative: " +val);
             // If the read report does not match with the command report, then try reading again
             if(((int)(data[7] & 0xFF) != reportCounter))
             {
+            	for(int i = 0; i < data.length; i++)
+            		System.out.print(data[i] + " ");
             	val = HIDHummingbird.read(data,10);
+            	System.out.println("\nTrying to read again: " +val);
             }
             
             // If things are still wonky, try ten more times to resynchronize, then give up because infinite loops are bad
             int count = 0;
             while((int)(data[7] & 0xFF) != reportCounter && count < 10)
             {
+            	System.out.println("Write in while loop");
             	val = HIDHummingbird.write(command, PACKET_LENGTH, (byte) 0x00);
                 if (val < 0) {
                     System.err.println(HIDHummingbird.getLastErrorMessage());
                 }
-            	
+            	System.out.println("Read attempt: " +count + " Val is " +val);
             	val = HIDHummingbird.read(data,10);
+            	for(int i = 0; i < data.length; i++)
+            		System.out.print(data[i] + " ");
+            	System.out.println("Val after read is " +val);
             	count++;
             }
             

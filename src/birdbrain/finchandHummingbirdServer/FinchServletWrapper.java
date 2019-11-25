@@ -13,6 +13,19 @@ public class FinchServletWrapper {
 	private boolean[] obstacles;
 	private int[] lights;
 	
+	int leftSpeed = 0;
+	int rightSpeed = 0;
+	int redLED = 0;
+	int greenLED = 0;
+	int blueLED = 0;
+	int frequency = 0;
+	int duration = 0;
+	
+
+	boolean setSpeed = false;
+	boolean setBuzzer = false;
+	boolean setLED = false;
+	
 	// We poll sensors in a separate thread to minimize the timer doGet has to wait
 	private Thread sensorLoop;
 	public boolean getConnected() {
@@ -21,20 +34,34 @@ public class FinchServletWrapper {
 	/* Get sensor data in a loop that runs at ~16 Hz */
 	private class SensorLoop implements Runnable {
 		public void run() {
+			int count = 0;
 			while(isConnected) {
 				try {
 					if(finch != null) 
 					{
 						try {
-							// Each finch.get takes 8 ms, then sleep to allow other things to happen
-							accelerations = finch.getAccelerations();
+							// check sensors every 4th loop
+							if(count%4 == 0)
+							{
+								// Each finch.get takes 8 ms, then sleep to allow other things to happen
+								accelerations = finch.getAccelerations();
+								Thread.sleep(12);
+								temperature = finch.getTemperature();
+								Thread.sleep(12);
+								obstacles = finch.getObstacleSensors();
+								Thread.sleep(12);
+								lights = finch.getLightSensors();
+								Thread.sleep(12); 
+							}
+							setOutputs();
 							Thread.sleep(12);
-							temperature = finch.getTemperature();
-							Thread.sleep(12);
-							obstacles = finch.getObstacleSensors();
-							Thread.sleep(12);
-							lights = finch.getLightSensors();
-							Thread.sleep(12); 
+							// Send a keep-alive every 100th iteration, approx every 2.5 seconds
+							if(count > 100)
+							{
+								finch.setLED(redLED, greenLED, blueLED);
+								count = 0;
+							}
+							count++;
 							
 						}
 						catch(NullPointerException ex) {
@@ -156,8 +183,7 @@ public class FinchServletWrapper {
 			if(setter.substring(0,5).equals("motor")) {
 				int lastSlash = setter.lastIndexOf('/');
 				int secondToLastSlash = setter.lastIndexOf('/', lastSlash-1);
-				int leftSpeed;
-				int rightSpeed;
+
 				
 				try {
 					leftSpeed = (int)(Double.parseDouble(setter.substring(secondToLastSlash+1,lastSlash))*2.55);
@@ -177,18 +203,16 @@ public class FinchServletWrapper {
 					rightSpeed = 255;
 				if(rightSpeed < -255)
 					rightSpeed = -255;				
-				
-				finch.setWheelVelocities(leftSpeed, rightSpeed);
+				setSpeed = true;
+				//finch.setWheelVelocities(leftSpeed, rightSpeed);
 				return true;
 			}
 			// Sets buzzer
 			else if(setter.substring(0,6).equals("buzzer")) {
 				int lastSlash = setter.lastIndexOf('/');
 				int secondToLastSlash = setter.lastIndexOf('/', lastSlash-1);
-				
-				int frequency;
-				int duration;
-				
+		
+		
 				try {
 					frequency = (int)(Double.parseDouble(setter.substring(secondToLastSlash+1,lastSlash)));
 					duration = (int)(Double.parseDouble(setter.substring(lastSlash+1)))-10; // to prevent collisions 
@@ -205,8 +229,8 @@ public class FinchServletWrapper {
 				
 				if(duration < 10)
 					duration = 10;
-				
-				finch.buzz(frequency, duration);
+				setBuzzer = true;
+				//finch.buzz(frequency, duration);
 				return true;
 			}
 			// Sets LED, color intensity is 0 to 100 for R, G, and B
@@ -215,9 +239,7 @@ public class FinchServletWrapper {
 				slashes[2] = setter.lastIndexOf('/');
 				slashes[1] = setter.lastIndexOf('/', slashes[2]-1);
 				slashes[0] = setter.lastIndexOf('/', slashes[1]-1);
-				int redLED = 0;
-				int greenLED = 0;
-				int blueLED = 0;
+
 				
 				try {
 					redLED = (int)(Double.parseDouble(setter.substring(slashes[0]+1,slashes[1]))*2.55);
@@ -243,14 +265,35 @@ public class FinchServletWrapper {
 					blueLED = 255;
 				if(blueLED < 0)
 					blueLED = 0;
-			
-				finch.setLED(redLED, greenLED, blueLED);
+				setLED = true;
+				//finch.setLED(redLED, greenLED, blueLED);
 				
 				return true;
 			}
 			return false;
 		}
 		
+	}
+	private void setOutputs()
+	{
+		//Set LED
+		if(setLED)
+		{
+			finch.setLED(redLED, greenLED, blueLED);
+			setLED = false;
+		}
+		
+		// Set motors if they've been set
+		if(setSpeed)
+		{
+			finch.setWheelVelocities(leftSpeed, rightSpeed);
+			setSpeed = false;
+		}
+		if(setBuzzer)
+		{
+			finch.buzz(frequency, duration);
+			setBuzzer = false;
+		}
 	}
 	
 }
