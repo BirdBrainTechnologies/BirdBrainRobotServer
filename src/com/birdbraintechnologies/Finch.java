@@ -3,17 +3,32 @@ package com.birdbraintechnologies;
 
 import org.hid4java.*;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+
+import java.util.concurrent.TimeUnit;
 
 import edu.cmu.ri.createlab.speech.Mouth;
 import edu.cmu.ri.createlab.util.FileUtils;
 import edu.cmu.ri.createlab.audio.AudioHelper;
+import edu.cmu.ri.createlab.userinterface.component.DatasetPlotter;
+
 
 
 /**
- * Created by Tom on 10/27/2019.
+ * Created by Tom Lauwers on 10/27/2019
+ * 
+ * This class controls low level communications with the Finch robot. 
+ * DO NOT EDIT
+ * 
  */
 public class Finch {
 
@@ -29,7 +44,6 @@ public class Finch {
     private HidDevice HIDFinch;                      // Object that opens and communicates with the Finch
     private HidServices hidServices;
     private int reportCounter = 0;                   // Tracks the sensor reports to make sure we're reading the correct report
-
 
 
     public Finch()
@@ -51,10 +65,10 @@ public class Finch {
     // Returns true if a Finch is connected, false otherwise
     public boolean isConnected()
     {
-    	if(HIDFinch != null)
-    		return true;
-    	else
-    		return false;
+        if(HIDFinch != null)
+        	return HIDFinch.isOpen();
+        else
+            return false;
     }
     
     // Returns true if a Finch successfully connected
@@ -66,11 +80,13 @@ public class Finch {
     		// If hidServices returned an HIDFinch it means one is attached to the computer, so open it
 	        if(HIDFinch != null) {
 	            System.out.println("Connecting Finch...");
-	            HIDFinch.open();
+                if (!HIDFinch.isOpen()) {
+                    HIDFinch.open();
+                }
 	            return true;
 	        }
 	        else {
-	            System.out.println("No Finch detected");
+	            System.out.println("No Finch detected, please connect a Finch and run the program again.");
 	            return false;
 	        }
     	}
@@ -251,8 +267,8 @@ public class Finch {
             writeFinch(message);
             if (timeToHold > 0)
             {
-                sleep(timeToHold);
-                stopWheels();
+            	sleep(timeToHold);
+            	stopWheels();
             }
         }
         else
@@ -601,7 +617,11 @@ public class Finch {
 
             if (mouth != null)
             {
-            	AudioHelper.playClip(mouth.getSpeech(sayThis));
+               AudioHelper.playClip(mouth.getSpeech(sayThis));
+            }
+            else
+            {
+            	System.out.println("Mouth is null");
             }
         }
         else
@@ -888,13 +908,12 @@ public class Finch {
      * Command to write a command to Finch
      */
     private void writeFinch(byte[] command) {
-        if (!HIDFinch.isOpen() || HIDFinch == null) {
+        if (!HIDFinch.isOpen()) {
             System.out.println("Finch not connected");
         } else {
             int val = HIDFinch.write(command, PACKET_LENGTH, (byte) 0x00);
             if (val < 0) {
                 System.err.println(HIDFinch.getLastErrorMessage());
-                HIDFinch = null;
             }
         }
     }
@@ -910,13 +929,12 @@ public class Finch {
         else {
             // This is a hack to ensure that each return report is different from the one before. If the sensors haven't changed, the return report won't either, causing problems.
             command[7] = (byte)reportCounter;
-            byte data[] = new byte[PACKET_LENGTH];
-            // This method reads the returned report, or returns null if it has timed out after 10 ms
-            int val = HIDFinch.read(data,10); // throw away the first read
-            val = HIDFinch.write(command, PACKET_LENGTH, (byte) 0x00);
+            int val = HIDFinch.write(command, PACKET_LENGTH, (byte) 0x00);
             if (val < 0) {
                 System.err.println(HIDFinch.getLastErrorMessage());
             }
+            
+            byte data[] = new byte[PACKET_LENGTH];
             // This method reads the returned report, or returns null if it has timed out after 10 ms
             val = HIDFinch.read(data,10);
             
@@ -959,223 +977,7 @@ public class Finch {
         return null;
     }
 
-    /**
-     * Displays a graph of the X, Y, and Z accelerometer values.  Note that this graph
-     * does not update on its own - you need to call updateAccelerometerGraph to
-     * do so.
-     *
-     */
-     /** Graphing isn't need for the BirdBrain Robot Server, so this is commented out
-    public void showAccelerometerGraph()
-    {
-        accelerometerPlotter.addDataset(Color.RED);
-        accelerometerPlotter.addDataset(Color.GREEN);
-        accelerometerPlotter.addDataset(Color.BLUE);
 
-        //Schedule a job for the event-dispatching thread: creating and showing this application's GUI.
-        SwingUtilities.invokeLater(
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        final Component plotComponent = accelerometerPlotter.getComponent();
-
-                        // create the main frame
-                        jFrameAccel = new JFrame("Accelerometer Values");
-
-                        // add the root panel to the JFrame
-                        jFrameAccel.add(plotComponent);
-
-                        // set various properties for the JFrame
-                        jFrameAccel.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-                        jFrameAccel.addWindowListener(
-                                new WindowAdapter()
-                                {
-                                    //  
-                                    public void windowClosing(final WindowEvent e)
-                                    {
-                                        jFrameAccel.setVisible(false);
-                                        jFrameAccel.dispose();
-                                    }
-                                });
-                        jFrameAccel.setBackground(Color.WHITE);
-                        jFrameAccel.setResizable(false);
-                        jFrameAccel.pack();
-                        jFrameAccel.setLocation(400, 200);// center the window on the screen
-                        jFrameAccel.setVisible(true);
-                    }
-                });
-    }*/
-
-    /**
-     * updates the accelerometer graph with accelerometer data specified by xVal,
-     * yVal, and zVal.
-     *
-     * @param xVal  The X axis acceleration value
-     * @param yVal  The Y axis acceleration value
-     * @param zVal  The Z axis acceleration value
-     */
-    /*
-    //  
-    public void updateAccelerometerGraph(final double xVal, final double yVal, final double zVal)
-    {
-        accelerometerPlotter.setCurrentValues(xVal, yVal, zVal);
-    }*/
-
-    /**
-     * Closes the opened Accelerometer Graph
-     */
-    /*
-    //  
-    public void closeAccelerometerGraph()
-    {
-        jFrameAccel.setVisible(false);
-        jFrameAccel.dispose();
-    }*/
-
-    /**
-     * Displays a graph of the left and right light sensor values.  Note that this graph
-     * does not update on its own - you need to call updateLightSensorGraph to
-     * do so.
-     *
-     */
-
-    /*
-    //  
-    public void showLightSensorGraph()
-    {
-        lightPlotter.addDataset(Color.RED);
-        lightPlotter.addDataset(Color.BLUE);
-
-        //Schedule a job for the event-dispatching thread: creating and showing this application's GUI.
-        SwingUtilities.invokeLater(
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        final Component plotComponent = lightPlotter.getComponent();
-
-                        // create the main frame
-                        jFrameLight = new JFrame("Light Sensor Values");
-
-                        // add the root panel to the JFrame
-                        jFrameLight.add(plotComponent);
-
-                        // set various properties for the JFrame
-                        jFrameLight.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-                        jFrameLight.addWindowListener(
-                                new WindowAdapter()
-                                {
-                                    //  
-                                    public void windowClosing(final WindowEvent e)
-                                    {
-                                        jFrameLight.setVisible(false);
-                                        jFrameLight.dispose();
-                                    }
-                                });
-                        jFrameLight.setBackground(Color.WHITE);
-                        jFrameLight.setResizable(false);
-                        jFrameLight.pack();
-                        jFrameLight.setLocation(20, 200);// center the window on the screen
-                        jFrameLight.setVisible(true);
-                    }
-                });
-    }
-    */
-    /**
-     * Updates the light sensor graph with the left and right light sensor data.
-     *
-     * @param leftSensor  Variable containing left light sensor value
-     * @param rightSensor  Variable containing right light sensor value
-     */
-    /*
-    //  
-    public void updateLightSensorGraph(final int leftSensor, final int rightSensor)
-    {
-        lightPlotter.setCurrentValues(leftSensor, rightSensor);
-    }*/
-
-    /**
-     * Closes the opened Light sensor Graph
-     */
-    /*
-    //  
-    public void closeLightSensorGraph()
-    {
-        jFrameLight.setVisible(false);
-        jFrameLight.dispose();
-    }*/
-
-    /**
-     * Displays a graph of the temperature value.  Note that this graph
-     * does not update on its own - you need to call updateTemperatureGraph to
-     * do so.
-     *
-     */
-    /*
-
-    //  
-    public void showTemperatureGraph()
-    {
-        temperaturePlotter.addDataset(Color.GREEN);
-
-        //Schedule a job for the event-dispatching thread: creating and showing this application's GUI.
-        SwingUtilities.invokeLater(
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        final Component plotComponent = temperaturePlotter.getComponent();
-
-                        // create the main frame
-                        jFrameTemp = new JFrame("Temperature Values");
-
-                        // add the root panel to the JFrame
-                        jFrameTemp.add(plotComponent);
-
-                        // set various properties for the JFrame
-                        jFrameTemp.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-                        jFrameTemp.addWindowListener(
-                                new WindowAdapter()
-                                {
-                                    //  
-                                    public void windowClosing(final WindowEvent e)
-                                    {
-                                        jFrameTemp.setVisible(false);
-                                        jFrameTemp.dispose();
-                                    }
-                                });
-                        jFrameTemp.setBackground(Color.WHITE);
-                        jFrameTemp.setResizable(false);
-                        jFrameTemp.pack();
-                        jFrameTemp.setLocation(780, 200);// center the window on the screen
-                        jFrameTemp.setVisible(true);
-                    }
-                });
-    }*/
-
-    /**
-     * Updates the temperature graph with the most recent temperature data.
-     *
-     * @param temp   variable containing a temperature value
-     */
-/*
-    //  
-    public void updateTemperatureGraph(final double temp)
-    {
-        temperaturePlotter.setCurrentValues(temp);
-    }
-*/
-    /**
-     * Closes the opened temperature Graph
-     */
-  /*  //  
-    public void closeTemperatureGraph()
-    {
-        jFrameTemp.setVisible(false);
-        jFrameTemp.dispose();
-    }
-*/
     /**
      * This method properly closes the connection with the Finch and resets the Finch so that
      * it is immediately ready to be controlled by subsequent programs.  Note that if this
@@ -1187,19 +989,7 @@ public class Finch {
     //  
     public void quit()
     {
-        /* No graphs are launched, so comment this out
-        if (jFrameAccel != null)
-        {
-            closeAccelerometerGraph();
-        }
-        if (jFrameLight != null)
-        {
-            closeLightSensorGraph();
-        }
-        if (jFrameTemp != null)
-        {
-            closeTemperatureGraph();
-        }*/
+
         // Send the reset command
         byte[] message = new byte[PACKET_LENGTH];
         message[0] = 'R'; // Turns off motors, shuts off the Finch

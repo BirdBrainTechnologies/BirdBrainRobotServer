@@ -1,7 +1,6 @@
 package com.birdbraintechnologies;
 
 import org.hid4java.*;
-
 import edu.cmu.ri.createlab.audio.AudioHelper;
 import edu.cmu.ri.createlab.speech.Mouth;
 
@@ -12,17 +11,16 @@ import java.awt.*;
  */
 public class HummingbirdRobot {
 
-    private static final Integer VENDOR_ID = 0x2354;  // HB's VID
-    private static final Integer PRODUCT_ID = 0x2222; // HB's PID
-    private static final int PACKET_LENGTH = 8;       // USB HID packets to HB are 8 bytes
+    private static final Integer VENDOR_ID = 0x2354;
+    private static final Integer PRODUCT_ID = 0x2222;
+    private static final int PACKET_LENGTH = 8;
     public static final String SERIAL_NUMBER = null;
 
-    private HidDevice HIDHummingbird;  // object to communicate with a HB
+    private boolean isDuo;
+    private HidDevice HIDHummingbird;
     private HidServices hidServices;
     private int reportCounter = 0;  // Tracks the sensor reports to make sure we're reading the correct report
-    private boolean isDuo = false;
-    
-    
+
     /**
      * Creates the Hummingbird object and automatically connects
      * to a Hummingbird.
@@ -31,11 +29,10 @@ public class HummingbirdRobot {
     {
         // Configure to use custom specification
         HidServicesSpecification hidServicesSpecification = new HidServicesSpecification();
-        // These are settings included in the HID example, they may not be necessary
         hidServicesSpecification.setAutoShutdown(true);
         //hidServicesSpecification.setScanInterval(500);
         //hidServicesSpecification.setPauseInterval(5000);
-        hidServicesSpecification.setScanMode(ScanMode.NO_SCAN);//SCAN_AT_FIXED_INTERVAL_WITH_PAUSE_AFTER_WRITE);
+        hidServicesSpecification.setScanMode(ScanMode.NO_SCAN);
 
         // Get HID services using custom specification
         hidServices = HidManager.getHidServices(hidServicesSpecification);
@@ -45,33 +42,62 @@ public class HummingbirdRobot {
     // Returns true if a Hummingbird is connected, false otherwise
     public boolean isConnected()
     {
-    	if(HIDHummingbird != null)
-    		return true;
-    	else
-    		return false;
+        if(HIDHummingbird != null)
+            return HIDHummingbird.isOpen();
+        else
+            return false;
     }
-    
-    // Returns true if a Hummingbird successfully connected. 
+    // Returns true if a Hummingbird successfully connected
     private boolean Connect()
     {
-    	if(!isConnected()) {
-	    	HIDHummingbird = hidServices.getHidDevice(VENDOR_ID, PRODUCT_ID, SERIAL_NUMBER);
-	    	// If not null, it means a Hummingbird was found
-	        if(HIDHummingbird != null) {
-	            System.out.println("Connecting Hummingbird...");
-	            HIDHummingbird.open();
-	            checkDuo();
-	            return true;
-	        }
-	        else {
-	            System.out.println("No Hummingbird detected");
-	            return false;
-	        }
-    	}
-    	else {
-    		return true; // because if isConnected is true, it means that a Hummingbird is already connected
-    	}
+        // Only connect if you aren't currently connected
+        if(!isConnected()) {
+            HIDHummingbird = hidServices.getHidDevice(VENDOR_ID, PRODUCT_ID, SERIAL_NUMBER);
+            // If hidServices returned an HIDHummingbird it means one is attached to the computer, so open it
+            if(HIDHummingbird != null) {
+                System.out.println("Connecting Hummingbird...");
+                if (!HIDHummingbird.isOpen()) {
+                    HIDHummingbird.open();
+                }
+                checkDuo();
+                return true;
+            }
+            else {
+                System.out.println("No Hummingbird detected, please connect a Hummingbird and run the program again.");
+                return false;
+            }
+        }
+        else {
+            return true; // because if isConnected is true, it means that a Hummingbird is already connected
+        }
     }
+
+    /**
+     * Command to determine if we have an original or duo HB
+     */
+    public boolean isDuo()
+    {
+    	return isDuo;
+    }
+    
+    /**
+     * Checks if the board is a Duo or original Hummingbird - called when we connect
+     */
+    private void checkDuo()
+    {
+    	// Send the G4 command
+        byte[] command = new byte[PACKET_LENGTH];
+        command[0] = 'G'; 
+        command[1] = '4'; 
+        byte[] data = readHB(command); 
+        if(data[0] == 0x03 && data[1] == 0x00) {
+        	isDuo = true;
+        }
+        else
+        {
+        	isDuo = false;
+        }	
+    }    
     
     /**
      * Sets the LEDs specified by the given <code>mask</code> to the given <code>intensities</code>.
@@ -151,7 +177,8 @@ public class HummingbirdRobot {
     
     public void playClip(final byte[] data)
     {
-        AudioHelper.playClip(data);
+    	if(data != null)
+    		AudioHelper.playClip(data);
     }
 
     /**
@@ -195,8 +222,8 @@ public class HummingbirdRobot {
     {
         // Send the G3 command
         byte[] command = new byte[PACKET_LENGTH];
-        command[0] = 'G'; // Sets get state
-        command[1] = '3'; // Option 3
+        command[0] = 'G'; // Sets an LED
+        command[1] = '3'; //setting is based on ASCII 0 to 3, so need to convert from decimal 1 to 4
         byte[] data = readHB(command);
         if(data != null) {
             int[] sensorVals = new int[data.length];
@@ -234,7 +261,6 @@ public class HummingbirdRobot {
      */
     public boolean setFullColorLED(final int ledId, final int red, final int green, final int blue)
     {
-    	// Check out of range parameters
         if(ledId < 1 || ledId > 2 || red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255)
         {
             System.out.println("One or more parameters out of range when setting full color LED");
@@ -259,7 +285,7 @@ public class HummingbirdRobot {
     {
         // Send the reset command
         byte[] message = new byte[PACKET_LENGTH];
-        message[0] = 'R'; // Turns off motors, LEDs, sets status LED back to color fade
+        message[0] = 'R'; // Turns off motors, shuts off the Hummingbird
         writeHB(message);
         // Shut down and rely on auto-shutdown hook to clear HidApi resources
         hidServices.shutdown();
@@ -296,20 +322,25 @@ public class HummingbirdRobot {
     
     public void speak(final String whatToSay)
     {
-	    if (whatToSay != null && whatToSay.length() > 0)
-	    {
-	        final Mouth mouth = Mouth.getInstance();
-	
-	        if (mouth != null)
-	        {
-	        	AudioHelper.playClip(mouth.getSpeech(whatToSay));
-	        }
-	    }
-	    else
-	    {
-	        System.out.println("Given text to speak was null or empty");
-	    }
+        if (whatToSay != null && whatToSay.length() > 0)
+        {
+            final Mouth mouth = Mouth.getInstance();
+
+            if (mouth != null)
+            {
+               AudioHelper.playClip(mouth.getSpeech(whatToSay));
+            }
+            else
+            {
+            	System.out.println("Mouth is null");
+            }
+        }
+        else
+        {
+            System.out.println("Given text to speak was null or empty");
+        }
     }
+
     /**
      * Sets the vibration motors specified by the given <code>mask</code> to the given <code>intensities</code>.  Returns
      * the current intensities as an array of integers if the command succeeded, <code>null</code> otherwise.
@@ -417,34 +448,6 @@ public class HummingbirdRobot {
         return writeHB(command);
     }
 
-   
-    /**
-     * Command to determine if we have an original or duo HB
-     */
-    public boolean isDuo()
-    {
-    	return isDuo;
-    }
-    
-    /**
-     * Checks if the board is a Duo or original Hummingbird - called when we connect
-     */
-    private void checkDuo()
-    {
-    	// Send the G4 command
-        byte[] command = new byte[PACKET_LENGTH];
-        command[0] = 'G'; 
-        command[1] = '4'; 
-        byte[] data = readHB(command); 
-        if(data[0] == 0x03 && data[1] == 0x00) {
-        	isDuo = true;
-        }
-        else
-        {
-        	isDuo = false;
-        }	
-    }
-    
     /**
      * Command to get state of the Full color LEDs
      */
@@ -453,7 +456,7 @@ public class HummingbirdRobot {
         // Send the G0 command
         byte[] command = new byte[PACKET_LENGTH];
         command[0] = 'G'; // Get state
-        command[1] = '4'; // Full color LEDs are in byte 0
+        command[1] = '0'; // Full color LEDs are in byte 0
         byte[] data = readHB(command);
         if(data != null)
         {
@@ -486,10 +489,10 @@ public class HummingbirdRobot {
             byte[] data2 = readHB(command);
             if(data2 != null) {
                 int[] LEDData = new int[4];
-                LEDData[0] = (int)(data1[6] & 0xFF); // LED 1 is the 7th byte in the first array
-                LEDData[1] = (int)(data2[0] & 0xFF);
-                LEDData[2] = (int)(data2[1] & 0xFF);
-                LEDData[3] = (int)(data2[2] & 0xFF);
+                LEDData[0] = data1[6]; // LED 1 is the 7th byte in the first array
+                LEDData[1] = data2[0];
+                LEDData[2] = data2[1];
+                LEDData[3] = data2[2];
                 return LEDData;
             }
         }
@@ -564,8 +567,8 @@ public class HummingbirdRobot {
         {
             int[] MotorData = new int[2];
 
-            MotorData[0] = (int)(data[4] & 0xFF);
-            MotorData[1] = (int)(data[5] & 0xFF);
+            MotorData[0] = data[4];
+            MotorData[1] = data[5];
 
             return MotorData;
         }
@@ -575,16 +578,14 @@ public class HummingbirdRobot {
      * Command to write a command to Hummingbird
      */
     private boolean writeHB(byte[] command) {
-        if (!HIDHummingbird.isOpen() || HIDHummingbird == null) {
+        if (!HIDHummingbird.isOpen()) {
             System.out.println("Hummingbird not connected");
         } else {
             int val = HIDHummingbird.write(command, PACKET_LENGTH, (byte) 0x00);
             if (val < 0) {
                 System.err.println(HIDHummingbird.getLastErrorMessage());
-                HIDHummingbird = null;
                 return false;
             }
-            
             return true;
         }
         return false;
@@ -615,28 +616,28 @@ public class HummingbirdRobot {
             if (val <= 0)
             	System.out.println("Read val was negative: " +val);
             // If the read report does not match with the command report, then try reading again
-            if(((int)(data[7] & 0xFF) != reportCounter))
+            /*if(((int)(data[7] & 0xFF) != reportCounter))
             {
             	for(int i = 0; i < data.length; i++)
             		System.out.print(data[i] + " ");
             	val = HIDHummingbird.read(data,10);
             	System.out.println("\nTrying to read again: " +val);
-            }
+            }*/
             
             // If things are still wonky, try ten more times to resynchronize, then give up because infinite loops are bad
             int count = 0;
             while((int)(data[7] & 0xFF) != reportCounter && count < 10)
             {
-            	System.out.println("Write in while loop");
+            	//System.out.println("Write in while loop");
             	val = HIDHummingbird.write(command, PACKET_LENGTH, (byte) 0x00);
                 if (val < 0) {
                     System.err.println(HIDHummingbird.getLastErrorMessage());
                 }
-            	System.out.println("Read attempt: " +count + " Val is " +val);
+            	//System.out.println("Read attempt: " +count + " Val is " +val);
             	val = HIDHummingbird.read(data,10);
-            	for(int i = 0; i < data.length; i++)
+            	/*for(int i = 0; i < data.length; i++)
             		System.out.print(data[i] + " ");
-            	System.out.println("Val after read is " +val);
+            	System.out.println("Val after read is " +val);*/
             	count++;
             }
             
