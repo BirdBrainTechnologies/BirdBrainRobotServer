@@ -1,0 +1,38 @@
+#!/bin/sh
+
+set -e
+
+get_lib_dir() {
+  if [ `getconf LONG_BIT` = "64" ]; then
+    LIBDIR=lib/x86_64-linux-gnu
+  else
+    LIBDIR=lib/i386-linux-gnu
+  fi
+}
+
+LIBUDEV_0=libudev.so.0
+LIBUDEV_1=libudev.so.1
+
+add_udev_symlinks() {
+  get_lib_dir
+  if [ -f "/$LIBDIR/$LIBUDEV_0" -o -f "/usr/$LIBDIR/$LIBUDEV_0" -o -f "/lib/$LIBUDEV_0" ]; then
+    return 0
+  fi
+
+  if [ -f "/$LIBDIR/$LIBUDEV_1" ]; then
+    ln -snf "/$LIBDIR/$LIBUDEV_1" "/usr/share/birdbrainrobotserver/$LIBUDEV_0"
+  elif [ -f "/usr/$LIBDIR/$LIBUDEV_1" ];
+  then
+    ln -snf "/usr/$LIBDIR/$LIBUDEV_1" "/usr/share/birdbrainrobotserver/$LIBUDEV_0"
+  else
+    echo "$LIBUDEV_1" not found in "$LIBDIR" or "/usr/$LIBDIR".
+    exit 1
+  fi
+}
+
+remove_udev_symlinks() {
+  rm -rf "/usr/share/birdbrainrobotserver/$LIBUDEV_0"
+}
+
+remove_udev_symlinks
+add_udev_symlinks

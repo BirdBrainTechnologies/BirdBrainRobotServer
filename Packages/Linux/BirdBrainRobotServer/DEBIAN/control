@@ -1,0 +1,12 @@
+Package: birdbrain-robot-server
+Version: 1.9.0
+Section: education
+Priority: optional
+Architecture: all
+Essential: no
+Description: Package for using Finch and Hummingbird with Snap. 
+ The BirdBrain Robot Server is a utility for connecting Hummingbird Duo, the original Hummingbird controller, and the Finch robot to the Snap! programming environment. 
+Maintainer: Tom Lauwers <tlauwers@birdbraintechnologies.com>
+Homepage: http://www.birdbraintechnologies.com/finch/snap
+Installed-Size: 35000
+Depends: default-jre, libgnome2-0, avrdude, chromium-browser | google-chrome-stable | google-chrome-unstable

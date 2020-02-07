@@ -1,0 +1,9 @@
+#!/bin/sh
+
+LIBUDEV_0=libudev.so.0
+
+remove_udev_symlinks() {
+  rm -rf "/usr/share/birdbrainrobotserver/$LIBUDEV_0"
+}
+
+remove_udev_symlinks 
