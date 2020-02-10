@@ -9,4 +9,4 @@ Description: Package for using Finch and Hummingbird with Snap.
 Maintainer: Tom Lauwers <tlauwers@birdbraintechnologies.com>
 Homepage: http://www.birdbraintechnologies.com/finch/snap
 Installed-Size: 35000
-Depends: default-jre, libgnome2-0, avrdude, chromium-browser | google-chrome-stable | google-chrome-unstable
+Depends: default-jre, libgnome2-0, chromium-browser | google-chrome-stable | google-chrome-unstable

@@ -628,7 +628,8 @@ public class BirdBrainRobotServer {
 												.getRootUsbHub());
 						String[] newPorts;
 
-						if (arduino) {
+						// Reverting from Arduino not supported in Linux
+						if (arduino  && !SystemUtils.IS_OS_LINUX) {
 							lblHummingbirdpic.setIcon(new ImageIcon(
 									BirdBrainRobotServer.class.getResource(
 											"/HummingbirdArduinoMode.png")));
@@ -753,7 +754,7 @@ public class BirdBrainRobotServer {
 									try {
 										String avrdude = "avrdude";
 										String avrconf = "avrdude.conf";
-										if (SystemUtils.IS_OS_LINUX) {
+										/*if (SystemUtils.IS_OS_LINUX) {
 											final String arch = System
 													.getProperty(
 															"sun.arch.data.model",
@@ -762,7 +763,8 @@ public class BirdBrainRobotServer {
 												avrdude = "./avrdude64";
 											else
 												avrdude = "./avrdude";
-										} else if (SystemUtils.IS_OS_MAC_OSX) {
+										} else*/ 
+										if (SystemUtils.IS_OS_MAC_OSX) {
 											avrdude = "./avrdude_mac";
 											avrconf = "./avrdude_mac.conf";
 										}
