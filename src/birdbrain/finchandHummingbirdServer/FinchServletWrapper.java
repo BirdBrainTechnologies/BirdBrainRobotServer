@@ -14,6 +14,9 @@ public class FinchServletWrapper {
 	private Double temperature;
 	private boolean[] obstacles;
 	private int[] lights;
+	// The time when the last tapped and shaken events were recorded
+	private long lastTappedTime = 0;
+	private long lastShakenTime = 0;
 	
 	// We poll sensors in a separate thread to minimize the timer doGet has to wait
 	private Thread sensorLoop;
@@ -29,6 +32,12 @@ public class FinchServletWrapper {
 					{
 						try {
 							// Each finch.get takes 8 ms, then sleep to allow other things to happen
+							if (finch.isTapped())
+								lastTappedTime = System.currentTimeMillis();
+							Thread.sleep(12);
+							if (finch.isShaken())
+								lastShakenTime = System.currentTimeMillis();
+							Thread.sleep(12);
 							accelerations = finch.getAccelerations();
 							Thread.sleep(12);
 							temperature = finch.getTemperature();
@@ -144,8 +153,16 @@ public class FinchServletWrapper {
 		
 	}	
 	
-	
-	
+	public long getLastTappedTime() {
+		return lastTappedTime;
+	}
+
+	public long getLastShakenTime() {
+		return lastShakenTime;
+	}
+
+
+
 	// Parses the Finch output string and sets it
 	public boolean setOutput(String setter)
 	{
